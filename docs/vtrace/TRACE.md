@@ -56,6 +56,7 @@
 | NEED-004 | RUNE-REQ-071 | V1 release readiness | `docs/release-readiness.md`, `README.md`, `PRODUCT_PLAN.md`, final VTRACE records | CI-ready validation commands and final workspace validation | Wave 32 v1 release readiness evidence |
 | NEED-001 | RUNE-REQ-072 | Adoption documentation package | `docs/README.md`, `docs/CORPUS.md`, `docs/concepts/`, `docs/how-to/`, `docs/tutorials/`, `docs/examples/`, `docs/traces/` | Documentation review and `git diff --check` | Wave 33 adoption docs evidence |
 | NEED-004 | RUNE-REQ-073 | Adopter validation runbook | `docs/runbooks/adopter-evidence-validation.md`, retained adopter and discovery fixtures | Runbook command sequence and workspace validation | Wave 34 adoption validation runbook evidence |
+| NEED-005 | RUNE-REQ-074 | Metadata-driven data contracts and games adoption guidance | `rune.data_contract_json`, `examples/rune-shape-calculator`, `docs/concepts/data-contracts.md`, `docs/examples/shape-calculator.md`, `docs/traces/games-contract-candidates.md` | Shape example tests, CLI profile tests, workspace validation | Wave 35 shape and games contract evidence |
 
 ## Specification Visibility
 
@@ -65,6 +66,6 @@
 | SPEC-RUNE-002 | RUNE-REQ-020 / RUNE-REQ-021 / RUNE-REQ-044 / RUNE-REQ-059 | Derive evidence boundary | Derive tests, trybuild tests, retained descriptor fixture |
 | SPEC-RUNE-003 | RUNE-REQ-030 / RUNE-REQ-033 / RUNE-REQ-039 / RUNE-REQ-054 / RUNE-REQ-068 | CLI inspection and compatibility | CLI status, inspect, check, and hardening tests |
 | SPEC-RUNE-004 | RUNE-REQ-052 / RUNE-REQ-053 / RUNE-REQ-055 / RUNE-REQ-056 / RUNE-REQ-057 / RUNE-REQ-063 | Retained collection evidence | Collection check, generate, inventory, and evidence bundle fixtures |
-| SPEC-RUNE-005 | RUNE-REQ-034 / RUNE-REQ-035 / RUNE-REQ-037 / RUNE-REQ-038 / RUNE-REQ-043 / RUNE-REQ-064 / RUNE-REQ-065 | Profile and generator boundary | Profile catalog and documentation packet profile evidence |
+| SPEC-RUNE-005 | RUNE-REQ-034 / RUNE-REQ-035 / RUNE-REQ-037 / RUNE-REQ-038 / RUNE-REQ-043 / RUNE-REQ-064 / RUNE-REQ-065 / RUNE-REQ-074 | Profile and generator boundary | Profile catalog, documentation packet profile evidence, and data-contract profile evidence |
 | SPEC-RUNE-006 | RUNE-REQ-060 / RUNE-REQ-061 / RUNE-REQ-062 / RUNE-REQ-066 / RUNE-REQ-067 | Discovery and adapter boundary | Adopter registry, discovery manifest, and review packet adapter evidence |
-| SPEC-RUNE-007 | RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 / RUNE-REQ-073 | Validation, release, adoption docs, and runbooks | Workspace validation, QUIVER bakeoff, release readiness, docs package, and adopter validation runbook |
+| SPEC-RUNE-007 | RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 / RUNE-REQ-073 / RUNE-REQ-074 | Validation, release, adoption docs, runbooks, and games adoption guidance | Workspace validation, QUIVER bakeoff, release readiness, docs package, adopter validation runbook, shape scenario, and games survey |

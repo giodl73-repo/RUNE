@@ -47,6 +47,30 @@
       ],
       "unsupported_policy": "error",
       "output_artifact_kind": "rune.documentation_packet.json"
+    },
+    {
+      "profile_id": "rune.data_contract_json",
+      "profile_version": "v0",
+      "input_descriptor_versions": [
+        "v0"
+      ],
+      "supported_kinds": [
+        "entity",
+        "event",
+        "command",
+        "state",
+        "artifact",
+        "source",
+        "evidence"
+      ],
+      "supported_concepts": [
+        "fields",
+        "invariants",
+        "trace_links",
+        "extensions"
+      ],
+      "unsupported_policy": "error",
+      "output_artifact_kind": "rune.data_contract.json"
     }
   ]
 }

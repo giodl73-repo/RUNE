@@ -290,6 +290,17 @@ packet adapter without changing RUNE code behavior.
 Status: complete as a documentation-only runbook over existing retained
 evidence and approved CLI commands.
 
+### Wave 35: Shape data contracts and games survey
+
+Add a small metadata-driven shape calculator scenario and use games repo review
+to decide whether RUNE should optimize for trait-only contracts or broader data
+contract adoption.
+
+Status: implemented as `examples\rune-shape-calculator`,
+`rune.data_contract_json`, and games contract candidate guidance. The adoption
+direction is data/event/state/simulation contracts first, host/client trait
+contracts second.
+
 ## Non-goals
 
 - Do not encode BAKER, LATTICE, FLETCHER, ARCADE, or any other product names in

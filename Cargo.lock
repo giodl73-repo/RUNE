@@ -108,6 +108,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "rune-shape-calculator"
+version = "0.1.0"
+dependencies = [
+ "rune-adapters",
+ "rune-core",
+ "rune-derive",
+ "serde_json",
+]
+
+[[package]]
 name = "serde"
 version = "1.0.228"
 source = "registry+https://github.com/rust-lang/crates.io-index"

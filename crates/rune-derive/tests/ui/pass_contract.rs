@@ -6,7 +6,9 @@ use rune_derive::RuneContract as DeriveRuneContract;
     id = "example.event",
     version = "v0",
     kind = "event",
-    requirement = "RUNE-REQ-013"
+    requirement = "RUNE-REQ-013",
+    invariant(id = "example.event.id.present", text = "id must be present"),
+    extension(namespace = "example", name = "formula", value = "n/a")
 )]
 struct ExampleEvent {
     id: String,
@@ -15,5 +17,7 @@ struct ExampleEvent {
 fn main() {
     let descriptor = ExampleEvent::descriptor();
     assert_eq!(descriptor.id, "example.event");
+    assert_eq!(descriptor.invariants[0].id, "example.event.id.present");
     assert_eq!(descriptor.trace_links[0].target, "RUNE-REQ-013");
+    assert_eq!(descriptor.extensions[0].namespace, "example");
 }

@@ -1,0 +1,159 @@
+{
+  "profile_id": "rune.data_contract_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.data_contract.json",
+  "source_kind": "collection",
+  "source_id": "example.shape_calculator_contracts",
+  "source_version": "v0",
+  "contract_count": 4,
+  "contracts": [
+    {
+      "id": "example.shape.circle",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Circle",
+      "fields": [
+        {
+          "name": "radius",
+          "rust_type": "f64"
+        }
+      ],
+      "invariants": [
+        {
+          "id": "shape.circle.radius.non_negative",
+          "text": "radius >= 0"
+        }
+      ],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extensions": [
+        {
+          "namespace": "shape.calculator",
+          "name": "area_formula",
+          "value": "pi * radius^2"
+        },
+        {
+          "namespace": "shape.calculator",
+          "name": "perimeter_formula",
+          "value": "2 * pi * radius"
+        }
+      ]
+    },
+    {
+      "id": "example.shape.rectangle",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Rectangle",
+      "fields": [
+        {
+          "name": "width",
+          "rust_type": "f64"
+        },
+        {
+          "name": "height",
+          "rust_type": "f64"
+        }
+      ],
+      "invariants": [
+        {
+          "id": "shape.rectangle.width.non_negative",
+          "text": "width >= 0"
+        },
+        {
+          "id": "shape.rectangle.height.non_negative",
+          "text": "height >= 0"
+        }
+      ],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extensions": [
+        {
+          "namespace": "shape.calculator",
+          "name": "area_formula",
+          "value": "width * height"
+        },
+        {
+          "namespace": "shape.calculator",
+          "name": "perimeter_formula",
+          "value": "2 * (width + height)"
+        }
+      ]
+    },
+    {
+      "id": "example.shape.calculate",
+      "version": "v0",
+      "kind": "command",
+      "rust_type": "CalculateShape",
+      "fields": [
+        {
+          "name": "shape_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "precision",
+          "rust_type": "u8"
+        }
+      ],
+      "invariants": [
+        {
+          "id": "shape.calculate.precision.range",
+          "text": "precision <= 12"
+        }
+      ],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extensions": [
+        {
+          "namespace": "shape.calculator",
+          "name": "operation",
+          "value": "calculate_area_and_perimeter"
+        }
+      ]
+    },
+    {
+      "id": "example.shape.calculated",
+      "version": "v0",
+      "kind": "event",
+      "rust_type": "ShapeCalculated",
+      "fields": [
+        {
+          "name": "area",
+          "rust_type": "f64"
+        },
+        {
+          "name": "perimeter",
+          "rust_type": "f64"
+        }
+      ],
+      "invariants": [
+        {
+          "id": "shape.calculated.area.non_negative",
+          "text": "area >= 0"
+        },
+        {
+          "id": "shape.calculated.perimeter.non_negative",
+          "text": "perimeter >= 0"
+        }
+      ],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extensions": []
+    }
+  ]
+}

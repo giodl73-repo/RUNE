@@ -22,11 +22,13 @@ product overview, then use this map to choose the right depth.
 | Goal | Read |
 |---|---|
 | Understand what RUNE adds to Rust | [Concepts: descriptors as contracts](concepts/descriptors-as-contracts.md) |
+| Model metadata-rich data, command, event, and state contracts | [Concepts: data contracts](concepts/data-contracts.md) |
 | Add RUNE to a crate | [Tutorials: adopter path](tutorials/adopter-path/) |
 | Validate the full adopter evidence path | [Runbook: adopter evidence validation](runbooks/adopter-evidence-validation.md) |
 | Generate reviewable evidence | [How-to: generate retained evidence](how-to/generate-retained-evidence.md) |
 | Use discovery safely | [How-to: use a discovery manifest](how-to/use-discovery-manifest.md) |
 | Build a downstream integration | [Concepts: profiles and adapters](concepts/profiles-and-adapters.md) |
+| Evaluate game/simulation adoption | [Traces: games contract candidates](traces/games-contract-candidates.md) |
 
 ## Current boundary
 

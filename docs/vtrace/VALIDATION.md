@@ -108,6 +108,19 @@ This is a positive scenario-level validation result, with limits: evidence is
 still fixture-backed, scoped to one annotated type, and does not demonstrate
 arbitrary crate discovery or external profile generation.
 
+## Wave 35 shape and games validation
+
+The shape calculator scenario validates metadata-driven data contracts before
+broader games adoption. It proves that derived invariants and namespaced
+extensions can be retained in descriptor collections, documentation packets, and
+`rune.data_contract_json` output.
+
+The games repo survey validates the adoption direction: COURT, MUDDLE, RALLY,
+RACKET, AMAZE, BANISH, QUEST, and TIGRIS expose more stable data, command,
+event, state, packet, simulation, and runtime-report surfaces than explicit
+traits. RUNE adoption should therefore begin with data contracts and add
+host/client trait contracts after snapshot and command boundaries are stable.
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for

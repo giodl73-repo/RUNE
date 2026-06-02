@@ -5,6 +5,7 @@ members = [
     "crates/rune-core",
     "crates/rune-derive",
     "examples/rune-adopter",
+    "examples/rune-shape-calculator",
 ]
 resolver = "3"
 

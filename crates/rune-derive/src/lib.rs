@@ -11,7 +11,9 @@ pub fn derive_rune_contract(input: TokenStream) -> TokenStream {
     let mut id = None;
     let mut version = None;
     let mut kind = quote! { ::rune_core::ContractKind::Entity };
+    let mut invariants = Vec::new();
     let mut trace_links = Vec::new();
+    let mut extensions = Vec::new();
 
     for attr in input
         .attrs
@@ -44,6 +46,63 @@ pub fn derive_rune_contract(input: TokenStream) -> TokenStream {
                     ::rune_core::TraceLink {
                         relation: "requirement",
                         target: #target,
+                    }
+                });
+            } else if meta.path.is_ident("invariant") {
+                let mut invariant_id = None;
+                let mut invariant_text = None;
+                meta.parse_nested_meta(|invariant_meta| {
+                    if invariant_meta.path.is_ident("id") {
+                        invariant_id = Some(invariant_meta.value()?.parse::<LitStr>()?.value());
+                    } else if invariant_meta.path.is_ident("text") {
+                        invariant_text = Some(invariant_meta.value()?.parse::<LitStr>()?.value());
+                    } else {
+                        return Err(invariant_meta.error("unsupported rune invariant attribute"));
+                    }
+                    Ok(())
+                })?;
+                let Some(invariant_id) = invariant_id else {
+                    return Err(meta.error("missing required rune invariant attribute: id"));
+                };
+                let Some(invariant_text) = invariant_text else {
+                    return Err(meta.error("missing required rune invariant attribute: text"));
+                };
+                invariants.push(quote! {
+                    ::rune_core::InvariantDescriptor {
+                        id: #invariant_id,
+                        text: #invariant_text,
+                    }
+                });
+            } else if meta.path.is_ident("extension") {
+                let mut namespace = None;
+                let mut name = None;
+                let mut value = None;
+                meta.parse_nested_meta(|extension_meta| {
+                    if extension_meta.path.is_ident("namespace") {
+                        namespace = Some(extension_meta.value()?.parse::<LitStr>()?.value());
+                    } else if extension_meta.path.is_ident("name") {
+                        name = Some(extension_meta.value()?.parse::<LitStr>()?.value());
+                    } else if extension_meta.path.is_ident("value") {
+                        value = Some(extension_meta.value()?.parse::<LitStr>()?.value());
+                    } else {
+                        return Err(extension_meta.error("unsupported rune extension attribute"));
+                    }
+                    Ok(())
+                })?;
+                let Some(namespace) = namespace else {
+                    return Err(meta.error("missing required rune extension attribute: namespace"));
+                };
+                let Some(name) = name else {
+                    return Err(meta.error("missing required rune extension attribute: name"));
+                };
+                let Some(value) = value else {
+                    return Err(meta.error("missing required rune extension attribute: value"));
+                };
+                extensions.push(quote! {
+                    ::rune_core::ExtensionDescriptor {
+                        namespace: #namespace,
+                        name: #name,
+                        value: #value,
                     }
                 });
             } else {
@@ -81,9 +140,9 @@ pub fn derive_rune_contract(input: TokenStream) -> TokenStream {
                     rust_type: #rust_type,
                     kind: #kind,
                     fields: &[#(#fields),*],
-                    invariants: &[],
+                    invariants: &[#(#invariants),*],
                     trace_links: &[#(#trace_links),*],
-                    extensions: &[],
+                    extensions: &[#(#extensions),*],
                 }
             }
         }

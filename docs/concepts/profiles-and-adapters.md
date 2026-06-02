@@ -11,6 +11,7 @@ external profile is:
 | Profile | Output |
 |---|---|
 | `rune.documentation_packet_json` | Documentation packets for AI and reviewer consumption. |
+| `rune.data_contract_json` | Data-contract packets that preserve fields, invariants, trace links, and extensions for metadata-rich adopters. |
 
 Profiles may introduce profile-owned vocabulary in their outputs, but they do
 not rewrite the neutral descriptor vocabulary.

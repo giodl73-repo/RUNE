@@ -1,0 +1,35 @@
+{
+  "profile_id": "rune.data_contract_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.data_contract.json",
+  "source_kind": "descriptor",
+  "source_id": "example.customer",
+  "source_version": "v0",
+  "contract_count": 1,
+  "contracts": [
+    {
+      "id": "example.customer",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Customer",
+      "fields": [
+        {
+          "name": "id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-034"
+        }
+      ],
+      "extensions": []
+    }
+  ]
+}

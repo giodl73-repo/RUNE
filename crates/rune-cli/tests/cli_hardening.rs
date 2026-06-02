@@ -12,6 +12,7 @@ fn status_reports_current_v1_surfaces() {
     assert!(stdout.contains("RUNE v1 surface"));
     assert!(stdout.contains("rune-adapters"));
     assert!(stdout.contains("rune.documentation_packet_json"));
+    assert!(stdout.contains("rune.data_contract_json"));
     assert!(stdout.contains("rune.review_packet_json"));
 }
 

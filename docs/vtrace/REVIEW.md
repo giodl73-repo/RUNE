@@ -190,6 +190,27 @@ Artifacts reviewed:
 Conclusion: Stage 6 is closed for foundation. Continue to Stage 7 validation
 planning; do not implement generators or adapters as part of validation.
 
+## Wave 35 data-contract and games survey review
+
+Date: 2026-06-02
+
+Artifacts reviewed:
+
+- `examples\rune-shape-calculator`
+- `docs\concepts\data-contracts.md`
+- `docs\examples\shape-calculator.md`
+- `docs\traces\games-contract-candidates.md`
+- Public contract surfaces in COURT, MUDDLE, RALLY, RACKET, AMAZE, BANISH,
+  QUEST, and TIGRIS
+
+| Review area | Result | Finding |
+|---|---|---|
+| Neutral core contract model | pass | Data-contract profile is a profile-owned output over neutral descriptors; game vocabulary stays in extensions/docs. |
+| Macro safety | pass | Derive metadata is explicit and fail-closed for unsupported keys. |
+| AI contract consumption | pass | Shape and games docs make fields, invariants, trace links, and extensions easier to consume than source-only review. |
+| Games adoption strategy | pass | Start with data/event/state/simulation contracts; treat host/client traits as a second lane. |
+| Privacy and corpus safety | pass | Survey records public symbols and contract classes only, not private playtest or campaign content. |
+
 ## Stage 7 validation planning review
 
 Date: 2026-06-01

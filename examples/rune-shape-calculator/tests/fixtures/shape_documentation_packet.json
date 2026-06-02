@@ -1,0 +1,111 @@
+{
+  "profile_id": "rune.documentation_packet_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.documentation_packet.json",
+  "source_kind": "collection",
+  "source_id": "example.shape_calculator_contracts",
+  "source_version": "v0",
+  "descriptor_count": 4,
+  "descriptors": [
+    {
+      "id": "example.shape.circle",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Circle",
+      "field_count": 1,
+      "fields": [
+        {
+          "name": "radius",
+          "rust_type": "f64"
+        }
+      ],
+      "invariant_count": 1,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extension_count": 2
+    },
+    {
+      "id": "example.shape.rectangle",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Rectangle",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "width",
+          "rust_type": "f64"
+        },
+        {
+          "name": "height",
+          "rust_type": "f64"
+        }
+      ],
+      "invariant_count": 2,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extension_count": 2
+    },
+    {
+      "id": "example.shape.calculate",
+      "version": "v0",
+      "kind": "command",
+      "rust_type": "CalculateShape",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "shape_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "precision",
+          "rust_type": "u8"
+        }
+      ],
+      "invariant_count": 1,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extension_count": 1
+    },
+    {
+      "id": "example.shape.calculated",
+      "version": "v0",
+      "kind": "event",
+      "rust_type": "ShapeCalculated",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "area",
+          "rust_type": "f64"
+        },
+        {
+          "name": "perimeter",
+          "rust_type": "f64"
+        }
+      ],
+      "invariant_count": 2,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-074"
+        }
+      ],
+      "extension_count": 0
+    }
+  ]
+}

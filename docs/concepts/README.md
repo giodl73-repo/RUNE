@@ -6,6 +6,7 @@ procedures or tutorials.
 | Guide | What it explains |
 |---|---|
 | [Descriptors as contracts](descriptors-as-contracts.md) | How Rust items become neutral, durable AI-readable contract descriptors. |
+| [Data contracts](data-contracts.md) | How metadata-rich descriptors model data, command, event, state, packet, and simulation surfaces. |
 | [Evidence and discovery](evidence-and-discovery.md) | Why RUNE favors retained evidence and manifest discovery over source scraping. |
 | [Profiles and adapters](profiles-and-adapters.md) | How RUNE emits useful downstream artifacts without moving product vocabulary into core. |
 

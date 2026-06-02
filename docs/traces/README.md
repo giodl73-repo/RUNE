@@ -8,3 +8,4 @@ evidence.
 |---|---|
 | [Adopter v1 walkthrough](adopter-v1-walkthrough.md) | An adopter crate can produce deterministic collection, profile, and adapter evidence. |
 | [QUIVER bakeoff walkthrough](quiver-bakeoff-walkthrough.md) | RUNE evidence improves reviewability in a representative non-RUNE Rust repo scenario. |
+| [Games contract candidates](games-contract-candidates.md) | Game repos are rich in data, event, state, packet, simulation, and host/client trait contract candidates. |

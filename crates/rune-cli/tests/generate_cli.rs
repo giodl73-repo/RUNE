@@ -201,6 +201,27 @@ fn generate_documentation_packet_profile_emits_descriptor_packet() {
 }
 
 #[test]
+fn generate_data_contract_profile_emits_descriptor_contract() {
+    let fixture = fixture_path("annotated_customer_descriptor.json");
+    let expected = include_str!("fixtures/annotated_customer.data_contract.json");
+
+    let output = Command::new(env!("CARGO_BIN_EXE_rune-cli"))
+        .args([
+            "generate",
+            "--profile",
+            "rune.data_contract_json",
+            "--fixture",
+            fixture.to_str().unwrap(),
+        ])
+        .output()
+        .expect("run rune-cli generate");
+
+    assert!(output.status.success());
+    let stdout = String::from_utf8(output.stdout).expect("utf8 stdout");
+    assert_eq!(normalize_newlines(&stdout), normalize_newlines(expected));
+}
+
+#[test]
 fn generate_neutral_profile_fails_closed_without_id() {
     let fixture = fixture_path("missing_id_descriptor.json");
 

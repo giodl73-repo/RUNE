@@ -148,6 +148,30 @@ pub struct DocumentationDescriptorSummary {
     pub extension_count: usize,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct DataContractDocument {
+    pub profile_id: String,
+    pub profile_version: String,
+    pub output_artifact_kind: String,
+    pub source_kind: String,
+    pub source_id: String,
+    pub source_version: String,
+    pub contract_count: usize,
+    pub contracts: Vec<DataContractSummary>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct DataContractSummary {
+    pub id: String,
+    pub version: String,
+    pub kind: String,
+    pub rust_type: String,
+    pub fields: Vec<FieldDocument>,
+    pub invariants: Vec<InvariantDocument>,
+    pub trace_links: Vec<TraceLinkDocument>,
+    pub extensions: Vec<ExtensionDocument>,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 pub struct DiscoveryManifestDraft {
     pub manifest_id: Option<String>,
@@ -633,6 +657,56 @@ impl DocumentationDescriptorSummary {
     }
 }
 
+impl DataContractDocument {
+    pub fn from_descriptor(profile: &ProfileDescriptor, descriptor: DescriptorDocument) -> Self {
+        Self {
+            profile_id: profile.profile_id.clone(),
+            profile_version: profile.profile_version.clone(),
+            output_artifact_kind: profile.output_artifact_kind.clone(),
+            source_kind: "descriptor".to_owned(),
+            source_id: descriptor.id.clone(),
+            source_version: descriptor.version.clone(),
+            contract_count: 1,
+            contracts: vec![DataContractSummary::from_descriptor(descriptor)],
+        }
+    }
+
+    pub fn from_collection(
+        profile: &ProfileDescriptor,
+        collection: DescriptorCollectionDocument,
+    ) -> Self {
+        Self {
+            profile_id: profile.profile_id.clone(),
+            profile_version: profile.profile_version.clone(),
+            output_artifact_kind: profile.output_artifact_kind.clone(),
+            source_kind: "collection".to_owned(),
+            source_id: collection.collection_id,
+            source_version: collection.collection_version,
+            contract_count: collection.descriptors.len(),
+            contracts: collection
+                .descriptors
+                .into_iter()
+                .map(DataContractSummary::from_descriptor)
+                .collect(),
+        }
+    }
+}
+
+impl DataContractSummary {
+    fn from_descriptor(descriptor: DescriptorDocument) -> Self {
+        Self {
+            id: descriptor.id,
+            version: descriptor.version,
+            kind: descriptor.kind,
+            rust_type: descriptor.rust_type,
+            fields: descriptor.fields,
+            invariants: descriptor.invariants,
+            trace_links: descriptor.trace_links,
+            extensions: descriptor.extensions,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct ProfileCatalog {
     pub profiles: Vec<ProfileDescriptor>,
@@ -641,7 +715,11 @@ pub struct ProfileCatalog {
 impl ProfileCatalog {
     pub fn approved() -> Self {
         Self {
-            profiles: vec![neutral_descriptor_profile(), documentation_packet_profile()],
+            profiles: vec![
+                neutral_descriptor_profile(),
+                documentation_packet_profile(),
+                data_contract_profile(),
+            ],
         }
     }
 
@@ -777,6 +855,31 @@ pub fn documentation_packet_profile() -> ProfileDescriptor {
         ],
         unsupported_policy: "error".to_owned(),
         output_artifact_kind: "rune.documentation_packet.json".to_owned(),
+    }
+}
+
+pub fn data_contract_profile() -> ProfileDescriptor {
+    ProfileDescriptor {
+        profile_id: "rune.data_contract_json".to_owned(),
+        profile_version: "v0".to_owned(),
+        input_descriptor_versions: vec!["v0".to_owned()],
+        supported_kinds: vec![
+            "entity".to_owned(),
+            "event".to_owned(),
+            "command".to_owned(),
+            "state".to_owned(),
+            "artifact".to_owned(),
+            "source".to_owned(),
+            "evidence".to_owned(),
+        ],
+        supported_concepts: vec![
+            "fields".to_owned(),
+            "invariants".to_owned(),
+            "trace_links".to_owned(),
+            "extensions".to_owned(),
+        ],
+        unsupported_policy: "error".to_owned(),
+        output_artifact_kind: "rune.data_contract.json".to_owned(),
     }
 }
 
@@ -988,6 +1091,48 @@ mod tests {
             "rune.documentation_packet.json"
         );
         assert!(profile.supported_kinds.iter().any(|kind| kind == "command"));
+    }
+
+    #[test]
+    fn data_contract_profile_is_in_approved_catalog() {
+        let catalog = ProfileCatalog::approved();
+        let profile = catalog
+            .find("rune.data_contract_json")
+            .expect("data contract profile");
+
+        assert_eq!(profile.profile_version, "v0");
+        assert_eq!(profile.output_artifact_kind, "rune.data_contract.json");
+        assert!(
+            profile
+                .supported_concepts
+                .iter()
+                .any(|kind| kind == "fields")
+        );
+        assert!(
+            profile
+                .supported_concepts
+                .iter()
+                .any(|kind| kind == "invariants")
+        );
+    }
+
+    #[test]
+    fn data_contract_profile_preserves_metadata() {
+        let profile = data_contract_profile();
+        let document = DataContractDocument::from_descriptor(
+            &profile,
+            DescriptorDocument::from_contract::<Customer>(),
+        );
+
+        assert_eq!(document.profile_id, "rune.data_contract_json");
+        assert_eq!(document.contract_count, 1);
+        assert_eq!(document.contracts[0].id, "example.customer");
+        assert_eq!(document.contracts[0].fields[0].name, "id");
+        assert_eq!(
+            document.contracts[0].invariants[0].id,
+            "customer.id.present"
+        );
+        assert_eq!(document.contracts[0].extensions[0].namespace, "example");
     }
 
     #[test]

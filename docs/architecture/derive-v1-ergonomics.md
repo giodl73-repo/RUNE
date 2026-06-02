@@ -16,7 +16,9 @@ The v1 durable derive surface is:
     id = "example.customer",
     version = "v0",
     kind = "entity",
-    requirement = "RUNE-REQ-034"
+    requirement = "RUNE-REQ-034",
+    invariant(id = "customer.email.present", text = "email is not empty"),
+    extension(namespace = "example.customer", name = "owner", value = "crm")
 )]
 struct Customer {
     id: String,
@@ -30,6 +32,8 @@ struct Customer {
 | `version` | required | Descriptor compatibility boundary. |
 | `kind` | optional, default `entity` | Neutral contract kind. |
 | `requirement` | optional, repeatable | Adds a neutral requirement trace link. |
+| `invariant(id = "...", text = "...")` | optional, repeatable | Adds declared contract rules as metadata. |
+| `extension(namespace = "...", name = "...", value = "...")` | optional, repeatable | Adds adopter-owned metadata without changing neutral core vocabulary. |
 
 Missing `id` or `version` is a compile-time error because generated artifacts and
 retained evidence are not durable without explicit identity and compatibility
@@ -53,7 +57,6 @@ evidence exist:
 - field-level aliases, docs, examples, sensitivity, optionality, or stability
   metadata,
 - enum variant descriptors and state-transition semantics,
-- invariant authoring macros,
 - source-link inference,
 - generated documentation capture from Rust doc comments,
 - product-specific adapter hints.
@@ -69,7 +72,7 @@ The derive macro must fail closed for:
 |---|---|
 | `missing required rune attribute: id` | Durable descriptor identity was omitted. |
 | `missing required rune attribute: version` | Durable descriptor compatibility boundary was omitted. |
-| `unsupported rune attribute` | The author supplied an unreviewed `#[rune(...)]` key. |
+| `unsupported rune attribute` | The author supplied an unreviewed `#[rune(...)]` key or nested metadata key. |
 
 ## Validation command
 

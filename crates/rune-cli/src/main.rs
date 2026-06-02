@@ -3,7 +3,7 @@ use rune_adapters::{
 };
 use rune_core::{
     CheckCollectionReportDocument, CheckReportDocument, CollectionEvidenceBundleDocument,
-    DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
+    DataContractDocument, DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
     DiscoveryManifestDraft, DocumentationPacketDocument, GeneratedArtifactDocument,
     GeneratedCollectionArtifactDocument, ProfileCatalog, ProfileCompatibilityCodes,
 };
@@ -22,7 +22,7 @@ fn main() {
                 "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
-                "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json"
+                "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
             );
             println!("approved adapters: rune.review_packet_json");
             println!("deferred surfaces: arbitrary crate discovery, product-specific adapters");
@@ -299,6 +299,8 @@ fn generate(args: Vec<String>) -> Result<(), String> {
         serde_json::to_string_pretty(&DocumentationPacketDocument::from_descriptor(
             profile, descriptor,
         ))
+    } else if profile.profile_id == "rune.data_contract_json" {
+        serde_json::to_string_pretty(&DataContractDocument::from_descriptor(profile, descriptor))
     } else {
         serde_json::to_string_pretty(&GeneratedArtifactDocument {
             profile_id: profile.profile_id.clone(),
@@ -348,6 +350,8 @@ fn generate_collection(args: Vec<String>) -> Result<(), String> {
         serde_json::to_string_pretty(&DocumentationPacketDocument::from_collection(
             profile, collection,
         ))
+    } else if profile.profile_id == "rune.data_contract_json" {
+        serde_json::to_string_pretty(&DataContractDocument::from_collection(profile, collection))
     } else {
         serde_json::to_string_pretty(&GeneratedCollectionArtifactDocument {
             profile_id: profile.profile_id.clone(),
