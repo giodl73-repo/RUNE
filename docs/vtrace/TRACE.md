@@ -54,3 +54,4 @@
 | NEED-001 | RUNE-REQ-069 | Adopter v1 workflow | `examples/rune-adopter`, `docs/adopter-guide.md` | Adopter registry and v1 workflow tests | Wave 30 adopter example evidence |
 | NEED-005 | RUNE-REQ-070 | Representative repo bakeoff | `docs/vtrace/fixtures/quiver_bakeoff_*`, `docs/vtrace/BAKEOFF.md` | RUNE CLI check/generate/adapt commands and workspace validation | Wave 31 representative repo bakeoff evidence |
 | NEED-004 | RUNE-REQ-071 | V1 release readiness | `docs/release-readiness.md`, `README.md`, `PRODUCT_PLAN.md`, final VTRACE records | CI-ready validation commands and final workspace validation | Wave 32 v1 release readiness evidence |
+| NEED-001 | RUNE-REQ-072 | Adoption documentation package | `docs/README.md`, `docs/CORPUS.md`, `docs/concepts/`, `docs/how-to/`, `docs/tutorials/`, `docs/examples/`, `docs/traces/` | Documentation review and `git diff --check` | Wave 33 adoption docs evidence |

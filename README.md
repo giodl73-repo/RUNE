@@ -167,6 +167,18 @@ Run it with:
 cargo test -p rune-adopter
 ```
 
+## Documentation paths
+
+The full adoption documentation package starts at `docs\README.md`:
+
+- `docs\concepts\` explains descriptors, evidence, discovery, profiles, and
+  adapters.
+- `docs\how-to\` gives task-oriented procedures for the current CLI workflows.
+- `docs\tutorials\` walks through the adopter path lesson by lesson.
+- `docs\examples\` indexes copyable adopter and fixture references.
+- `docs\traces\` connects commands and retained artifacts to review decisions.
+- `docs\CORPUS.md` records documentation update obligations.
+
 ## V1 completion target
 
 RUNE v1 is complete when it provides:

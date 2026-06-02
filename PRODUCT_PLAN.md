@@ -272,6 +272,15 @@ evidence for v1.
 Status: complete. Release readiness and compatibility policy are recorded in
 `docs/release-readiness.md`, with full workspace validation as the CI-ready gate.
 
+### Wave 33: Adoption docs package
+
+Turn the single adopter guide into a Craftworks-style documentation package with
+concepts, how-tos, tutorials, examples, trace walkthroughs, and corpus
+governance.
+
+Status: complete as a documentation-only adoption package. No new CLI behavior,
+discovery expansion, or product-specific core vocabulary was added.
+
 ## Non-goals
 
 - Do not encode BAKER, LATTICE, FLETCHER, ARCADE, or any other product names in

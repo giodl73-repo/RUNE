@@ -877,6 +877,34 @@ Artifacts reviewed:
 
 Conclusion: Wave 32 closes RUNE v1 release readiness.
 
+## Wave 33 adoption docs package review
+
+Reviewed surfaces:
+
+- `docs/README.md`
+- `docs/CORPUS.md`
+- `docs/concepts/`
+- `docs/how-to/`
+- `docs/tutorials/`
+- `docs/examples/`
+- `docs/traces/`
+- `README.md`
+- `PRODUCT_PLAN.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-02-adoption-docs-package/`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Documentation taxonomy | pass | The package separates concepts, how-tos, tutorials, examples, traces, and corpus governance. |
+| Adopter usefulness | pass | The docs provide a progressive path from first derive through registry, evidence, profile, adapter, and discovery manifest use. |
+| Product neutrality | pass | The docs keep product-specific downstream vocabulary outside `rune-core` and frame profiles/adapters as separate surfaces. |
+| Scope control | pass | No code behavior, CLI surface, or discovery boundary changed in this wave. |
+
+Conclusion: Wave 33 closes the v1 adoption documentation package.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor

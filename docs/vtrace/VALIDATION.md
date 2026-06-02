@@ -505,6 +505,19 @@ crate surfaces, retained evidence expectations, and v1 non-goals.
 | Evidence completeness | pass | V1 evidence covers neutral core, derive, discovery, evidence bundles, external profile, adapter, adopter guide, and bakeoff. |
 | Release scope | pass | V1 non-goals explicitly exclude source scraping, Cargo traversal, executable hooks, product vocabulary in core, and automatic downstream publication. |
 
+## Wave 33 adoption docs package
+
+RUNE now has a Craftworks-style documentation package for adopters. The package
+adds indexed concepts, how-tos, tutorials, examples, trace walkthroughs, and
+corpus governance while preserving the v1 code surface.
+
+| Area | Result | Finding |
+|---|---|---|
+| Learnability | pass | Adopters can choose concept, task, tutorial, example, or trace paths instead of relying on one short guide. |
+| Adoption workflow | pass | The docs cover derive, explicit registry, retained evidence, manifest discovery, documentation packet profile output, and review packet adapter output. |
+| Scope control | pass | The package explicitly preserves v1 non-goals: no source scraping, Cargo traversal, executable hooks, automatic publishing, or product vocabulary in `rune-core`. |
+| Evidence continuity | pass | Trace walkthroughs connect the adopter example and QUIVER bakeoff fixtures to review decisions. |
+
 ## Validation command
 
 ```powershell
