@@ -70,7 +70,8 @@ cargo run -p rune-cli -- status
 | Adoption docs package | Documentation indexes, concepts, how-tos, tutorials, examples, traces, corpus rules, README links, product plan wave notes, and VTRACE rows describe the v1 adoption path without changing code behavior. | covered |
 | Adoption validation runbook | `docs\runbooks\adopter-evidence-validation.md` defines the ordered commands for adopter tests, collection inspection, compatibility checks, inventory, discovery, evidence bundles, documentation packets, and review packets over retained fixtures. | covered |
 | Metadata-driven data contracts | `rune-derive` accepts invariant/extension metadata; `examples\rune-shape-calculator` retains descriptor, documentation packet, and `rune.data_contract_json` evidence; CLI/profile tests cover the data-contract profile. | covered |
-| Field metadata DCR | `docs\vtrace\DCR.md` records DCR-RUNE-001 before any field-level metadata implementation begins. | planned |
+| Field metadata DCR | `docs\vtrace\DCR.md` records DCR-RUNE-001 before field-level metadata implementation begins. | covered |
+| Field metadata implementation | `rune-core` tests preserve field metadata, `rune-derive` compile tests cover `#[rune_field(...)]` and fail-closed unsupported keys, and `rune-shape-calculator` retains metadata-rich descriptor/documentation/data-contract fixtures. | covered |
 
 ## Evidence rule
 

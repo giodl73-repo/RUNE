@@ -13,6 +13,7 @@ and review tools without moving domain vocabulary into `rune-core`.
 | Contract family | `kind` |
 | Rust symbol | `rust_type` |
 | Shape | `fields` |
+| Field facts | explicit field metadata for required status, units, bounds, sensitivity, examples, stability, and aliases |
 | Rules | `invariants` |
 | Traceability | `trace_links` |
 | Domain hints | namespaced `extensions` |
@@ -20,6 +21,22 @@ and review tools without moving domain vocabulary into `rune-core`.
 The `rune.data_contract_json` profile preserves these fields as data-contract
 output. It does not validate runtime values; invariants remain declared contract
 metadata until a future validator profile or adapter is reviewed.
+
+## Field metadata
+
+Field metadata is explicit author-supplied contract data. RUNE preserves it in
+descriptor documents and the `rune.data_contract_json` profile, but does not
+interpret it as runtime validation.
+
+| Metadata | Use |
+|---|---|
+| `required` | Whether consumers may omit a field. |
+| `unit` | Measurement or domain unit. |
+| `min` / `max` | String-preserved declared bounds. |
+| `sensitivity` | Review/privacy handling hint. |
+| `example` | Copyable sample value for docs and AI consumers. |
+| `stability` | Compatibility expectation for the field. |
+| `aliases` | Alternate consumer-facing names in author order. |
 
 ## Why this matters for games and simulations
 
@@ -31,6 +48,7 @@ RUNE data contracts because they answer AI and review questions such as:
 | Question | RUNE answer |
 |---|---|
 | What snapshot shape should a renderer consume? | Descriptor fields and `kind = "state"` or `kind = "entity"`. |
+| Which fields need special handling? | Field metadata captures required status, units, sensitivity, examples, and stability. |
 | What command/event semantics are durable? | `kind = "command"` / `kind = "event"` with invariants. |
 | What simulator outputs are comparable across runs? | `kind = "evidence"` or `kind = "artifact"` with trace links. |
 | What game-specific rules exist? | Namespaced extensions owned by the adopter, not core. |

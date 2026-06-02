@@ -21,12 +21,14 @@ The v1 durable derive surface is:
     extension(namespace = "example.customer", name = "owner", value = "crm")
 )]
 struct Customer {
+    #[rune_field(required = true, sensitivity = "internal", stability = "stable")]
     id: String,
+    #[rune_field(required = true, sensitivity = "private", example = "a@example.com")]
     email: String,
 }
 ```
 
-| Attribute | V1 status | Meaning |
+| Type attribute | V1 status | Meaning |
 |---|---|---|
 | `id` | required | Stable descriptor identity. |
 | `version` | required | Descriptor compatibility boundary. |
@@ -34,6 +36,16 @@ struct Customer {
 | `requirement` | optional, repeatable | Adds a neutral requirement trace link. |
 | `invariant(id = "...", text = "...")` | optional, repeatable | Adds declared contract rules as metadata. |
 | `extension(namespace = "...", name = "...", value = "...")` | optional, repeatable | Adds adopter-owned metadata without changing neutral core vocabulary. |
+
+| Field attribute | V1 status | Meaning |
+|---|---|---|
+| `required = true/false` | optional | Declares whether consumers may omit the field. |
+| `unit = "..."` | optional | Declares a measurement or domain unit. |
+| `min = "..."` / `max = "..."` | optional | Declares string-preserved bounds without imposing numeric coercion semantics. |
+| `sensitivity = "..."` | optional | Declares review/privacy handling metadata. |
+| `example = "..."` | optional | Provides a copyable example value. |
+| `stability = "..."` | optional | Declares compatibility expectation for the field. |
+| `alias = "..."` | optional, repeatable | Adds alternate consumer-facing field names in author order. |
 
 Missing `id` or `version` is a compile-time error because generated artifacts and
 retained evidence are not durable without explicit identity and compatibility
@@ -43,7 +55,7 @@ boundaries.
 
 | Rust input | V1 behavior |
 |---|---|
-| Named-field structs | Field names and Rust type strings are emitted. |
+| Named-field structs | Field names, Rust type strings, and explicit `#[rune_field(...)]` metadata are emitted. |
 | Tuple structs | Accepted, but no fields are emitted yet. |
 | Unit structs | Accepted, but no fields are emitted. |
 | Enums | Accepted, but no variant metadata is emitted yet. |
@@ -54,8 +66,6 @@ boundaries.
 The following are deliberately deferred until separate requirements and retained
 evidence exist:
 
-- field-level aliases, docs, examples, sensitivity, optionality, or stability
-  metadata,
 - enum variant descriptors and state-transition semantics,
 - source-link inference,
 - generated documentation capture from Rust doc comments,
@@ -73,6 +83,7 @@ The derive macro must fail closed for:
 | `missing required rune attribute: id` | Durable descriptor identity was omitted. |
 | `missing required rune attribute: version` | Durable descriptor compatibility boundary was omitted. |
 | `unsupported rune attribute` | The author supplied an unreviewed `#[rune(...)]` key or nested metadata key. |
+| `unsupported rune field attribute` | The author supplied an unreviewed `#[rune_field(...)]` key. |
 
 ## Validation command
 

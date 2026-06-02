@@ -34,6 +34,32 @@ impl ContractKind {
 pub struct FieldDescriptor {
     pub name: &'static str,
     pub rust_type: &'static str,
+    pub metadata: FieldMetadataDescriptor,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct FieldMetadataDescriptor {
+    pub required: Option<bool>,
+    pub unit: Option<&'static str>,
+    pub min: Option<&'static str>,
+    pub max: Option<&'static str>,
+    pub sensitivity: Option<&'static str>,
+    pub example: Option<&'static str>,
+    pub stability: Option<&'static str>,
+    pub aliases: &'static [&'static str],
+}
+
+impl FieldMetadataDescriptor {
+    pub const EMPTY: Self = Self {
+        required: None,
+        unit: None,
+        min: None,
+        max: None,
+        sensitivity: None,
+        example: None,
+        stability: None,
+        aliases: &[],
+    };
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -270,6 +296,21 @@ impl DescriptorDocument {
                 .map(|field| FieldDocument {
                     name: field.name.to_owned(),
                     rust_type: field.rust_type.to_owned(),
+                    metadata: FieldMetadataDocument {
+                        required: field.metadata.required,
+                        unit: field.metadata.unit.map(str::to_owned),
+                        min: field.metadata.min.map(str::to_owned),
+                        max: field.metadata.max.map(str::to_owned),
+                        sensitivity: field.metadata.sensitivity.map(str::to_owned),
+                        example: field.metadata.example.map(str::to_owned),
+                        stability: field.metadata.stability.map(str::to_owned),
+                        aliases: field
+                            .metadata
+                            .aliases
+                            .iter()
+                            .map(|alias| (*alias).to_owned())
+                            .collect(),
+                    },
                 })
                 .collect(),
             invariants: descriptor
@@ -490,6 +531,41 @@ fn required_non_empty(
 pub struct FieldDocument {
     pub name: String,
     pub rust_type: String,
+    #[serde(default, skip_serializing_if = "FieldMetadataDocument::is_empty")]
+    pub metadata: FieldMetadataDocument,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct FieldMetadataDocument {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub required: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sensitivity: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub example: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stability: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub aliases: Vec<String>,
+}
+
+impl FieldMetadataDocument {
+    pub fn is_empty(&self) -> bool {
+        self.required.is_none()
+            && self.unit.is_none()
+            && self.min.is_none()
+            && self.max.is_none()
+            && self.sensitivity.is_none()
+            && self.example.is_none()
+            && self.stability.is_none()
+            && self.aliases.is_empty()
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -899,6 +975,16 @@ mod tests {
                 fields: &[FieldDescriptor {
                     name: "id",
                     rust_type: "String",
+                    metadata: FieldMetadataDescriptor {
+                        required: Some(true),
+                        unit: None,
+                        min: None,
+                        max: None,
+                        sensitivity: Some("internal"),
+                        example: Some("cus_123"),
+                        stability: Some("stable"),
+                        aliases: &["customer_id"],
+                    },
                 }],
                 invariants: &[InvariantDescriptor {
                     id: "customer.id.present",
@@ -942,6 +1028,8 @@ mod tests {
         assert_eq!(descriptor.version, "v0");
         assert_eq!(descriptor.kind, ContractKind::Entity);
         assert_eq!(descriptor.fields[0].name, "id");
+        assert_eq!(descriptor.fields[0].metadata.required, Some(true));
+        assert_eq!(descriptor.fields[0].metadata.aliases[0], "customer_id");
         assert_eq!(descriptor.invariants[0].id, "customer.id.present");
         assert_eq!(descriptor.trace_links[0].target, "RUNE-REQ-010");
         assert_eq!(descriptor.extensions[0].namespace, "example");
@@ -955,6 +1043,8 @@ mod tests {
         assert_eq!(document.version, "v0");
         assert_eq!(document.kind, "entity");
         assert_eq!(document.fields[0].name, "id");
+        assert_eq!(document.fields[0].metadata.required, Some(true));
+        assert_eq!(document.fields[0].metadata.aliases[0], "customer_id");
         assert_eq!(document.invariants[0].id, "customer.id.present");
         assert_eq!(document.trace_links[0].target, "RUNE-REQ-010");
         assert_eq!(document.extensions[0].namespace, "example");
@@ -1128,6 +1218,10 @@ mod tests {
         assert_eq!(document.contract_count, 1);
         assert_eq!(document.contracts[0].id, "example.customer");
         assert_eq!(document.contracts[0].fields[0].name, "id");
+        assert_eq!(
+            document.contracts[0].fields[0].metadata.sensitivity,
+            Some("internal".to_owned())
+        );
         assert_eq!(
             document.contracts[0].invariants[0].id,
             "customer.id.present"
@@ -1343,6 +1437,7 @@ mod tests {
             fields: vec![FieldDocument {
                 name: "id".to_owned(),
                 rust_type: "String".to_owned(),
+                metadata: FieldMetadataDocument::default(),
             }],
             invariants: Vec::new(),
             trace_links: Vec::new(),

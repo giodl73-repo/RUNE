@@ -15,7 +15,18 @@
       "fields": [
         {
           "name": "radius",
-          "rust_type": "f64"
+          "rust_type": "f64",
+          "metadata": {
+            "required": true,
+            "unit": "unit",
+            "min": "0",
+            "sensitivity": "public",
+            "example": "2.0",
+            "stability": "stable",
+            "aliases": [
+              "r"
+            ]
+          }
         }
       ],
       "invariants": [
@@ -51,11 +62,33 @@
       "fields": [
         {
           "name": "width",
-          "rust_type": "f64"
+          "rust_type": "f64",
+          "metadata": {
+            "required": true,
+            "unit": "unit",
+            "min": "0",
+            "sensitivity": "public",
+            "example": "3.0",
+            "stability": "stable",
+            "aliases": [
+              "w"
+            ]
+          }
         },
         {
           "name": "height",
-          "rust_type": "f64"
+          "rust_type": "f64",
+          "metadata": {
+            "required": true,
+            "unit": "unit",
+            "min": "0",
+            "sensitivity": "public",
+            "example": "4.0",
+            "stability": "stable",
+            "aliases": [
+              "h"
+            ]
+          }
         }
       ],
       "invariants": [
@@ -95,11 +128,25 @@
       "fields": [
         {
           "name": "shape_id",
-          "rust_type": "String"
+          "rust_type": "String",
+          "metadata": {
+            "required": true,
+            "sensitivity": "internal",
+            "example": "shape-001",
+            "stability": "stable"
+          }
         },
         {
           "name": "precision",
-          "rust_type": "u8"
+          "rust_type": "u8",
+          "metadata": {
+            "required": true,
+            "min": "0",
+            "max": "12",
+            "sensitivity": "public",
+            "example": "2",
+            "stability": "stable"
+          }
         }
       ],
       "invariants": [
@@ -130,11 +177,27 @@
       "fields": [
         {
           "name": "area",
-          "rust_type": "f64"
+          "rust_type": "f64",
+          "metadata": {
+            "required": true,
+            "unit": "square-unit",
+            "min": "0",
+            "sensitivity": "public",
+            "example": "12.57",
+            "stability": "stable"
+          }
         },
         {
           "name": "perimeter",
-          "rust_type": "f64"
+          "rust_type": "f64",
+          "metadata": {
+            "required": true,
+            "unit": "unit",
+            "min": "0",
+            "sensitivity": "public",
+            "example": "12.57",
+            "stability": "stable"
+          }
         }
       ],
       "invariants": [

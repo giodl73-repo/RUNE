@@ -1,8 +1,8 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{Data, DeriveInput, Fields, LitStr, parse_macro_input, spanned::Spanned};
+use syn::{Data, DeriveInput, Field, Fields, LitBool, LitStr, parse_macro_input, spanned::Spanned};
 
-#[proc_macro_derive(RuneContract, attributes(rune))]
+#[proc_macro_derive(RuneContract, attributes(rune, rune_field))]
 pub fn derive_rune_contract(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let input_span = input.ident.span();
@@ -128,7 +128,11 @@ pub fn derive_rune_contract(input: TokenStream) -> TokenStream {
 
     let fields = match input.data {
         Data::Struct(data) => field_descriptors(data.fields),
-        Data::Enum(_) | Data::Union(_) => Vec::new(),
+        Data::Enum(_) | Data::Union(_) => Ok(Vec::new()),
+    };
+    let fields = match fields {
+        Ok(fields) => fields,
+        Err(error) => return error.to_compile_error().into(),
     };
 
     quote! {
@@ -150,23 +154,89 @@ pub fn derive_rune_contract(input: TokenStream) -> TokenStream {
     .into()
 }
 
-fn field_descriptors(fields: Fields) -> Vec<proc_macro2::TokenStream> {
+fn field_descriptors(fields: Fields) -> Result<Vec<proc_macro2::TokenStream>, syn::Error> {
     match fields {
         Fields::Named(named) => named
             .named
             .into_iter()
-            .filter_map(|field| {
-                let name = field.ident.clone()?.to_string();
+            .map(|field| {
+                let name = field
+                    .ident
+                    .clone()
+                    .expect("named fields have identifiers")
+                    .to_string();
+                let metadata = field_metadata_descriptor(&field)?;
                 let ty = field.ty;
                 let rust_type = quote! { #ty }.to_string();
-                Some(quote! {
+                Ok(quote! {
                     ::rune_core::FieldDescriptor {
                         name: #name,
                         rust_type: #rust_type,
+                        metadata: #metadata,
                     }
                 })
             })
             .collect(),
-        Fields::Unnamed(_) | Fields::Unit => Vec::new(),
+        Fields::Unnamed(_) | Fields::Unit => Ok(Vec::new()),
     }
+}
+
+fn field_metadata_descriptor(field: &Field) -> Result<proc_macro2::TokenStream, syn::Error> {
+    let mut required = quote! { None };
+    let mut unit = quote! { None };
+    let mut min = quote! { None };
+    let mut max = quote! { None };
+    let mut sensitivity = quote! { None };
+    let mut example = quote! { None };
+    let mut stability = quote! { None };
+    let mut aliases = Vec::new();
+
+    for attr in field
+        .attrs
+        .iter()
+        .filter(|attr| attr.path().is_ident("rune_field"))
+    {
+        attr.parse_nested_meta(|meta| {
+            if meta.path.is_ident("required") {
+                let value = meta.value()?.parse::<LitBool>()?.value;
+                required = quote! { Some(#value) };
+            } else if meta.path.is_ident("unit") {
+                let value = meta.value()?.parse::<LitStr>()?.value();
+                unit = quote! { Some(#value) };
+            } else if meta.path.is_ident("min") {
+                let value = meta.value()?.parse::<LitStr>()?.value();
+                min = quote! { Some(#value) };
+            } else if meta.path.is_ident("max") {
+                let value = meta.value()?.parse::<LitStr>()?.value();
+                max = quote! { Some(#value) };
+            } else if meta.path.is_ident("sensitivity") {
+                let value = meta.value()?.parse::<LitStr>()?.value();
+                sensitivity = quote! { Some(#value) };
+            } else if meta.path.is_ident("example") {
+                let value = meta.value()?.parse::<LitStr>()?.value();
+                example = quote! { Some(#value) };
+            } else if meta.path.is_ident("stability") {
+                let value = meta.value()?.parse::<LitStr>()?.value();
+                stability = quote! { Some(#value) };
+            } else if meta.path.is_ident("alias") {
+                aliases.push(meta.value()?.parse::<LitStr>()?.value());
+            } else {
+                return Err(meta.error("unsupported rune field attribute"));
+            }
+            Ok(())
+        })?;
+    }
+
+    Ok(quote! {
+        ::rune_core::FieldMetadataDescriptor {
+            required: #required,
+            unit: #unit,
+            min: #min,
+            max: #max,
+            sensitivity: #sensitivity,
+            example: #example,
+            stability: #stability,
+            aliases: &[#(#aliases),*],
+        }
+    })
 }

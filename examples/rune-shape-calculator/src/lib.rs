@@ -23,6 +23,15 @@ pub const COLLECTION_VERSION: &str = "v0";
     )
 )]
 pub struct Circle {
+    #[rune_field(
+        required = true,
+        unit = "unit",
+        min = "0",
+        sensitivity = "public",
+        example = "2.0",
+        stability = "stable",
+        alias = "r"
+    )]
     pub radius: f64,
 }
 
@@ -46,7 +55,25 @@ pub struct Circle {
     )
 )]
 pub struct Rectangle {
+    #[rune_field(
+        required = true,
+        unit = "unit",
+        min = "0",
+        sensitivity = "public",
+        example = "3.0",
+        stability = "stable",
+        alias = "w"
+    )]
     pub width: f64,
+    #[rune_field(
+        required = true,
+        unit = "unit",
+        min = "0",
+        sensitivity = "public",
+        example = "4.0",
+        stability = "stable",
+        alias = "h"
+    )]
     pub height: f64,
 }
 
@@ -64,7 +91,21 @@ pub struct Rectangle {
     )
 )]
 pub struct CalculateShape {
+    #[rune_field(
+        required = true,
+        sensitivity = "internal",
+        example = "shape-001",
+        stability = "stable"
+    )]
     pub shape_id: String,
+    #[rune_field(
+        required = true,
+        min = "0",
+        max = "12",
+        sensitivity = "public",
+        example = "2",
+        stability = "stable"
+    )]
     pub precision: u8,
 }
 
@@ -81,7 +122,23 @@ pub struct CalculateShape {
     )
 )]
 pub struct ShapeCalculated {
+    #[rune_field(
+        required = true,
+        unit = "square-unit",
+        min = "0",
+        sensitivity = "public",
+        example = "12.57",
+        stability = "stable"
+    )]
     pub area: f64,
+    #[rune_field(
+        required = true,
+        unit = "unit",
+        min = "0",
+        sensitivity = "public",
+        example = "12.57",
+        stability = "stable"
+    )]
     pub perimeter: f64,
 }
 

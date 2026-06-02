@@ -58,6 +58,7 @@
 | NEED-004 | RUNE-REQ-073 | Adopter validation runbook | `docs/runbooks/adopter-evidence-validation.md`, retained adopter and discovery fixtures | Runbook command sequence and workspace validation | Wave 34 adoption validation runbook evidence |
 | NEED-005 | RUNE-REQ-074 | Metadata-driven data contracts and games adoption guidance | `rune.data_contract_json`, `examples/rune-shape-calculator`, `docs/concepts/data-contracts.md`, `docs/examples/shape-calculator.md`, `docs/traces/games-contract-candidates.md` | Shape example tests, CLI profile tests, workspace validation | Wave 35 shape and games contract evidence |
 | NEED-005 | RUNE-REQ-075 | Field metadata DCR | `docs/vtrace/DCR.md` | DCR review and `git diff --check` | DCR-RUNE-001 |
+| NEED-005 | RUNE-REQ-076 | Field-level metadata implementation | `FieldMetadataDescriptor`, `FieldMetadataDocument`, `#[rune_field(...)]`, `examples/rune-shape-calculator` | Core, derive, shape, CLI, and workspace tests | Wave 36 field metadata evidence |
 
 ## Specification Visibility
 
@@ -70,4 +71,4 @@
 | SPEC-RUNE-005 | RUNE-REQ-034 / RUNE-REQ-035 / RUNE-REQ-037 / RUNE-REQ-038 / RUNE-REQ-043 / RUNE-REQ-064 / RUNE-REQ-065 / RUNE-REQ-074 | Profile and generator boundary | Profile catalog, documentation packet profile evidence, and data-contract profile evidence |
 | SPEC-RUNE-006 | RUNE-REQ-060 / RUNE-REQ-061 / RUNE-REQ-062 / RUNE-REQ-066 / RUNE-REQ-067 | Discovery and adapter boundary | Adopter registry, discovery manifest, and review packet adapter evidence |
 | SPEC-RUNE-007 | RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 / RUNE-REQ-073 / RUNE-REQ-074 | Validation, release, adoption docs, runbooks, and games adoption guidance | Workspace validation, QUIVER bakeoff, release readiness, docs package, adopter validation runbook, shape scenario, and games survey |
-| SPEC-RUNE-008 | RUNE-REQ-075 | Design change control | DCR-RUNE-001 records planned field-level metadata scope, sequencing, non-goals, affected repos, and validation expectations before implementation. |
+| SPEC-RUNE-008 | RUNE-REQ-075 / RUNE-REQ-076 | Design change control and field metadata | DCR-RUNE-001 records planned field-level metadata scope before implementation; Wave 36 implements the approved first slice with retained evidence. |

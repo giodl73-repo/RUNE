@@ -308,9 +308,11 @@ review, profile, and games-adoption consumers can see required/optional status,
 units, bounds, sensitivity, examples, stability, and aliases without guessing
 from Rust source or prose.
 
-Status: planned through `docs\vtrace\DCR.md` as DCR-RUNE-001. Implementation is
-not started; trait/function contracts remain deferred until the field metadata
-lane is verified.
+Status: first implementation slice complete. `FieldMetadataDescriptor`,
+`FieldMetadataDocument`, `#[rune_field(...)]`, and the shape calculator retained
+fixtures now preserve field metadata through descriptors and
+`rune.data_contract_json`. Trait/function contracts remain deferred until a
+separate DCR.
 
 ## Non-goals
 

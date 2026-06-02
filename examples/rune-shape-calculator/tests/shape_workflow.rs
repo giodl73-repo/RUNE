@@ -32,6 +32,11 @@ fn shape_registry_preserves_metadata_driven_contracts() {
     assert_eq!(collection.descriptors[0].invariants.len(), 1);
     assert_eq!(collection.descriptors[0].extensions.len(), 2);
     assert_eq!(
+        collection.descriptors[0].fields[0].metadata.unit,
+        Some("unit".to_owned())
+    );
+    assert_eq!(collection.descriptors[0].fields[0].metadata.aliases[0], "r");
+    assert_eq!(
         collection.descriptors[0].extensions[0].value,
         "pi * radius^2"
     );

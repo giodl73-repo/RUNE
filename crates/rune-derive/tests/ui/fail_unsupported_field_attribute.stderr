@@ -1,0 +1,5 @@
+error: unsupported rune field attribute
+ --> tests/ui/fail_unsupported_field_attribute.rs:6:18
+  |
+6 |     #[rune_field(format = "legacy")]
+  |                  ^^^^^^

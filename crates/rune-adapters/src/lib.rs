@@ -167,7 +167,7 @@ pub fn review_packet_adapter() -> AdapterDescriptor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rune_core::{DescriptorDocument, FieldDocument, TraceLinkDocument};
+    use rune_core::{DescriptorDocument, FieldDocument, FieldMetadataDocument, TraceLinkDocument};
 
     #[test]
     fn approved_catalog_exposes_review_packet_adapter() {
@@ -242,6 +242,7 @@ mod tests {
             fields: vec![FieldDocument {
                 name: "id".to_owned(),
                 rust_type: "String".to_owned(),
+                metadata: FieldMetadataDocument::default(),
             }],
             invariants: Vec::new(),
             trace_links: vec![TraceLinkDocument {

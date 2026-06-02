@@ -22,10 +22,21 @@ trait contracts. The first practical adoption path is:
 
 1. Annotate stable structs/enums that cross repo, engine, AI, or review
    boundaries.
-2. Retain descriptor collections and `rune.data_contract_json` profile output.
-3. Add host/client trait contracts after the data snapshots and commands are
+2. Add explicit field metadata for required status, units, bounds, sensitivity,
+   examples, stability, and aliases.
+3. Retain descriptor collections and `rune.data_contract_json` profile output.
+4. Add host/client trait contracts after the data snapshots and commands are
    stable.
-4. Keep game-specific semantics in namespaced extensions or adapters.
+5. Keep game-specific semantics in namespaced extensions or adapters.
+
+## Field metadata spike candidates
+
+| Repo | Candidate | First field metadata to try |
+|---|---|---|
+| RALLY | `SimulationRun`, `ActorTrace`, `SimulationMetric`, `ComparisonDelta`, `ValidationReport` | required IDs, seed/example values, numeric metric units, stability hints, public sensitivity. |
+| COURT | `CourtSnapshot`, `CourtAction`, `CourtValidationPacket` | required snapshot/action IDs, scene-contract version stability, destructive-action sensitivity, evidence references. |
+| MUDDLE | `MuddleRoom`, `MuddleCommand`, `MuddleSession`, `MuddleClientSnapshot` | room/session IDs, command aliases, transcript/save sensitivity, UI panel stability. |
+| RACKET | `RacketFramePlan`, `RacketRuntimeReport`, `RacketAdapterDiagnostic` | frame counts, diagnostic code aliases, runtime bounds, adapter-output stability. |
 
 ## RALLY role review lens
 
@@ -42,7 +53,7 @@ infrastructure:
 
 ## RUNE implications
 
-The review supports `RUNE-REQ-074`: RUNE should expose metadata-driven data
-contracts and a retained data-contract profile before broad games adoption. A
-later wave can add field-level metadata and trait/function descriptors once the
-data-contract path is validated.
+The review supports `RUNE-REQ-074` and `RUNE-REQ-076`: RUNE should expose
+metadata-driven data contracts, retained data-contract profile output, and
+field-level metadata before broad games adoption. Trait/function descriptors
+remain a later lane.

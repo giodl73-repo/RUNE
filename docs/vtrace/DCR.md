@@ -8,7 +8,7 @@ surface is implemented or stable.
 
 | Field | Value |
 |---|---|
-| Status | approved for planning |
+| Status | implemented first slice |
 | Date | 2026-06-02 |
 | Source requirement | RUNE-REQ-075 |
 | Trigger | Shape data-contract scenario and games repo survey showed that data contracts need field-level metadata before broad game/simulation adoption. |
@@ -21,6 +21,10 @@ surface is implemented or stable.
 RUNE should add a reviewed field-level metadata lane before trait/function
 contracts. The next implementation wave should make field metadata explicit,
 retained, and profile-visible while preserving the neutral core boundary.
+
+First implementation slice completed under `RUNE-REQ-076`: `FieldDescriptor`
+now carries explicit metadata, `#[rune_field(...)]` authors it, and
+`rune.data_contract_json` preserves it in retained shape evidence.
 
 ### Proposed authoring surface
 

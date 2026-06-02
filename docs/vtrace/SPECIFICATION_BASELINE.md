@@ -18,7 +18,7 @@ adapters, not in `rune-core`.
 | SPEC-RUNE-005 | NEED-003 / NEED-005 / RUNE-REQ-034 / RUNE-REQ-035 / RUNE-REQ-037 / RUNE-REQ-038 / RUNE-REQ-043 / RUNE-REQ-064 / RUNE-REQ-065 | Profile and generator boundary | Profiles are reviewed mappings over neutral descriptors and fail closed for unsupported versions, kinds, or concepts. | profile catalog tests and generation fixtures | accepted |
 | SPEC-RUNE-006 | NEED-003 / RUNE-REQ-060 / RUNE-REQ-061 / RUNE-REQ-062 / RUNE-REQ-066 / RUNE-REQ-067 | Discovery and adapter boundary | Discovery is manifest-controlled and deterministic; adapters consume validated evidence or profile outputs outside the neutral core. | discovery tests, adapter tests, retained review packet fixture | accepted |
 | SPEC-RUNE-007 | NEED-004 / NEED-005 / RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 | Validation, release, and adoption docs | v1 readiness depends on CI-ready validation, representative bakeoff evidence, adopter docs, and corpus update rules. | workspace validation, QUIVER bakeoff fixtures, docs package review | accepted |
-| SPEC-RUNE-008 | NEED-005 / RUNE-REQ-075 | Design change control | Field-level metadata must enter through a DCR that records descriptor, derive, profile, adoption, non-goal, and validation expectations before implementation. | DCR review and `git diff --check` | proposed |
+| SPEC-RUNE-008 | NEED-005 / RUNE-REQ-075 / RUNE-REQ-076 | Design change control and field metadata | Field-level metadata must enter through a DCR, then preserve explicit author metadata through descriptors, derive output, and data-contract profile evidence. | DCR review, derive tests, retained shape fixtures, and workspace validation | accepted |
 
 ## Non-Goals
 
