@@ -55,3 +55,15 @@
 | NEED-005 | RUNE-REQ-070 | Representative repo bakeoff | `docs/vtrace/fixtures/quiver_bakeoff_*`, `docs/vtrace/BAKEOFF.md` | RUNE CLI check/generate/adapt commands and workspace validation | Wave 31 representative repo bakeoff evidence |
 | NEED-004 | RUNE-REQ-071 | V1 release readiness | `docs/release-readiness.md`, `README.md`, `PRODUCT_PLAN.md`, final VTRACE records | CI-ready validation commands and final workspace validation | Wave 32 v1 release readiness evidence |
 | NEED-001 | RUNE-REQ-072 | Adoption documentation package | `docs/README.md`, `docs/CORPUS.md`, `docs/concepts/`, `docs/how-to/`, `docs/tutorials/`, `docs/examples/`, `docs/traces/` | Documentation review and `git diff --check` | Wave 33 adoption docs evidence |
+
+## Specification Visibility
+
+| Spec ID | Source IDs | Trace Surface | Evidence |
+|---|---|---|---|
+| SPEC-RUNE-001 | RUNE-REQ-010 / RUNE-REQ-011 / RUNE-REQ-012 / RUNE-REQ-013 | Neutral descriptor model | Descriptor model docs, core tests, retained descriptor evidence |
+| SPEC-RUNE-002 | RUNE-REQ-020 / RUNE-REQ-021 / RUNE-REQ-044 / RUNE-REQ-059 | Derive evidence boundary | Derive tests, trybuild tests, retained descriptor fixture |
+| SPEC-RUNE-003 | RUNE-REQ-030 / RUNE-REQ-033 / RUNE-REQ-039 / RUNE-REQ-054 / RUNE-REQ-068 | CLI inspection and compatibility | CLI status, inspect, check, and hardening tests |
+| SPEC-RUNE-004 | RUNE-REQ-052 / RUNE-REQ-053 / RUNE-REQ-055 / RUNE-REQ-056 / RUNE-REQ-057 / RUNE-REQ-063 | Retained collection evidence | Collection check, generate, inventory, and evidence bundle fixtures |
+| SPEC-RUNE-005 | RUNE-REQ-034 / RUNE-REQ-035 / RUNE-REQ-037 / RUNE-REQ-038 / RUNE-REQ-043 / RUNE-REQ-064 / RUNE-REQ-065 | Profile and generator boundary | Profile catalog and documentation packet profile evidence |
+| SPEC-RUNE-006 | RUNE-REQ-060 / RUNE-REQ-061 / RUNE-REQ-062 / RUNE-REQ-066 / RUNE-REQ-067 | Discovery and adapter boundary | Adopter registry, discovery manifest, and review packet adapter evidence |
+| SPEC-RUNE-007 | RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 | Validation, release, and adoption docs | Workspace validation, QUIVER bakeoff, release readiness, and docs package |

@@ -12,6 +12,14 @@
 | Workspace validation commands pass. | pass for scaffold |
 | First downstream bakeoff is deferred until the neutral contract surface exists. | pass |
 
+## Review Lanes
+
+| Lane | Required | Decision | Evidence / Rationale |
+|---|---|---|---|
+| Neutral core contract model | yes | accepted | Descriptor and derive rows keep product vocabulary out of core surfaces. |
+| Verification and retained evidence | yes | accepted | Workspace validation, retained fixtures, and bakeoff rows are trace-visible. |
+| Adoption docs and downstream boundaries | yes | accepted | Profiles, adapters, adopter docs, and corpus duties are owned outside neutral core semantics. |
+
 ## Ordered stage review
 
 | Stage | Review result | Finding |
