@@ -9,7 +9,7 @@ without modifying the scenario repo.
 
 | Input | Location |
 |---|---|
-| Scenario repo | `C:\src\quiver` |
+| Scenario repo | `C:\src\quiver` during the original bakeoff; retained fixtures below are the durable review evidence. |
 | Retained descriptor collection | `docs\vtrace\fixtures\quiver_bakeoff_descriptor_collection.json` |
 | Compatibility report | `docs\vtrace\fixtures\quiver_bakeoff.check.json` |
 | Documentation packet | `docs\vtrace\fixtures\quiver_bakeoff.documentation_packet.json` |
@@ -31,3 +31,6 @@ without modifying the scenario repo.
 
 QUIVER was a scenario only. Native QUIVER derives and registry adoption remain a
 future repo-specific integration decision.
+
+The local scenario path is historical context, not a required adopter input.
+Reviewers should rely on the retained fixtures when re-reading the bakeoff.

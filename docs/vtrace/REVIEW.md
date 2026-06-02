@@ -905,6 +905,24 @@ Reviewed surfaces:
 
 Conclusion: Wave 33 closes the v1 adoption documentation package.
 
+## Wave 33 `.roles` review
+
+Role review was run after the adoption docs package was created.
+
+| Role | Result | Finding |
+|---|---|---|
+| Contract Model Steward | pass | Concepts and how-tos keep core vocabulary generic and frame downstream terms as profile or adapter-owned. |
+| Macro Safety Steward | pass | Derive docs keep macro inputs small, visible, and test-backed; no new macro behavior or hidden runtime side effects were introduced. |
+| Generator Interop Steward | pass with fix | Profile and adapter docs preserve deterministic outputs and compatibility boundaries. The discovery how-to was fixed to reference the existing `adopter_discovery_manifest.json` fixture. |
+| VTRACE Traceability Auditor | pass with fix | Requirements, trace, verification, validation, and review rows cover the docs package. The QUIVER walkthrough now states that retained fixtures, not the machine-local scenario path, are durable evidence. |
+| AI Contract Consumer | pass | Tutorials and examples show validation commands and retained evidence before relying on generated outputs. |
+| Rust Maintainer | pass | The adopter path remains incremental: one type, explicit registry, Cargo tests, and reviewable JSON fixtures. |
+| Platform Adapter Author | pass | Profiles and adapters remain separate from `rune-core`, with unsupported mappings directed to diagnostics and retained output evidence. |
+| Future Agent | pass | The docs expose ids, versions, fields, fixtures, diagnostics, and validation commands needed to continue without source scraping. |
+
+Conclusion: the `.roles` review passes after correcting the manifest reference
+and clarifying the durable evidence boundary for the QUIVER walkthrough.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor

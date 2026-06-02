@@ -24,7 +24,7 @@ order.
 ## Run discovery
 
 ```powershell
-cargo run -p rune-cli -- discover --manifest docs\vtrace\fixtures\discovery_manifest.json
+cargo run -p rune-cli -- discover --manifest crates\rune-cli\tests\fixtures\adopter_discovery_manifest.json
 ```
 
 ## Rules
