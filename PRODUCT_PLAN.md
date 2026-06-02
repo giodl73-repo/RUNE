@@ -301,6 +301,17 @@ Status: implemented as `examples\rune-shape-calculator`,
 direction is data/event/state/simulation contracts first, host/client trait
 contracts second.
 
+### Wave 36: Field-level data metadata
+
+Specify and then implement field-level metadata for data contracts so AI,
+review, profile, and games-adoption consumers can see required/optional status,
+units, bounds, sensitivity, examples, stability, and aliases without guessing
+from Rust source or prose.
+
+Status: planned through `docs\vtrace\DCR.md` as DCR-RUNE-001. Implementation is
+not started; trait/function contracts remain deferred until the field metadata
+lane is verified.
+
 ## Non-goals
 
 - Do not encode BAKER, LATTICE, FLETCHER, ARCADE, or any other product names in
