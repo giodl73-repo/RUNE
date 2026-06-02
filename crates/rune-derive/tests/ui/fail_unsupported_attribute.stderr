@@ -1,0 +1,5 @@
+error: unsupported rune attribute
+ --> tests/ui/fail_unsupported_attribute.rs:4:8
+  |
+4 | #[rune(schema = "example.old")]
+  |        ^^^^^^

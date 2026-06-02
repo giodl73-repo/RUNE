@@ -1,0 +1,31 @@
+{
+  "id": "example.customer",
+  "version": "v0",
+  "kind": "entity",
+  "rust_type": "Customer",
+  "fields": [
+    {
+      "name": "id",
+      "rust_type": "String"
+    }
+  ],
+  "invariants": [
+    {
+      "id": "customer.id.present",
+      "text": "Customer id is present."
+    }
+  ],
+  "trace_links": [
+    {
+      "relation": "requirement",
+      "target": "RUNE-REQ-033"
+    }
+  ],
+  "extensions": [
+    {
+      "namespace": "example",
+      "name": "fixture",
+      "value": "true"
+    }
+  ]
+}

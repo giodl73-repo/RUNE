@@ -1,0 +1,24 @@
+{
+  "id": "example.create_customer",
+  "version": "v0",
+  "kind": "command",
+  "rust_type": "CreateCustomer",
+  "fields": [
+    {
+      "name": "customer_id",
+      "rust_type": "String"
+    },
+    {
+      "name": "email",
+      "rust_type": "String"
+    }
+  ],
+  "invariants": [],
+  "trace_links": [
+    {
+      "relation": "requirement",
+      "target": "RUNE-REQ-045"
+    }
+  ],
+  "extensions": []
+}

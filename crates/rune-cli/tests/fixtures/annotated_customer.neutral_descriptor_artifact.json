@@ -1,0 +1,29 @@
+{
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.descriptor.json",
+  "descriptor": {
+    "id": "example.customer",
+    "version": "v0",
+    "kind": "entity",
+    "rust_type": "Customer",
+    "fields": [
+      {
+        "name": "id",
+        "rust_type": "String"
+      },
+      {
+        "name": "email",
+        "rust_type": "String"
+      }
+    ],
+    "invariants": [],
+    "trace_links": [
+      {
+        "relation": "requirement",
+        "target": "RUNE-REQ-034"
+      }
+    ],
+    "extensions": []
+  }
+}

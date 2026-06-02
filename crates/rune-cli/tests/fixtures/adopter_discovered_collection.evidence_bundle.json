@@ -1,0 +1,159 @@
+{
+  "source_kind": "discovery_manifest",
+  "source": "adopter_discovery_manifest.json",
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "collection": {
+    "collection_id": "example.discovered_adopter_contracts",
+    "collection_version": "v0",
+    "descriptors": [
+      {
+        "id": "example.adopter.account",
+        "version": "v0",
+        "kind": "entity",
+        "rust_type": "Account",
+        "fields": [
+          {
+            "name": "id",
+            "rust_type": "String"
+          },
+          {
+            "name": "email",
+            "rust_type": "String"
+          }
+        ],
+        "invariants": [],
+        "trace_links": [
+          {
+            "relation": "requirement",
+            "target": "RUNE-REQ-060"
+          }
+        ],
+        "extensions": []
+      },
+      {
+        "id": "example.adopter.open_account",
+        "version": "v0",
+        "kind": "command",
+        "rust_type": "OpenAccount",
+        "fields": [
+          {
+            "name": "account_id",
+            "rust_type": "String"
+          },
+          {
+            "name": "email",
+            "rust_type": "String"
+          }
+        ],
+        "invariants": [],
+        "trace_links": [
+          {
+            "relation": "requirement",
+            "target": "RUNE-REQ-060"
+          }
+        ],
+        "extensions": []
+      }
+    ]
+  },
+  "check_report": {
+    "status": "ok",
+    "profile_id": "rune.neutral_descriptor_json",
+    "profile_version": "v0",
+    "collection_id": "example.discovered_adopter_contracts",
+    "collection_version": "v0",
+    "descriptors": [
+      {
+        "status": "ok",
+        "profile_id": "rune.neutral_descriptor_json",
+        "profile_version": "v0",
+        "descriptor_id": "example.adopter.account",
+        "descriptor_version": "v0",
+        "descriptor_kind": "entity"
+      },
+      {
+        "status": "ok",
+        "profile_id": "rune.neutral_descriptor_json",
+        "profile_version": "v0",
+        "descriptor_id": "example.adopter.open_account",
+        "descriptor_version": "v0",
+        "descriptor_kind": "command"
+      }
+    ]
+  },
+  "inventory": {
+    "collection_id": "example.discovered_adopter_contracts",
+    "collection_version": "v0",
+    "descriptor_count": 2,
+    "kinds": [
+      {
+        "kind": "command",
+        "descriptor_count": 1
+      },
+      {
+        "kind": "entity",
+        "descriptor_count": 1
+      }
+    ]
+  },
+  "generated_artifact": {
+    "profile_id": "rune.neutral_descriptor_json",
+    "profile_version": "v0",
+    "output_artifact_kind": "rune.descriptor.json",
+    "collection": {
+      "collection_id": "example.discovered_adopter_contracts",
+      "collection_version": "v0",
+      "descriptors": [
+        {
+          "id": "example.adopter.account",
+          "version": "v0",
+          "kind": "entity",
+          "rust_type": "Account",
+          "fields": [
+            {
+              "name": "id",
+              "rust_type": "String"
+            },
+            {
+              "name": "email",
+              "rust_type": "String"
+            }
+          ],
+          "invariants": [],
+          "trace_links": [
+            {
+              "relation": "requirement",
+              "target": "RUNE-REQ-060"
+            }
+          ],
+          "extensions": []
+        },
+        {
+          "id": "example.adopter.open_account",
+          "version": "v0",
+          "kind": "command",
+          "rust_type": "OpenAccount",
+          "fields": [
+            {
+              "name": "account_id",
+              "rust_type": "String"
+            },
+            {
+              "name": "email",
+              "rust_type": "String"
+            }
+          ],
+          "invariants": [],
+          "trace_links": [
+            {
+              "relation": "requirement",
+              "target": "RUNE-REQ-060"
+            }
+          ],
+          "extensions": []
+        }
+      ]
+    }
+  }
+}

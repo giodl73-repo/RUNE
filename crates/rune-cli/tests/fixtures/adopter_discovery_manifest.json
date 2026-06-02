@@ -1,0 +1,13 @@
+{
+  "manifest_id": "example.adopter_discovery",
+  "manifest_version": "v0",
+  "collection_id": "example.discovered_adopter_contracts",
+  "collection_version": "v0",
+  "entries": [
+    {
+      "name": "adopter-contracts",
+      "source_kind": "descriptor_collection_fixture",
+      "source": "..\\..\\..\\..\\examples\\rune-adopter\\tests\\fixtures\\adopter_contract_collection.json"
+    }
+  ]
+}

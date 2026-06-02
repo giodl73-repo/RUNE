@@ -1,0 +1,28 @@
+{
+  "adapter_id": "rune.review_packet_json",
+  "adapter_version": "v0",
+  "output_artifact_kind": "rune.review_packet.json",
+  "source_collection_id": "example.adopter_contracts",
+  "source_collection_version": "v0",
+  "item_count": 2,
+  "items": [
+    {
+      "descriptor_id": "example.adopter.account",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity",
+      "rust_type": "Account",
+      "field_count": 2,
+      "trace_link_count": 1,
+      "review_prompt": "Review entity example.adopter.account for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.adopter.open_account",
+      "descriptor_version": "v0",
+      "descriptor_kind": "command",
+      "rust_type": "OpenAccount",
+      "field_count": 2,
+      "trace_link_count": 1,
+      "review_prompt": "Review command example.adopter.open_account for identity, version, fields, traceability, and adapter readiness."
+    }
+  ]
+}

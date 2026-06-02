@@ -1,0 +1,5 @@
+error: missing required rune attribute: version
+ --> tests/ui/fail_missing_version.rs:5:8
+  |
+5 | struct MissingVersionContract {
+  |        ^^^^^^^^^^^^^^^^^^^^^^

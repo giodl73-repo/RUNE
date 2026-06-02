@@ -1,0 +1,6 @@
+{
+  "id": "example.customer",
+  "version": "v0",
+  "kind": "product_specific_kind",
+  "rust_type": "Customer"
+}

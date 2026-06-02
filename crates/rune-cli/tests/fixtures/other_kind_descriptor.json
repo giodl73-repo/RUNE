@@ -1,0 +1,6 @@
+{
+  "id": "example.custom",
+  "version": "v0",
+  "kind": "other",
+  "rust_type": "Custom"
+}

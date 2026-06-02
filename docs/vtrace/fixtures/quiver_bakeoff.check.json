@@ -1,0 +1,41 @@
+{
+  "status": "ok",
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "collection_id": "quiver.bakeoff_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "quiver.capability",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "quiver.repo_target",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "quiver.run_plan",
+      "descriptor_version": "v0",
+      "descriptor_kind": "artifact"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "quiver.run_event",
+      "descriptor_version": "v0",
+      "descriptor_kind": "event"
+    }
+  ]
+}

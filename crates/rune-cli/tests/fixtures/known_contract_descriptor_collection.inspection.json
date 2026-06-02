@@ -1,0 +1,190 @@
+{
+  "collection_id": "example.known_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "id": "example.customer",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Customer",
+      "fields": [
+        {
+          "name": "id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-034"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.create_customer",
+      "version": "v0",
+      "kind": "command",
+      "rust_type": "CreateCustomer",
+      "fields": [
+        {
+          "name": "customer_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-045"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.customer_created",
+      "version": "v0",
+      "kind": "event",
+      "rust_type": "CustomerCreated",
+      "fields": [
+        {
+          "name": "customer_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "occurred_at",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-047"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.customer_lifecycle",
+      "version": "v0",
+      "kind": "state",
+      "rust_type": "CustomerLifecycleState",
+      "fields": [
+        {
+          "name": "customer_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "status",
+          "rust_type": "String"
+        },
+        {
+          "name": "updated_at",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-048"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.contract_evidence",
+      "version": "v0",
+      "kind": "artifact",
+      "rust_type": "ContractEvidenceArtifact",
+      "fields": [
+        {
+          "name": "descriptor_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "artifact_uri",
+          "rust_type": "String"
+        },
+        {
+          "name": "artifact_kind",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-049"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.contract_source_reference",
+      "version": "v0",
+      "kind": "source",
+      "rust_type": "ContractSourceReference",
+      "fields": [
+        {
+          "name": "descriptor_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "source_path",
+          "rust_type": "String"
+        },
+        {
+          "name": "source_symbol",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-050"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.contract_verification_evidence",
+      "version": "v0",
+      "kind": "evidence",
+      "rust_type": "ContractVerificationEvidence",
+      "fields": [
+        {
+          "name": "descriptor_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "verification_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "evidence_uri",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-051"
+        }
+      ],
+      "extensions": []
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "adapter_id": "rune.review_packet_json",
+  "adapter_version": "v0",
+  "output_artifact_kind": "rune.review_packet.json",
+  "source_collection_id": "quiver.bakeoff_contracts",
+  "source_collection_version": "v0",
+  "item_count": 4,
+  "items": [
+    {
+      "descriptor_id": "quiver.capability",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity",
+      "rust_type": "Capability",
+      "field_count": 3,
+      "trace_link_count": 1,
+      "review_prompt": "Review entity quiver.capability for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "quiver.repo_target",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity",
+      "rust_type": "RepoTarget",
+      "field_count": 5,
+      "trace_link_count": 1,
+      "review_prompt": "Review entity quiver.repo_target for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "quiver.run_plan",
+      "descriptor_version": "v0",
+      "descriptor_kind": "artifact",
+      "rust_type": "RunPlan",
+      "field_count": 4,
+      "trace_link_count": 1,
+      "review_prompt": "Review artifact quiver.run_plan for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "quiver.run_event",
+      "descriptor_version": "v0",
+      "descriptor_kind": "event",
+      "rust_type": "RunEvent",
+      "field_count": 3,
+      "trace_link_count": 1,
+      "review_prompt": "Review event quiver.run_event for identity, version, fields, traceability, and adapter readiness."
+    }
+  ]
+}

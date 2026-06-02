@@ -1,0 +1,143 @@
+{
+  "profile_id": "rune.documentation_packet_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.documentation_packet.json",
+  "source_kind": "collection",
+  "source_id": "quiver.bakeoff_contracts",
+  "source_version": "v0",
+  "descriptor_count": 4,
+  "descriptors": [
+    {
+      "id": "quiver.capability",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Capability",
+      "field_count": 3,
+      "fields": [
+        {
+          "name": "id",
+          "rust_type": "String"
+        },
+        {
+          "name": "summary",
+          "rust_type": "String"
+        },
+        {
+          "name": "commands",
+          "rust_type": "Vec<String>"
+        }
+      ],
+      "invariant_count": 0,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-070"
+        }
+      ],
+      "extension_count": 0
+    },
+    {
+      "id": "quiver.repo_target",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "RepoTarget",
+      "field_count": 5,
+      "fields": [
+        {
+          "name": "name",
+          "rust_type": "String"
+        },
+        {
+          "name": "path",
+          "rust_type": "String"
+        },
+        {
+          "name": "kind",
+          "rust_type": "TargetKind"
+        },
+        {
+          "name": "description",
+          "rust_type": "Option<String>"
+        },
+        {
+          "name": "capabilities",
+          "rust_type": "Vec<Capability>"
+        }
+      ],
+      "invariant_count": 0,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-070"
+        }
+      ],
+      "extension_count": 0
+    },
+    {
+      "id": "quiver.run_plan",
+      "version": "v0",
+      "kind": "artifact",
+      "rust_type": "RunPlan",
+      "field_count": 4,
+      "fields": [
+        {
+          "name": "goal",
+          "rust_type": "String"
+        },
+        {
+          "name": "agent",
+          "rust_type": "AgentProfile"
+        },
+        {
+          "name": "context",
+          "rust_type": "ContextPlan"
+        },
+        {
+          "name": "steps",
+          "rust_type": "Vec<PlanStep>"
+        }
+      ],
+      "invariant_count": 0,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-070"
+        }
+      ],
+      "extension_count": 0
+    },
+    {
+      "id": "quiver.run_event",
+      "version": "v0",
+      "kind": "event",
+      "rust_type": "RunEvent",
+      "field_count": 3,
+      "fields": [
+        {
+          "name": "kind",
+          "rust_type": "RunEventKind"
+        },
+        {
+          "name": "step_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "message",
+          "rust_type": "String"
+        }
+      ],
+      "invariant_count": 0,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-070"
+        }
+      ],
+      "extension_count": 0
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+error: missing required rune attribute: id
+ --> tests/ui/fail_missing_id.rs:5:8
+  |
+5 | struct MissingIdContract {
+  |        ^^^^^^^^^^^^^^^^^

@@ -1,0 +1,26 @@
+{
+  "adapters": [
+    {
+      "adapter_id": "rune.review_packet_json",
+      "adapter_version": "v0",
+      "accepted_input_artifact_kinds": [
+        "rune.descriptor_collection.json"
+      ],
+      "supported_kinds": [
+        "entity",
+        "event",
+        "command",
+        "state",
+        "artifact",
+        "source",
+        "evidence"
+      ],
+      "supported_concepts": [
+        "fields",
+        "trace_links"
+      ],
+      "unsupported_policy": "error",
+      "output_artifact_kind": "rune.review_packet.json"
+    }
+  ]
+}

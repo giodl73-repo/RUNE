@@ -1,0 +1,33 @@
+{
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.descriptor.json",
+  "descriptor": {
+    "id": "example.customer_lifecycle",
+    "version": "v0",
+    "kind": "state",
+    "rust_type": "CustomerLifecycleState",
+    "fields": [
+      {
+        "name": "customer_id",
+        "rust_type": "String"
+      },
+      {
+        "name": "status",
+        "rust_type": "String"
+      },
+      {
+        "name": "updated_at",
+        "rust_type": "String"
+      }
+    ],
+    "invariants": [],
+    "trace_links": [
+      {
+        "relation": "requirement",
+        "target": "RUNE-REQ-048"
+      }
+    ],
+    "extensions": []
+  }
+}

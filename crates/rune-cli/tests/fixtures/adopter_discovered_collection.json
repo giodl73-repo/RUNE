@@ -1,0 +1,54 @@
+{
+  "collection_id": "example.discovered_adopter_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "id": "example.adopter.account",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Account",
+      "fields": [
+        {
+          "name": "id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-060"
+        }
+      ],
+      "extensions": []
+    },
+    {
+      "id": "example.adopter.open_account",
+      "version": "v0",
+      "kind": "command",
+      "rust_type": "OpenAccount",
+      "fields": [
+        {
+          "name": "account_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-060"
+        }
+      ],
+      "extensions": []
+    }
+  ]
+}

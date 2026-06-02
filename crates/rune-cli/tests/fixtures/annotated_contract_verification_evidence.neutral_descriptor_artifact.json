@@ -1,0 +1,33 @@
+{
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.descriptor.json",
+  "descriptor": {
+    "id": "example.contract_verification_evidence",
+    "version": "v0",
+    "kind": "evidence",
+    "rust_type": "ContractVerificationEvidence",
+    "fields": [
+      {
+        "name": "descriptor_id",
+        "rust_type": "String"
+      },
+      {
+        "name": "verification_id",
+        "rust_type": "String"
+      },
+      {
+        "name": "evidence_uri",
+        "rust_type": "String"
+      }
+    ],
+    "invariants": [],
+    "trace_links": [
+      {
+        "relation": "requirement",
+        "target": "RUNE-REQ-051"
+      }
+    ],
+    "extensions": []
+  }
+}

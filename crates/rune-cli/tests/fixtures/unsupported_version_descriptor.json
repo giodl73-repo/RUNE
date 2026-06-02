@@ -1,0 +1,6 @@
+{
+  "id": "example.customer",
+  "version": "v9",
+  "kind": "entity",
+  "rust_type": "Customer"
+}

@@ -1,0 +1,65 @@
+{
+  "status": "ok",
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "collection_id": "example.known_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.customer",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.create_customer",
+      "descriptor_version": "v0",
+      "descriptor_kind": "command"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.customer_created",
+      "descriptor_version": "v0",
+      "descriptor_kind": "event"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.customer_lifecycle",
+      "descriptor_version": "v0",
+      "descriptor_kind": "state"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.contract_evidence",
+      "descriptor_version": "v0",
+      "descriptor_kind": "artifact"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.contract_source_reference",
+      "descriptor_version": "v0",
+      "descriptor_kind": "source"
+    },
+    {
+      "status": "ok",
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0",
+      "descriptor_id": "example.contract_verification_evidence",
+      "descriptor_version": "v0",
+      "descriptor_kind": "evidence"
+    }
+  ]
+}

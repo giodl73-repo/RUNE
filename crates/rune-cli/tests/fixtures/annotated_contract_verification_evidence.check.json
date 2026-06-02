@@ -1,0 +1,8 @@
+{
+  "status": "ok",
+  "profile_id": "rune.neutral_descriptor_json",
+  "profile_version": "v0",
+  "descriptor_id": "example.contract_verification_evidence",
+  "descriptor_version": "v0",
+  "descriptor_kind": "evidence"
+}

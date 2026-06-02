@@ -1,0 +1,16 @@
+{
+  "collection_id": "example.unsupported_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "id": "example.custom",
+      "version": "v0",
+      "kind": "other",
+      "rust_type": "CustomContract",
+      "fields": [],
+      "invariants": [],
+      "trace_links": [],
+      "extensions": []
+    }
+  ]
+}

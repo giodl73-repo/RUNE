@@ -1,0 +1,26 @@
+{
+  "collection_id": "example.known_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "id": "example.customer",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Customer",
+      "fields": [],
+      "invariants": [],
+      "trace_links": [],
+      "extensions": []
+    },
+    {
+      "id": "example.customer",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "CustomerAgain",
+      "fields": [],
+      "invariants": [],
+      "trace_links": [],
+      "extensions": []
+    }
+  ]
+}

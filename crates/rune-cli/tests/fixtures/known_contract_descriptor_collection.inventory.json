@@ -1,0 +1,35 @@
+{
+  "collection_id": "example.known_contracts",
+  "collection_version": "v0",
+  "descriptor_count": 7,
+  "kinds": [
+    {
+      "kind": "artifact",
+      "descriptor_count": 1
+    },
+    {
+      "kind": "command",
+      "descriptor_count": 1
+    },
+    {
+      "kind": "entity",
+      "descriptor_count": 1
+    },
+    {
+      "kind": "event",
+      "descriptor_count": 1
+    },
+    {
+      "kind": "evidence",
+      "descriptor_count": 1
+    },
+    {
+      "kind": "source",
+      "descriptor_count": 1
+    },
+    {
+      "kind": "state",
+      "descriptor_count": 1
+    }
+  ]
+}

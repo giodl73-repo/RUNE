@@ -1,0 +1,73 @@
+{
+  "adapter_id": "rune.review_packet_json",
+  "adapter_version": "v0",
+  "output_artifact_kind": "rune.review_packet.json",
+  "source_collection_id": "example.known_contracts",
+  "source_collection_version": "v0",
+  "item_count": 7,
+  "items": [
+    {
+      "descriptor_id": "example.customer",
+      "descriptor_version": "v0",
+      "descriptor_kind": "entity",
+      "rust_type": "Customer",
+      "field_count": 2,
+      "trace_link_count": 1,
+      "review_prompt": "Review entity example.customer for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.create_customer",
+      "descriptor_version": "v0",
+      "descriptor_kind": "command",
+      "rust_type": "CreateCustomer",
+      "field_count": 2,
+      "trace_link_count": 1,
+      "review_prompt": "Review command example.create_customer for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.customer_created",
+      "descriptor_version": "v0",
+      "descriptor_kind": "event",
+      "rust_type": "CustomerCreated",
+      "field_count": 2,
+      "trace_link_count": 1,
+      "review_prompt": "Review event example.customer_created for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.customer_lifecycle",
+      "descriptor_version": "v0",
+      "descriptor_kind": "state",
+      "rust_type": "CustomerLifecycleState",
+      "field_count": 3,
+      "trace_link_count": 1,
+      "review_prompt": "Review state example.customer_lifecycle for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.contract_evidence",
+      "descriptor_version": "v0",
+      "descriptor_kind": "artifact",
+      "rust_type": "ContractEvidenceArtifact",
+      "field_count": 3,
+      "trace_link_count": 1,
+      "review_prompt": "Review artifact example.contract_evidence for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.contract_source_reference",
+      "descriptor_version": "v0",
+      "descriptor_kind": "source",
+      "rust_type": "ContractSourceReference",
+      "field_count": 3,
+      "trace_link_count": 1,
+      "review_prompt": "Review source example.contract_source_reference for identity, version, fields, traceability, and adapter readiness."
+    },
+    {
+      "descriptor_id": "example.contract_verification_evidence",
+      "descriptor_version": "v0",
+      "descriptor_kind": "evidence",
+      "rust_type": "ContractVerificationEvidence",
+      "field_count": 3,
+      "trace_link_count": 1,
+      "review_prompt": "Review evidence example.contract_verification_evidence for identity, version, fields, traceability, and adapter readiness."
+    }
+  ]
+}

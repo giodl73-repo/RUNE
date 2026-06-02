@@ -1,0 +1,63 @@
+{
+  "profile_id": "rune.documentation_packet_json",
+  "profile_version": "v0",
+  "output_artifact_kind": "rune.documentation_packet.json",
+  "source_kind": "collection",
+  "source_id": "example.adopter_contracts",
+  "source_version": "v0",
+  "descriptor_count": 2,
+  "descriptors": [
+    {
+      "id": "example.adopter.account",
+      "version": "v0",
+      "kind": "entity",
+      "rust_type": "Account",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariant_count": 0,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-060"
+        }
+      ],
+      "extension_count": 0
+    },
+    {
+      "id": "example.adopter.open_account",
+      "version": "v0",
+      "kind": "command",
+      "rust_type": "OpenAccount",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "account_id",
+          "rust_type": "String"
+        },
+        {
+          "name": "email",
+          "rust_type": "String"
+        }
+      ],
+      "invariant_count": 0,
+      "trace_link_count": 1,
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-060"
+        }
+      ],
+      "extension_count": 0
+    }
+  ]
+}

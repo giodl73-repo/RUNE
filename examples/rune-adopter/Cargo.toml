@@ -1,0 +1,13 @@
+[package]
+name = "rune-adopter"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+rune-core.workspace = true
+rune-derive.workspace = true
+
+[dev-dependencies]
+rune-adapters.workspace = true
+serde_json.workspace = true
