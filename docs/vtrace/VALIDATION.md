@@ -518,6 +518,18 @@ corpus governance while preserving the v1 code surface.
 | Scope control | pass | The package explicitly preserves v1 non-goals: no source scraping, Cargo traversal, executable hooks, automatic publishing, or product vocabulary in `rune-core`. |
 | Evidence continuity | pass | Trace walkthroughs connect the adopter example and QUIVER bakeoff fixtures to review decisions. |
 
+## Wave 34 adoption validation runbook
+
+RUNE now has an ordered operator runbook for validating the complete adopter
+evidence path over existing fixtures and approved CLI commands.
+
+| Area | Result | Finding |
+|---|---|---|
+| Executability | pass | The runbook gives concrete commands for adopter tests, inspection, compatibility, inventory, discovery, evidence bundles, profile output, and adapter output. |
+| Evidence grounding | pass | Every command points at retained adopter or discovery fixtures already present in the repo. |
+| Scope control | pass | The runbook adds no CLI behavior and preserves v1 non-goals around source scraping, Cargo traversal, hooks, automatic publication, and product vocabulary in core. |
+| Reviewer usefulness | pass | Pass criteria tell reviewers what must be visible before relying on generated evidence. |
+
 ## Validation command
 
 ```powershell

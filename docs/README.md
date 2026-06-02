@@ -7,6 +7,7 @@ product overview, then use this map to choose the right depth.
 |---|---|---|
 | [Concepts](concepts/) | Rust maintainers, AI tooling authors, reviewers | Explain the model: descriptors, evidence, discovery, profiles, and adapters. |
 | [How-to guides](how-to/) | Adopters and operators | Complete one concrete task with commands and expected boundaries. |
+| [Runbooks](runbooks/) | Operators and release reviewers | Execute ordered validation sequences over retained evidence. |
 | [Tutorials](tutorials/) | Hands-on learners | Walk from a first annotated type to retained profile and adapter evidence. |
 | [Examples](examples/) | Implementers | Copyable references for the adopter crate and retained JSON outputs. |
 | [Traces](traces/) | Reviewers and assurance users | End-to-end walkthroughs that connect commands, evidence, and decisions. |
@@ -22,6 +23,7 @@ product overview, then use this map to choose the right depth.
 |---|---|
 | Understand what RUNE adds to Rust | [Concepts: descriptors as contracts](concepts/descriptors-as-contracts.md) |
 | Add RUNE to a crate | [Tutorials: adopter path](tutorials/adopter-path/) |
+| Validate the full adopter evidence path | [Runbook: adopter evidence validation](runbooks/adopter-evidence-validation.md) |
 | Generate reviewable evidence | [How-to: generate retained evidence](how-to/generate-retained-evidence.md) |
 | Use discovery safely | [How-to: use a discovery manifest](how-to/use-discovery-manifest.md) |
 | Build a downstream integration | [Concepts: profiles and adapters](concepts/profiles-and-adapters.md) |

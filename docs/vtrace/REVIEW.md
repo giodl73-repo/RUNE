@@ -931,6 +931,33 @@ Role review was run after the adoption docs package was created.
 Conclusion: the `.roles` review passes after correcting the manifest reference
 and clarifying the durable evidence boundary for the QUIVER walkthrough.
 
+## Wave 34 adoption validation runbook review
+
+Reviewed surfaces:
+
+- `docs/runbooks/README.md`
+- `docs/runbooks/adopter-evidence-validation.md`
+- `docs/README.md`
+- `docs/CORPUS.md`
+- `docs/how-to/README.md`
+- `docs/traces/adopter-v1-walkthrough.md`
+- `PRODUCT_PLAN.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-02-adoption-validation-runbook/`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Operator usefulness | pass | The runbook provides one ordered command sequence instead of scattering commands across tutorials and how-tos. |
+| Evidence references | pass | Commands use existing retained fixtures and the reviewed adopter discovery manifest. |
+| Product neutrality | pass | The runbook keeps source scraping, Cargo traversal, hooks, automatic publishing, and product-specific core vocabulary out of scope. |
+| Traceability | pass | Requirement, trace, verification, validation, review, and wave records all point to the runbook evidence. |
+
+Conclusion: Wave 34 closes the adopter validation runbook without broadening the
+RUNE code surface.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor

@@ -25,6 +25,9 @@ depending on arbitrary source scanning.
 
 ## Validation commands
 
+For the full ordered command sequence, use
+`docs\runbooks\adopter-evidence-validation.md`.
+
 ```powershell
 cargo test -p rune-adopter
 cargo run -p rune-cli -- inspect-collection --fixture examples\rune-adopter\tests\fixtures\adopter_contract_collection.json

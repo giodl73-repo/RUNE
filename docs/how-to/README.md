@@ -10,3 +10,6 @@ basic RUNE model and want to complete one workflow.
 | [Generate retained evidence](generate-retained-evidence.md) | Inspect, check, inventory, and emit evidence from a collection fixture. |
 | [Use a discovery manifest](use-discovery-manifest.md) | Merge approved retained collections deterministically. |
 | [Generate profile and adapter output](generate-profile-and-adapter-output.md) | Emit documentation packets and review packets. |
+
+For ordered end-to-end validation, use the
+[adopter evidence validation runbook](../runbooks/adopter-evidence-validation.md).

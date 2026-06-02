@@ -12,6 +12,7 @@ evolves.
 | `docs\README.md` | Documentation map and recommended reading paths. | A docs surface is added, renamed, or retired. |
 | `docs\concepts\` | Durable mental models. | A concept changes or a new adopter decision needs explanation before procedures. |
 | `docs\how-to\` | Task-oriented procedures. | A supported workflow gains or changes commands. |
+| `docs\runbooks\` | Ordered operator validation sequences. | A supported end-to-end command path changes or gains retained evidence. |
 | `docs\tutorials\` | Progressive learning paths. | A new end-to-end adoption path is supported. |
 | `docs\examples\` | Copyable example references and retained outputs. | Example crate files, fixtures, or expected outputs change. |
 | `docs\traces\` | End-to-end evidence walkthroughs. | A scenario, bakeoff, or adopter workflow becomes evidence for a decision. |
@@ -30,6 +31,8 @@ evolves.
    intended for adopters.
 5. A new bakeoff needs a trace walkthrough plus `docs\vtrace\BAKEOFF.md` and
    `docs\vtrace\VALIDATION.md` updates.
+6. A new runbook needs concrete command inputs, retained evidence references,
+   pass criteria, and validation under the current CLI surface.
 
 ## Documentation validation
 

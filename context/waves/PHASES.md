@@ -41,6 +41,7 @@ Work is organized into VTRACE-style waves and pulses.
 - `2026-06-02-representative-repo-bakeoff`
 - `2026-06-02-v1-release-readiness`
 - `2026-06-02-adoption-docs-package`
+- `2026-06-02-adoption-validation-runbook`
 
 ## Protocol
 

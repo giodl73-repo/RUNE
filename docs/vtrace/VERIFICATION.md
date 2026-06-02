@@ -68,6 +68,7 @@ cargo run -p rune-cli -- status
 | Representative repo bakeoff | QUIVER scenario fixtures retain descriptor collection, compatibility check, documentation packet, and review packet evidence generated through RUNE CLI commands. | covered |
 | V1 release readiness | Release readiness docs define crate surfaces, CI-ready validation, compatibility policy, retained evidence, and v1 non-goals. | covered |
 | Adoption docs package | Documentation indexes, concepts, how-tos, tutorials, examples, traces, corpus rules, README links, product plan wave notes, and VTRACE rows describe the v1 adoption path without changing code behavior. | covered |
+| Adoption validation runbook | `docs\runbooks\adopter-evidence-validation.md` defines the ordered commands for adopter tests, collection inspection, compatibility checks, inventory, discovery, evidence bundles, documentation packets, and review packets over retained fixtures. | covered |
 
 ## Evidence rule
 

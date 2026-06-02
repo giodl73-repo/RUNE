@@ -281,6 +281,15 @@ governance.
 Status: complete as a documentation-only adoption package. No new CLI behavior,
 discovery expansion, or product-specific core vocabulary was added.
 
+### Wave 34: Adoption validation runbook
+
+Add an ordered operator runbook that exercises the existing v1 adopter fixtures,
+discovery manifest, evidence bundle, documentation packet profile, and review
+packet adapter without changing RUNE code behavior.
+
+Status: complete as a documentation-only runbook over existing retained
+evidence and approved CLI commands.
+
 ## Non-goals
 
 - Do not encode BAKER, LATTICE, FLETCHER, ARCADE, or any other product names in
