@@ -263,7 +263,64 @@ Record the managed native semantic runtime mission and gate semantic registry,
 state graph, evidence runtime, agent protocol, compatibility negotiation,
 capability policy, and runtime host work behind future DCRs.
 
-Status: documentation and VTRACE control package.
+Status: documentation and VTRACE control package complete; planning index and
+lane interface docs complete.
+
+### Wave 42: Semantic registry interface
+
+Define crate/workspace/process registry documents over descriptor collections,
+profiles, adapters, ownership, capabilities, and version boundaries.
+
+Status: planning complete in `docs\architecture\semantic-registry-interface.md`;
+ready for a narrow implementation DCR.
+
+### Wave 43: State graph interface
+
+Define retained state graph and transition evidence keyed by descriptor ids,
+registry refs, ownership, and evidence links.
+
+Status: planning complete in `docs\architecture\state-graph-interface.md`;
+implementation waits for semantic registry.
+
+### Wave 44: Evidence runtime packets
+
+Define diagnostic, validation, trace, health, and audit packets tied to
+descriptor ids and semantic registries.
+
+Status: planning complete in `docs\architecture\evidence-runtime-packets.md`.
+
+### Wave 45: Agent protocol interface
+
+Define read-first agent/tool query operations over registries, descriptors,
+evidence, compatibility reports, profiles, and adapters.
+
+Status: planning complete in `docs\architecture\agent-protocol-interface.md`;
+mutating operations remain blocked.
+
+### Wave 46: Compatibility negotiation
+
+Define compatibility reports across collections, profiles, adapters, registries,
+state graphs, protocols, and optional runtime hosts.
+
+Status: planning complete in `docs\architecture\compatibility-negotiation.md`;
+automatic migration remains blocked.
+
+### Wave 47: Capability and sensitivity policy
+
+Define sensitivity, exportability, mutability, authority, stability, and
+retention metadata before private data or runtime endpoints are exposed.
+
+Status: planning complete in
+`docs\architecture\capability-sensitivity-policy.md`; enforcement remains
+blocked.
+
+### Wave 48: Optional runtime host design
+
+Define the optional native runtime host only as a future surface over approved
+registry, state, evidence, agent protocol, compatibility, and policy lanes.
+
+Status: planning complete in `docs\architecture\runtime-host-design.md`;
+implementation blocked until prerequisite lanes are implemented and reviewed.
 
 ### Wave 29: CLI hardening
 

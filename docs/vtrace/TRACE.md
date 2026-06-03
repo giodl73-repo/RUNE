@@ -60,12 +60,13 @@
 | NEED-005 | RUNE-REQ-075 | Field metadata DCR | `docs/vtrace/DCR.md` | DCR review and `git diff --check` | DCR-RUNE-001 |
 | NEED-005 | RUNE-REQ-076 | Field-level metadata implementation | `FieldMetadataDescriptor`, `FieldMetadataDocument`, `#[rune_field(...)]`, `examples/rune-shape-calculator` | Core, derive, shape, CLI, and workspace tests | Wave 36 field metadata evidence |
 | NEED-006 / NEED-007 / NEED-008 / NEED-009 / NEED-010 | RUNE-REQ-077 | Mission 2.0 managed native semantic runtime direction | `docs/vtrace/MISSION_2_0.md`, `docs/vtrace/DCR.md` | DCR review and `git diff --check` | Wave 41 Mission 2.0 control package |
-| NEED-006 | RUNE-REQ-078 | Semantic registry lane | Future semantic registry interface DCR | Future interface review and registry fixtures | Planned Wave 42 |
-| NEED-006 / NEED-007 | RUNE-REQ-079 | State graph and transition evidence lane | Future state graph interface DCR | Future interface review and state graph fixtures | Planned Wave 43 |
-| NEED-008 | RUNE-REQ-080 | Evidence runtime packet lane | Future evidence runtime DCR | Future packet fixture review | Planned Wave 44 |
-| NEED-007 / NEED-010 | RUNE-REQ-081 | Agent-safe protocol lane | Future agent protocol DCR | Future protocol fixture and fail-closed diagnostics review | Planned Wave 45 |
-| NEED-009 | RUNE-REQ-082 | Compatibility negotiation lane | Future compatibility negotiation DCR | Future compatibility report fixtures | Planned Wave 46 |
-| NEED-010 | RUNE-REQ-083 | Capability and sensitivity policy lane | Future policy DCR | Future policy compatibility checks | Planned Wave 47 |
+| NEED-006 | RUNE-REQ-078 | Semantic registry lane | `docs/architecture/semantic-registry-interface.md` | Interface review and future registry fixtures | Wave 42 planning complete |
+| NEED-006 / NEED-007 | RUNE-REQ-079 | State graph and transition evidence lane | `docs/architecture/state-graph-interface.md` | Interface review and future state graph fixtures | Wave 43 planning complete |
+| NEED-008 | RUNE-REQ-080 | Evidence runtime packet lane | `docs/architecture/evidence-runtime-packets.md` | Interface review and future packet fixtures | Wave 44 planning complete |
+| NEED-007 / NEED-010 | RUNE-REQ-081 | Agent-safe protocol lane | `docs/architecture/agent-protocol-interface.md` | Interface review and future protocol fixtures | Wave 45 planning complete |
+| NEED-009 | RUNE-REQ-082 | Compatibility negotiation lane | `docs/architecture/compatibility-negotiation.md` | Interface review and future compatibility report fixtures | Wave 46 planning complete |
+| NEED-010 | RUNE-REQ-083 | Capability and sensitivity policy lane | `docs/architecture/capability-sensitivity-policy.md` | Interface review and future policy checks | Wave 47 planning complete |
+| NEED-006 / NEED-007 / NEED-008 / NEED-009 / NEED-010 | RUNE-REQ-084 | Optional runtime host design blocker | `docs/architecture/runtime-host-design.md` | Interface review and future host fixtures | Wave 48 planning complete |
 
 ## Specification Visibility
 
@@ -79,4 +80,4 @@
 | SPEC-RUNE-006 | RUNE-REQ-060 / RUNE-REQ-061 / RUNE-REQ-062 / RUNE-REQ-066 / RUNE-REQ-067 | Discovery and adapter boundary | Adopter registry, discovery manifest, and review packet adapter evidence |
 | SPEC-RUNE-007 | RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 / RUNE-REQ-073 / RUNE-REQ-074 | Validation, release, adoption docs, runbooks, and games adoption guidance | Workspace validation, QUIVER bakeoff, release readiness, docs package, adopter validation runbook, shape scenario, and games survey |
 | SPEC-RUNE-008 | RUNE-REQ-075 / RUNE-REQ-076 | Design change control and field metadata | DCR-RUNE-001 records planned field-level metadata scope before implementation; Wave 36 implements the approved first slice with retained evidence. |
-| SPEC-RUNE-009 | RUNE-REQ-077 / RUNE-REQ-078 / RUNE-REQ-079 / RUNE-REQ-080 / RUNE-REQ-081 / RUNE-REQ-082 / RUNE-REQ-083 | Mission 2.0 managed native semantic runtime | DCR-RUNE-002 upgrades the mission and gates semantic registry, state graph, evidence runtime, agent protocol, compatibility negotiation, capability policy, and optional runtime host lanes behind future DCRs. |
+| SPEC-RUNE-009 | RUNE-REQ-077 / RUNE-REQ-078 / RUNE-REQ-079 / RUNE-REQ-080 / RUNE-REQ-081 / RUNE-REQ-082 / RUNE-REQ-083 / RUNE-REQ-084 | Mission 2.0 managed native semantic runtime | DCR-RUNE-002 upgrades the mission and `docs/architecture/mission-2-planning-index.md` closes planning for semantic registry, state graph, evidence runtime, agent protocol, compatibility negotiation, capability policy, and optional runtime host lanes. |

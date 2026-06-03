@@ -136,6 +136,26 @@ Mission 2.0 remains a direction, not an implementation claim. Runtime host and
 agent protocol implementation are blocked until their DCRs define boundaries,
 diagnostics, fixtures, and validation commands.
 
+## Mission 2.0 planning closeout
+
+The planning package is now complete enough to start the first implementation
+DCR. `docs/architecture/mission-2-planning-index.md` points to interface specs
+for semantic registry, state graph, evidence runtime packets, agent protocol,
+compatibility negotiation, capability/sensitivity policy, and optional runtime
+host design.
+
+Validation posture:
+
+| Lane | Planning status | Implementation status |
+|---|---|---|
+| Semantic registry | complete | ready for narrow implementation DCR |
+| State graph | complete | blocked until registry implementation exists |
+| Evidence runtime packets | complete | blocked until packet fixtures and diagnostics are designed in implementation DCR |
+| Agent protocol | complete | blocked until registry, evidence, and policy prerequisites exist |
+| Compatibility negotiation | complete | blocked until report fixtures are implemented |
+| Capability and sensitivity policy | complete | blocked until enforcement boundary DCR |
+| Runtime host | complete as design blocker | blocked until prior lanes are implemented and reviewed |
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for

@@ -215,13 +215,22 @@ remain gated:
 
 | Lane | Readiness |
 |---|---|
-| Semantic registry | ready for interface DCR/spec |
-| State graph | gated until registry shape is specified |
-| Evidence runtime packets | gated until packet documents, diagnostics, and fixtures are specified |
-| Agent protocol | gated until read-first operations, capability declarations, and command examples are specified |
-| Compatibility negotiation | gated until collection/profile/adapter/runtime-host report shapes are specified |
-| Capability and sensitivity policy | gated until exportability, mutability, authority, and enforcement boundaries are specified |
-| Runtime host | blocked until all prior lanes have approved boundaries |
+| Semantic registry | interface planning complete in `docs/architecture/semantic-registry-interface.md`; ready for implementation DCR |
+| State graph | interface planning complete in `docs/architecture/state-graph-interface.md`; implementation gated until semantic registry shape exists |
+| Evidence runtime packets | interface planning complete in `docs/architecture/evidence-runtime-packets.md`; implementation gated until packet fixtures and diagnostics are added |
+| Agent protocol | interface planning complete in `docs/architecture/agent-protocol-interface.md`; implementation gated until registry, evidence, and policy surfaces exist |
+| Compatibility negotiation | interface planning complete in `docs/architecture/compatibility-negotiation.md`; implementation gated until report fixtures are added |
+| Capability and sensitivity policy | interface planning complete in `docs/architecture/capability-sensitivity-policy.md`; implementation gated until enforcement boundaries are approved |
+| Runtime host | design planning complete in `docs/architecture/runtime-host-design.md`; implementation blocked until all prior lanes have approved implementations |
+
+### Planning closeout
+
+Mission 2.0 planning is complete as a docs/spec package. The planning index is
+`docs/architecture/mission-2-planning-index.md`.
+
+Next allowed implementation-oriented work is a narrow DCR for **Wave 42:
+Semantic registry implementation**. All other lanes remain blocked until their
+dependencies have retained fixtures, diagnostics, and validation commands.
 
 ### Validation expectations
 

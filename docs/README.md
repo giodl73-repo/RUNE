@@ -29,9 +29,12 @@ product overview, then use this map to choose the right depth.
 | Use discovery safely | [How-to: use a discovery manifest](how-to/use-discovery-manifest.md) |
 | Build a downstream integration | [Concepts: profiles and adapters](concepts/profiles-and-adapters.md) |
 | Evaluate game/simulation adoption | [Traces: games contract candidates](traces/games-contract-candidates.md) |
+| Review Mission 2.0 planning | [Architecture: Mission 2.0 planning index](architecture/mission-2-planning-index.md) |
 
 ## Current boundary
 
-The current docs describe RUNE v1. They do not promise arbitrary Rust source
-scraping, Cargo metadata traversal, executable hooks, automatic publishing, or
-product-specific vocabulary in `rune-core`.
+The current docs describe RUNE v1 plus Mission 2.0 planning. They do not promise
+arbitrary Rust source scraping, Cargo metadata traversal, executable hooks,
+automatic publishing, product-specific vocabulary in `rune-core`, runtime host
+behavior, live state inspection, mutating agent operations, or automatic
+migration.
