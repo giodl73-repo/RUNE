@@ -75,6 +75,7 @@ cargo run -p rune-cli -- status
 | Mission 2.0 control package | `MISSION_2_0.md`, DCR-RUNE-002, requirements, trace, validation, product docs, and wave records define managed native semantic runtime lanes without code changes. | covered |
 | Mission 2.0 planning package | Architecture interface docs cover semantic registry, state graph, evidence runtime packets, agent protocol, compatibility negotiation, capability policy, and optional runtime host design; planning index records implementation blockers. | covered |
 | Semantic registry implementation | `rune-core` tests cover retained semantic registry validation, duplicate collection failure, unsupported scope failure, and runtime capability blocking. | covered |
+| Semantic registry CLI checks | `rune-cli` tests compare retained registry check output and reject duplicate collection refs, runtime capability, unknown profile refs, and invalid usage. | covered |
 
 ## Evidence rule
 

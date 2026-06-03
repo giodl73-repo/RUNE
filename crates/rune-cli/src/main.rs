@@ -6,7 +6,9 @@ use rune_core::{
     DataContractDocument, DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
     DiscoveryManifestDraft, DocumentationPacketDocument, GeneratedArtifactDocument,
     GeneratedCollectionArtifactDocument, ProfileCatalog, ProfileCompatibilityCodes,
+    SemanticRegistryCapabilities, SemanticRegistryDocument, SemanticRegistryDraft,
 };
+use serde::Serialize;
 use std::path::Path;
 
 fn main() {
@@ -19,7 +21,7 @@ fn main() {
             println!("approved stage: v1 implementation waves");
             println!("contract kinds: entity,event,command,state,artifact,source,evidence,other");
             println!(
-                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
+                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
                 "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
@@ -37,6 +39,7 @@ fn main() {
         "adapter" => adapter(args.collect()),
         "check" => check(args.collect()),
         "check-collection" => check_collection(args.collect()),
+        "check-registry" => check_registry(args.collect()),
         "generate" => generate(args.collect()),
         "generate-collection" => generate_collection(args.collect()),
         "profile" => profile(args.collect()),
@@ -47,6 +50,18 @@ fn main() {
         eprintln!("{message}");
         std::process::exit(2);
     }
+}
+
+#[derive(Serialize)]
+struct SemanticRegistryCheckReportDocument {
+    status: String,
+    registry_id: String,
+    registry_version: String,
+    scope: String,
+    collection_count: usize,
+    profile_count: usize,
+    adapter_count: usize,
+    capabilities: SemanticRegistryCapabilities,
 }
 
 fn inspect_collection(args: Vec<String>) -> Result<(), String> {
@@ -269,6 +284,71 @@ fn check_collection(args: Vec<String>) -> Result<(), String> {
         format!("RUNE-COLL-CHECK-900 error serializing collection check report: {error}")
     })?;
     println!("{output}");
+    Ok(())
+}
+
+fn check_registry(args: Vec<String>) -> Result<(), String> {
+    let fixture = parse_fixture_arg(&args, "usage: rune check-registry --fixture <path>")?;
+    let registry = read_semantic_registry_fixture(&fixture, "RUNE-REGISTRY-900")?;
+    let registry = registry.validate_with_codes(
+        "RUNE-REGISTRY-001",
+        "RUNE-REGISTRY-002",
+        "RUNE-REGISTRY-003",
+        "RUNE-REGISTRY-004",
+        "RUNE-REGISTRY-007",
+    )?;
+    check_registry_catalog_refs(&registry)?;
+
+    let output = serde_json::to_string_pretty(&SemanticRegistryCheckReportDocument {
+        status: "ok".to_owned(),
+        registry_id: registry.registry_id,
+        registry_version: registry.registry_version,
+        scope: registry.scope,
+        collection_count: registry.collections.len(),
+        profile_count: registry.profiles.len(),
+        adapter_count: registry.adapters.len(),
+        capabilities: registry.capabilities,
+    })
+    .map_err(|error| {
+        format!("RUNE-REGISTRY-900 error serializing registry check report: {error}")
+    })?;
+    println!("{output}");
+    Ok(())
+}
+
+fn check_registry_catalog_refs(registry: &SemanticRegistryDocument) -> Result<(), String> {
+    let profiles = ProfileCatalog::approved();
+    for profile_ref in &registry.profiles {
+        let Some(profile) = profiles.find(&profile_ref.profile_id) else {
+            return Err(format!(
+                "RUNE-REGISTRY-006 unknown profile in semantic registry: {}",
+                profile_ref.profile_id
+            ));
+        };
+        if profile.profile_version != profile_ref.profile_version {
+            return Err(format!(
+                "RUNE-REGISTRY-006 unsupported profile version in semantic registry: {}@{}",
+                profile_ref.profile_id, profile_ref.profile_version
+            ));
+        }
+    }
+
+    let adapters = AdapterCatalog::approved();
+    for adapter_ref in &registry.adapters {
+        let Some(adapter) = adapters.find(&adapter_ref.adapter_id) else {
+            return Err(format!(
+                "RUNE-REGISTRY-006 unknown adapter in semantic registry: {}",
+                adapter_ref.adapter_id
+            ));
+        };
+        if adapter.adapter_version != adapter_ref.adapter_version {
+            return Err(format!(
+                "RUNE-REGISTRY-006 unsupported adapter version in semantic registry: {}@{}",
+                adapter_ref.adapter_id, adapter_ref.adapter_version
+            ));
+        }
+    }
+
     Ok(())
 }
 
@@ -560,4 +640,14 @@ fn read_discovery_manifest(
         .map_err(|error| format!("{io_code} error reading discovery manifest: {error}"))?;
     serde_json::from_str(&content)
         .map_err(|error| format!("{io_code} error parsing discovery manifest JSON: {error}"))
+}
+
+fn read_semantic_registry_fixture(
+    path: &str,
+    io_code: &'static str,
+) -> Result<SemanticRegistryDraft, String> {
+    let content = std::fs::read_to_string(Path::new(path))
+        .map_err(|error| format!("{io_code} error reading semantic registry fixture: {error}"))?;
+    serde_json::from_str(&content)
+        .map_err(|error| format!("{io_code} error parsing semantic registry fixture JSON: {error}"))
 }

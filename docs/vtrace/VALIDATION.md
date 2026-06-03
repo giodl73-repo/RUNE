@@ -170,7 +170,20 @@ default.
 | Deterministic collection refs | pass | Ordered collection references are preserved and duplicate id/version refs fail closed. |
 | Runtime safety | pass | `runtime: true` is rejected with `RUNE-REGISTRY-007`. |
 | Scope control | pass | Only `crate`, `workspace`, `process`, and `retained_bundle` scopes are accepted. |
-| Non-goals preserved | pass | No CLI command, runtime host, Cargo traversal, source scraping, or mutation was added. |
+| Non-goals preserved | pass | No runtime host, Cargo traversal, source scraping, or mutation was added. |
+
+## Wave 42 semantic registry CLI validation
+
+The read-only CLI slice validates retained registry fixtures and approved
+profile/adapter catalog references without loading collection source refs or
+performing discovery.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Registry check report | pass | `rune check-registry --fixture <path>` emits retained status/count/capability JSON. |
+| Catalog cross-checks | pass | Unknown profile or adapter references fail with `RUNE-REGISTRY-006`. |
+| Existing fail-closed behavior | pass | Duplicate collection refs and runtime capability declarations remain blocked. |
+| Runtime safety | pass | The command is read-only and does not add host behavior, mutation, Cargo traversal, source scraping, or plugin discovery. |
 
 ## Wave 4 readiness decision
 

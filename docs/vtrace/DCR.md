@@ -8,7 +8,7 @@ surface is implemented or stable.
 
 | Field | Value |
 |---|---|
-| Status | implemented first slice |
+| Status | implemented read-only registry slices |
 | Date | 2026-06-02 |
 | Source requirement | RUNE-REQ-075 |
 | Trigger | Shape data-contract scenario and games repo survey showed that data contracts need field-level metadata before broad game/simulation adoption. |
@@ -272,6 +272,7 @@ behavior, or agent protocol operations.
 | `SemanticRegistryAdapterRef` | implemented |
 | `SemanticRegistryCapabilities` | implemented |
 | Retained crate/workspace/failure fixtures | implemented |
+| `rune check-registry --fixture <path>` | implemented |
 
 ### Validation behavior
 
@@ -281,14 +282,14 @@ behavior, or agent protocol operations.
 | `RUNE-REGISTRY-002` missing registry version | implemented |
 | `RUNE-REGISTRY-003` duplicate collection id/version ref | implemented |
 | `RUNE-REGISTRY-004` unsupported registry scope | implemented |
+| `RUNE-REGISTRY-006` unknown or unsupported profile/adapter reference | implemented for approved catalog cross-checks |
 | `RUNE-REGISTRY-007` runtime capability blocked without host boundary | implemented |
 
-`RUNE-REGISTRY-005` and `RUNE-REGISTRY-006` remain future implementation
-diagnostics for cross-checking referenced collection/profile/adapter catalogs.
+`RUNE-REGISTRY-005` remains a future implementation diagnostic for loading and
+checking referenced collection source refs.
 
 ### Non-goals
 
-- No CLI registry command in this slice.
 - No runtime host.
 - No live state inspection.
 - No Cargo graph scanning.
@@ -297,6 +298,6 @@ diagnostics for cross-checking referenced collection/profile/adapter catalogs.
 
 ### Next allowed work
 
-The next semantic registry slice may add CLI inspection/check commands or catalog
-cross-checks for referenced profiles/adapters, but must stay read-only unless a
-new DCR approves mutation or runtime exposure.
+The next semantic registry slice may add retained collection source-ref loading or
+inspection reports, but must stay read-only unless a new DCR approves mutation or
+runtime exposure.

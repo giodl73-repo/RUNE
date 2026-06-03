@@ -1089,6 +1089,34 @@ Conclusion: Wave 42 first implementation slice passes. Next work may add
 read-only CLI inspection/check or catalog cross-checks, but runtime behavior and
 agent mutation remain blocked.
 
+## Wave 42 semantic registry CLI review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates/rune-cli/src/main.rs`
+- `crates/rune-cli/tests/registry_cli.rs`
+- `crates/rune-cli/tests/fixtures/semantic_registry_*.json`
+- `docs/architecture/semantic-registry-interface.md`
+- `docs/vtrace/DCR.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-03-semantic-registry/pulses/pulse-02.md`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Read-only command boundary | pass | `check-registry` reads one retained fixture and emits a report; it does not mutate state. |
+| Catalog compatibility | pass | Declared profiles and adapters are checked against approved catalogs with `RUNE-REGISTRY-006` failures. |
+| Runtime safety | pass | Runtime capability declarations still fail closed and no host behavior was added. |
+| Source boundary | pass | The command does not traverse Cargo metadata, scrape Rust source, discover plugins, or load collection source refs. |
+
+Conclusion: Wave 42 read-only CLI validation passes. Next work may load retained
+collection source refs for `RUNE-REGISTRY-005`, but runtime and mutation remain
+blocked.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor

@@ -85,5 +85,15 @@ documents:
 - retained fixtures for crate, workspace, duplicate collection, and runtime
   blocked scenarios
 
-This slice does not add CLI commands, runtime host behavior, Cargo traversal, or
-source scraping.
+This slice does not add runtime host behavior, Cargo traversal, or source
+scraping.
+
+## Read-only CLI status
+
+`rune check-registry --fixture <path>` validates retained semantic registry JSON
+and emits a compact check report. The command also cross-checks declared
+profile and adapter references against approved catalogs.
+
+The command remains read-only. It does not load collection source refs, traverse
+Cargo metadata, scrape Rust source, discover plugins, mutate registry state, or
+enable runtime host behavior.

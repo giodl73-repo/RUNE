@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "registry_id": "example.workspace_registry",
+  "registry_version": "v0",
+  "scope": "workspace",
+  "collection_count": 2,
+  "profile_count": 2,
+  "adapter_count": 1,
+  "capabilities": {
+    "read": true,
+    "query": true,
+    "generate": true,
+    "mutate": false,
+    "runtime": false
+  }
+}

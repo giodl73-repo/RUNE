@@ -57,7 +57,7 @@ their terms.
 | `rune-adapters` | Downstream adapter surfaces over validated RUNE evidence. |
 | `rune-core` | Neutral contract descriptor types and traits. |
 | `rune-derive` | Procedural macros that derive RUNE descriptors from Rust types. |
-| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, and profile catalog commands. |
+| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, and semantic registry check commands. |
 
 ## Current CLI surface
 
@@ -76,6 +76,7 @@ cargo run -p rune-cli -- adapter list
 cargo run -p rune-cli -- adapt-collection --adapter rune.review_packet_json --fixture <collection.json>
 cargo run -p rune-cli -- check --profile rune.neutral_descriptor_json --fixture <descriptor.json>
 cargo run -p rune-cli -- check-collection --profile rune.neutral_descriptor_json --fixture <collection.json>
+cargo run -p rune-cli -- check-registry --fixture <semantic-registry.json>
 cargo run -p rune-cli -- generate --profile rune.neutral_descriptor_json --fixture <descriptor.json>
 cargo run -p rune-cli -- generate-collection --profile rune.neutral_descriptor_json --fixture <collection.json>
 cargo run -p rune-cli -- generate --profile rune.documentation_packet_json --fixture <descriptor.json>
@@ -98,6 +99,11 @@ without adding documentation-packet vocabulary to the neutral descriptor model.
 The first downstream adapter is `rune.review_packet_json`. It lives in
 `rune-adapters` and converts validated descriptor collections into deterministic
 review packets without adding adapter vocabulary to `rune-core`.
+
+The first semantic registry command is `check-registry`. It validates retained
+registry metadata and cross-checks declared profile/adapter ids against approved
+catalogs. It does not inspect Cargo metadata, scrape source, discover plugins, or
+enable runtime host behavior.
 
 CLI hardening covers current status text, unknown commands, usage failures,
 malformed JSON diagnostics, invalid adapter argument order, and adapter
