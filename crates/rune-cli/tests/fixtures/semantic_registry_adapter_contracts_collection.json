@@ -1,0 +1,26 @@
+{
+  "collection_id": "example.adapter_contracts",
+  "collection_version": "v0",
+  "descriptors": [
+    {
+      "id": "example.adapter_review",
+      "version": "v0",
+      "kind": "artifact",
+      "rust_type": "ReviewPacket",
+      "fields": [
+        {
+          "name": "item_count",
+          "rust_type": "usize"
+        }
+      ],
+      "invariants": [],
+      "trace_links": [
+        {
+          "relation": "requirement",
+          "target": "RUNE-REQ-086"
+        }
+      ],
+      "extensions": []
+    }
+  ]
+}

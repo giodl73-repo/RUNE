@@ -174,9 +174,8 @@ default.
 
 ## Wave 42 semantic registry CLI validation
 
-The read-only CLI slice validates retained registry fixtures and approved
-profile/adapter catalog references without loading collection source refs or
-performing discovery.
+The read-only CLI catalog slice validates retained registry fixtures and approved
+profile/adapter catalog references without performing discovery.
 
 | Criterion | Result | Evidence |
 |---|---|---|
@@ -184,6 +183,18 @@ performing discovery.
 | Catalog cross-checks | pass | Unknown profile or adapter references fail with `RUNE-REGISTRY-006`. |
 | Existing fail-closed behavior | pass | Duplicate collection refs and runtime capability declarations remain blocked. |
 | Runtime safety | pass | The command is read-only and does not add host behavior, mutation, Cargo traversal, source scraping, or plugin discovery. |
+
+## Wave 42 semantic registry source-ref validation
+
+The source-ref slice validates retained descriptor collection source refs named by
+semantic registry entries. Source refs are resolved relative to the retained
+registry fixture.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Local source-ref loading | pass | Workspace registry fixture loads two retained descriptor collection fixtures. |
+| Collection identity/version match | pass | Mismatched collection id/version refs fail with `RUNE-REGISTRY-005`. |
+| Read-only boundary | pass | The command reads retained local JSON only and does not traverse Cargo metadata, scrape source, discover plugins, mutate registry state, or enable runtime behavior. |
 
 ## Wave 4 readiness decision
 

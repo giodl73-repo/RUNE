@@ -7,13 +7,13 @@
     {
       "collection_id": "example.known_contracts",
       "collection_version": "v0",
-      "source_ref": "crates/example/docs/rune/contracts.json",
+      "source_ref": "known_contract_descriptor_collection.json",
       "owner": "example-crate"
     },
     {
       "collection_id": "example.adapter_contracts",
       "collection_version": "v0",
-      "source_ref": "crates/example-adapter/docs/rune/contracts.json",
+      "source_ref": "semantic_registry_adapter_contracts_collection.json",
       "owner": "example-adapter"
     }
   ],

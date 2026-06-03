@@ -92,8 +92,8 @@ scraping.
 
 `rune check-registry --fixture <path>` validates retained semantic registry JSON
 and emits a compact check report. The command also cross-checks declared
-profile and adapter references against approved catalogs.
+profile and adapter references against approved catalogs and loads retained
+descriptor collection source refs relative to the registry fixture.
 
-The command remains read-only. It does not load collection source refs, traverse
-Cargo metadata, scrape Rust source, discover plugins, mutate registry state, or
-enable runtime host behavior.
+The command remains read-only. It does not traverse Cargo metadata, scrape Rust
+source, discover plugins, mutate registry state, or enable runtime host behavior.

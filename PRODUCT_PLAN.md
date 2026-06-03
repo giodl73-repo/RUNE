@@ -275,7 +275,8 @@ Status: first implementation slice complete. `rune-core` now defines retained
 semantic registry documents and validates missing identity/version, duplicate
 collection refs, unsupported scopes, and blocked runtime capability declarations.
 The CLI also provides `check-registry --fixture <path>` for read-only registry
-validation and approved profile/adapter catalog cross-checks.
+validation, retained collection source-ref checks, and approved profile/adapter
+catalog cross-checks.
 
 ### Wave 43: State graph interface
 

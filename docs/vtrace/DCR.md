@@ -247,7 +247,7 @@ complete.
 
 | Field | Value |
 |---|---|
-| Status | implemented first slice |
+| Status | implemented read-only registry slices |
 | Date | 2026-06-03 |
 | Source requirement | RUNE-REQ-085 |
 | Trigger | DCR-RUNE-002 and Mission 2.0 planning named semantic registry as the first implementation target because it builds directly on descriptor collections and explicit registries. |
@@ -273,6 +273,7 @@ behavior, or agent protocol operations.
 | `SemanticRegistryCapabilities` | implemented |
 | Retained crate/workspace/failure fixtures | implemented |
 | `rune check-registry --fixture <path>` | implemented |
+| Retained collection source-ref loading | implemented for local fixture-relative refs |
 
 ### Validation behavior
 
@@ -282,11 +283,13 @@ behavior, or agent protocol operations.
 | `RUNE-REGISTRY-002` missing registry version | implemented |
 | `RUNE-REGISTRY-003` duplicate collection id/version ref | implemented |
 | `RUNE-REGISTRY-004` unsupported registry scope | implemented |
+| `RUNE-REGISTRY-005` malformed or mismatched collection source ref | implemented for retained local collection fixtures |
 | `RUNE-REGISTRY-006` unknown or unsupported profile/adapter reference | implemented for approved catalog cross-checks |
 | `RUNE-REGISTRY-007` runtime capability blocked without host boundary | implemented |
 
-`RUNE-REGISTRY-005` remains a future implementation diagnostic for loading and
-checking referenced collection source refs.
+Registry source-ref validation is intentionally bounded to retained local
+descriptor collection fixtures. It does not traverse Cargo metadata or discover
+collections.
 
 ### Non-goals
 
@@ -298,6 +301,6 @@ checking referenced collection source refs.
 
 ### Next allowed work
 
-The next semantic registry slice may add retained collection source-ref loading or
-inspection reports, but must stay read-only unless a new DCR approves mutation or
-runtime exposure.
+The next semantic registry slice may add richer inspection reports over loaded
+retained collection refs, but must stay read-only unless a new DCR approves
+mutation or runtime exposure.

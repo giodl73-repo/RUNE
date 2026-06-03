@@ -76,6 +76,7 @@ cargo run -p rune-cli -- status
 | Mission 2.0 planning package | Architecture interface docs cover semantic registry, state graph, evidence runtime packets, agent protocol, compatibility negotiation, capability policy, and optional runtime host design; planning index records implementation blockers. | covered |
 | Semantic registry implementation | `rune-core` tests cover retained semantic registry validation, duplicate collection failure, unsupported scope failure, and runtime capability blocking. | covered |
 | Semantic registry CLI checks | `rune-cli` tests compare retained registry check output and reject duplicate collection refs, runtime capability, unknown profile refs, and invalid usage. | covered |
+| Semantic registry source-ref checks | `rune-cli` tests validate retained descriptor collection source refs and reject mismatched collection id/version refs with `RUNE-REGISTRY-005`. | covered |
 
 ## Evidence rule
 

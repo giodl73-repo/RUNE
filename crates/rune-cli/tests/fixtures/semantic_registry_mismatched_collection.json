@@ -1,0 +1,28 @@
+{
+  "registry_id": "example.mismatched_registry",
+  "registry_version": "v0",
+  "owner": "example-workspace",
+  "scope": "workspace",
+  "collections": [
+    {
+      "collection_id": "example.expected_contracts",
+      "collection_version": "v0",
+      "source_ref": "known_contract_descriptor_collection.json",
+      "owner": "example-crate"
+    }
+  ],
+  "profiles": [
+    {
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0"
+    }
+  ],
+  "adapters": [],
+  "capabilities": {
+    "read": true,
+    "query": true,
+    "generate": false,
+    "mutate": false,
+    "runtime": false
+  }
+}

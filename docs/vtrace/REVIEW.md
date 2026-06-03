@@ -1111,11 +1111,37 @@ Artifacts reviewed:
 | Read-only command boundary | pass | `check-registry` reads one retained fixture and emits a report; it does not mutate state. |
 | Catalog compatibility | pass | Declared profiles and adapters are checked against approved catalogs with `RUNE-REGISTRY-006` failures. |
 | Runtime safety | pass | Runtime capability declarations still fail closed and no host behavior was added. |
-| Source boundary | pass | The command does not traverse Cargo metadata, scrape Rust source, discover plugins, or load collection source refs. |
+| Source boundary | pass | This pulse did not traverse Cargo metadata, scrape Rust source, discover plugins, or load collection source refs. |
 
-Conclusion: Wave 42 read-only CLI validation passes. Next work may load retained
-collection source refs for `RUNE-REGISTRY-005`, but runtime and mutation remain
-blocked.
+Conclusion: Wave 42 read-only CLI validation passed. Source-ref loading was
+deferred to the next bounded pulse; runtime and mutation remained blocked.
+
+## Wave 42 semantic registry source-ref review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates/rune-cli/src/main.rs`
+- `crates/rune-cli/tests/registry_cli.rs`
+- `crates/rune-cli/tests/fixtures/semantic_registry_*.json`
+- `docs/architecture/semantic-registry-interface.md`
+- `docs/vtrace/DCR.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-03-semantic-registry/pulses/pulse-03.md`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Source-ref boundary | pass | Collection source refs are local retained JSON files resolved relative to the registry fixture. |
+| Fail-closed diagnostics | pass | Missing, malformed, or mismatched collection refs use `RUNE-REGISTRY-005`. |
+| Product neutrality | pass | No product-specific vocabulary was added to `rune-core` or registry checks. |
+| Runtime safety | pass | No host behavior, mutation, source scraping, Cargo traversal, or plugin discovery was added. |
+
+Conclusion: Wave 42 source-ref validation passes. Next semantic registry work may
+add richer inspection reports, but runtime behavior and mutation remain blocked.
 
 ## Review gate
 

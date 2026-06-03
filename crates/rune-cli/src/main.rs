@@ -298,6 +298,7 @@ fn check_registry(args: Vec<String>) -> Result<(), String> {
         "RUNE-REGISTRY-007",
     )?;
     check_registry_catalog_refs(&registry)?;
+    check_registry_collection_refs(&registry, &fixture)?;
 
     let output = serde_json::to_string_pretty(&SemanticRegistryCheckReportDocument {
         status: "ok".to_owned(),
@@ -313,6 +314,38 @@ fn check_registry(args: Vec<String>) -> Result<(), String> {
         format!("RUNE-REGISTRY-900 error serializing registry check report: {error}")
     })?;
     println!("{output}");
+    Ok(())
+}
+
+fn check_registry_collection_refs(
+    registry: &SemanticRegistryDocument,
+    registry_fixture: &str,
+) -> Result<(), String> {
+    let registry_dir = Path::new(registry_fixture)
+        .parent()
+        .unwrap_or(Path::new(""));
+    for collection_ref in &registry.collections {
+        let source_path = registry_dir.join(&collection_ref.source_ref);
+        let collection =
+            read_collection_fixture(source_path.to_string_lossy().as_ref(), "RUNE-REGISTRY-005")?
+                .validate_with_codes(
+                "RUNE-REGISTRY-005",
+                "RUNE-REGISTRY-005",
+                "RUNE-REGISTRY-005",
+            )?;
+        if collection.collection_id != collection_ref.collection_id
+            || collection.collection_version != collection_ref.collection_version
+        {
+            return Err(format!(
+                "RUNE-REGISTRY-005 collection source ref mismatch: declared {}@{} but source has {}@{}",
+                collection_ref.collection_id,
+                collection_ref.collection_version,
+                collection.collection_id,
+                collection.collection_version
+            ));
+        }
+    }
+
     Ok(())
 }
 

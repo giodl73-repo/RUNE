@@ -60,6 +60,21 @@ fn check_registry_rejects_unknown_profile() {
 }
 
 #[test]
+fn check_registry_rejects_collection_source_ref_mismatch() {
+    let fixture = fixture_path("semantic_registry_mismatched_collection.json");
+
+    let output = Command::new(env!("CARGO_BIN_EXE_rune-cli"))
+        .args(["check-registry", "--fixture", fixture.to_str().unwrap()])
+        .output()
+        .expect("run rune-cli check-registry");
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).expect("utf8 stderr");
+    assert!(stderr.contains("RUNE-REGISTRY-005"));
+    assert!(stderr.contains("collection source ref mismatch"));
+}
+
+#[test]
 fn check_registry_requires_fixture_flag() {
     let fixture = fixture_path("semantic_registry_workspace.json");
 

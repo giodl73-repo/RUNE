@@ -102,8 +102,9 @@ review packets without adding adapter vocabulary to `rune-core`.
 
 The first semantic registry command is `check-registry`. It validates retained
 registry metadata and cross-checks declared profile/adapter ids against approved
-catalogs. It does not inspect Cargo metadata, scrape source, discover plugins, or
-enable runtime host behavior.
+catalogs. It also validates retained descriptor collection source refs relative
+to the registry fixture. It does not inspect Cargo metadata, scrape source,
+discover plugins, mutate registry state, or enable runtime host behavior.
 
 CLI hardening covers current status text, unknown commands, usage failures,
 malformed JSON diagnostics, invalid adapter argument order, and adapter
