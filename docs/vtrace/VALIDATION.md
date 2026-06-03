@@ -156,6 +156,22 @@ Validation posture:
 | Capability and sensitivity policy | complete | blocked until enforcement boundary DCR |
 | Runtime host | complete as design blocker | blocked until prior lanes are implemented and reviewed |
 
+## Wave 42 semantic registry validation
+
+The first semantic registry implementation validates Mission 2.0's first
+implementation lane without adding runtime behavior. It proves that a crate or
+workspace can retain explicit registry metadata for descriptor collections,
+profiles, adapters, and capabilities while runtime exposure remains blocked by
+default.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Retained registry shape | pass | `SemanticRegistryDocument` and retained crate/workspace fixtures. |
+| Deterministic collection refs | pass | Ordered collection references are preserved and duplicate id/version refs fail closed. |
+| Runtime safety | pass | `runtime: true` is rejected with `RUNE-REGISTRY-007`. |
+| Scope control | pass | Only `crate`, `workspace`, `process`, and `retained_bundle` scopes are accepted. |
+| Non-goals preserved | pass | No CLI command, runtime host, Cargo traversal, source scraping, or mutation was added. |
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for

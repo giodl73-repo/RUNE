@@ -242,3 +242,61 @@ git diff --check
 
 Implementation waves must add code-specific validation before they are treated as
 complete.
+
+## DCR-RUNE-003: Semantic registry implementation
+
+| Field | Value |
+|---|---|
+| Status | implemented first slice |
+| Date | 2026-06-03 |
+| Source requirement | RUNE-REQ-085 |
+| Trigger | DCR-RUNE-002 and Mission 2.0 planning named semantic registry as the first implementation target because it builds directly on descriptor collections and explicit registries. |
+| Primary repo | RUNE |
+| Coordinating repo | TRACKER |
+
+### Decision
+
+RUNE should implement the first semantic registry slice as a retained evidence
+document in `rune-core`. It should validate authored registry metadata without
+adding live runtime discovery, Cargo traversal, source scraping, runtime host
+behavior, or agent protocol operations.
+
+### Implemented surface
+
+| Surface | Status |
+|---|---|
+| `SemanticRegistryDraft` | implemented |
+| `SemanticRegistryDocument` | implemented |
+| `SemanticRegistryCollectionRef` | implemented |
+| `SemanticRegistryProfileRef` | implemented |
+| `SemanticRegistryAdapterRef` | implemented |
+| `SemanticRegistryCapabilities` | implemented |
+| Retained crate/workspace/failure fixtures | implemented |
+
+### Validation behavior
+
+| Diagnostic | Status |
+|---|---|
+| `RUNE-REGISTRY-001` missing registry identity | implemented |
+| `RUNE-REGISTRY-002` missing registry version | implemented |
+| `RUNE-REGISTRY-003` duplicate collection id/version ref | implemented |
+| `RUNE-REGISTRY-004` unsupported registry scope | implemented |
+| `RUNE-REGISTRY-007` runtime capability blocked without host boundary | implemented |
+
+`RUNE-REGISTRY-005` and `RUNE-REGISTRY-006` remain future implementation
+diagnostics for cross-checking referenced collection/profile/adapter catalogs.
+
+### Non-goals
+
+- No CLI registry command in this slice.
+- No runtime host.
+- No live state inspection.
+- No Cargo graph scanning.
+- No source scraping.
+- No mutating agent protocol.
+
+### Next allowed work
+
+The next semantic registry slice may add CLI inspection/check commands or catalog
+cross-checks for referenced profiles/adapters, but must stay read-only unless a
+new DCR approves mutation or runtime exposure.

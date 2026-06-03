@@ -1,0 +1,28 @@
+{
+  "registry_id": "example.registry",
+  "registry_version": "v0",
+  "owner": "example-crate",
+  "scope": "crate",
+  "collections": [
+    {
+      "collection_id": "example.known_contracts",
+      "collection_version": "v0",
+      "source_ref": "docs/rune/contracts.json",
+      "owner": "example-crate"
+    }
+  ],
+  "profiles": [
+    {
+      "profile_id": "rune.neutral_descriptor_json",
+      "profile_version": "v0"
+    }
+  ],
+  "adapters": [],
+  "capabilities": {
+    "read": true,
+    "query": true,
+    "generate": true,
+    "mutate": false,
+    "runtime": false
+  }
+}

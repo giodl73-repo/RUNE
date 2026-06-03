@@ -1,0 +1,16 @@
+{
+  "registry_id": "example.runtime_registry",
+  "registry_version": "v0",
+  "owner": "example-process",
+  "scope": "process",
+  "collections": [],
+  "profiles": [],
+  "adapters": [],
+  "capabilities": {
+    "read": true,
+    "query": true,
+    "generate": false,
+    "mutate": false,
+    "runtime": true
+  }
+}

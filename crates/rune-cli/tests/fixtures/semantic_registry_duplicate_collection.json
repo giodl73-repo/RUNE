@@ -1,0 +1,29 @@
+{
+  "registry_id": "example.duplicate_registry",
+  "registry_version": "v0",
+  "owner": "example-workspace",
+  "scope": "workspace",
+  "collections": [
+    {
+      "collection_id": "example.known_contracts",
+      "collection_version": "v0",
+      "source_ref": "crates/example/docs/rune/contracts.json",
+      "owner": "example-crate"
+    },
+    {
+      "collection_id": "example.known_contracts",
+      "collection_version": "v0",
+      "source_ref": "crates/example-copy/docs/rune/contracts.json",
+      "owner": "example-copy"
+    }
+  ],
+  "profiles": [],
+  "adapters": [],
+  "capabilities": {
+    "read": true,
+    "query": false,
+    "generate": false,
+    "mutate": false,
+    "runtime": false
+  }
+}

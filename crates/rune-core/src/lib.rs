@@ -225,6 +225,68 @@ pub struct DiscoveryManifestEntry {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
+pub struct SemanticRegistryDraft {
+    pub registry_id: Option<String>,
+    pub registry_version: Option<String>,
+    pub owner: Option<String>,
+    pub scope: Option<String>,
+    #[serde(default)]
+    pub collections: Vec<SemanticRegistryCollectionRef>,
+    #[serde(default)]
+    pub profiles: Vec<SemanticRegistryProfileRef>,
+    #[serde(default)]
+    pub adapters: Vec<SemanticRegistryAdapterRef>,
+    #[serde(default)]
+    pub capabilities: SemanticRegistryCapabilities,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct SemanticRegistryDocument {
+    pub registry_id: String,
+    pub registry_version: String,
+    pub owner: String,
+    pub scope: String,
+    pub collections: Vec<SemanticRegistryCollectionRef>,
+    pub profiles: Vec<SemanticRegistryProfileRef>,
+    pub adapters: Vec<SemanticRegistryAdapterRef>,
+    pub capabilities: SemanticRegistryCapabilities,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct SemanticRegistryCollectionRef {
+    pub collection_id: String,
+    pub collection_version: String,
+    pub source_ref: String,
+    pub owner: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct SemanticRegistryProfileRef {
+    pub profile_id: String,
+    pub profile_version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct SemanticRegistryAdapterRef {
+    pub adapter_id: String,
+    pub adapter_version: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct SemanticRegistryCapabilities {
+    #[serde(default)]
+    pub read: bool,
+    #[serde(default)]
+    pub query: bool,
+    #[serde(default)]
+    pub generate: bool,
+    #[serde(default)]
+    pub mutate: bool,
+    #[serde(default)]
+    pub runtime: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 pub struct DescriptorCollectionDraft {
     pub collection_id: Option<String>,
     pub collection_version: Option<String>,
@@ -485,6 +547,65 @@ impl DiscoveryManifestDraft {
     }
 }
 
+impl SemanticRegistryDraft {
+    pub fn validate_with_codes(
+        self,
+        missing_registry_id_code: &'static str,
+        missing_registry_version_code: &'static str,
+        duplicate_collection_code: &'static str,
+        unsupported_scope_code: &'static str,
+        runtime_capability_code: &'static str,
+    ) -> Result<SemanticRegistryDocument, String> {
+        let registry_id = required_non_empty(
+            self.registry_id,
+            missing_registry_id_code,
+            "semantic registry identity is missing",
+        )?;
+        let registry_version = required_non_empty(
+            self.registry_version,
+            missing_registry_version_code,
+            "semantic registry version is missing",
+        )?;
+        let scope = required_non_empty(
+            self.scope,
+            unsupported_scope_code,
+            "semantic registry scope is missing",
+        )?;
+        if !is_supported_registry_scope(&scope) {
+            return Err(format!(
+                "{unsupported_scope_code} unsupported semantic registry scope: {scope}"
+            ));
+        }
+        if self.capabilities.runtime {
+            return Err(format!(
+                "{runtime_capability_code} runtime capability requires approved runtime host boundary"
+            ));
+        }
+        for (index, collection) in self.collections.iter().enumerate() {
+            if self.collections.iter().skip(index + 1).any(|candidate| {
+                candidate.collection_id == collection.collection_id
+                    && candidate.collection_version == collection.collection_version
+            }) {
+                return Err(format!(
+                    "{duplicate_collection_code} duplicate collection ref in semantic registry: {}@{}",
+                    collection.collection_id, collection.collection_version
+                ));
+            }
+        }
+
+        Ok(SemanticRegistryDocument {
+            registry_id,
+            registry_version,
+            owner: self.owner.unwrap_or_default(),
+            scope,
+            collections: self.collections,
+            profiles: self.profiles,
+            adapters: self.adapters,
+            capabilities: self.capabilities,
+        })
+    }
+}
+
 pub fn collect_known_contract_documents(
     registrations: &[ContractRegistration],
     duplicate_id_code: &'static str,
@@ -514,6 +635,10 @@ pub fn is_supported_kind(kind: &str) -> bool {
         kind,
         "entity" | "event" | "command" | "state" | "artifact" | "source" | "evidence" | "other"
     )
+}
+
+pub fn is_supported_registry_scope(scope: &str) -> bool {
+    matches!(scope, "crate" | "workspace" | "process" | "retained_bundle")
 }
 
 fn required_non_empty(
@@ -1166,6 +1291,218 @@ mod tests {
             bundle.generated_artifact.output_artifact_kind,
             "rune.descriptor.json"
         );
+    }
+
+    #[test]
+    fn semantic_registry_draft_validates_crate_registry() {
+        let registry = SemanticRegistryDraft {
+            registry_id: Some("example.registry".to_owned()),
+            registry_version: Some("v0".to_owned()),
+            owner: Some("example-crate".to_owned()),
+            scope: Some("crate".to_owned()),
+            collections: vec![SemanticRegistryCollectionRef {
+                collection_id: "example.known_contracts".to_owned(),
+                collection_version: "v0".to_owned(),
+                source_ref: "docs/rune/contracts.json".to_owned(),
+                owner: "example-crate".to_owned(),
+            }],
+            profiles: vec![SemanticRegistryProfileRef {
+                profile_id: "rune.neutral_descriptor_json".to_owned(),
+                profile_version: "v0".to_owned(),
+            }],
+            adapters: Vec::new(),
+            capabilities: SemanticRegistryCapabilities {
+                read: true,
+                query: true,
+                generate: true,
+                mutate: false,
+                runtime: false,
+            },
+        }
+        .validate_with_codes(
+            "RUNE-REGISTRY-001",
+            "RUNE-REGISTRY-002",
+            "RUNE-REGISTRY-003",
+            "RUNE-REGISTRY-004",
+            "RUNE-REGISTRY-007",
+        )
+        .expect("semantic registry validates");
+
+        assert_eq!(registry.registry_id, "example.registry");
+        assert_eq!(registry.scope, "crate");
+        assert_eq!(
+            registry.collections[0].collection_id,
+            "example.known_contracts"
+        );
+        assert!(registry.capabilities.read);
+        assert!(!registry.capabilities.runtime);
+    }
+
+    #[test]
+    fn semantic_registry_rejects_duplicate_collection_refs() {
+        let duplicate = SemanticRegistryCollectionRef {
+            collection_id: "example.known_contracts".to_owned(),
+            collection_version: "v0".to_owned(),
+            source_ref: "docs/rune/contracts.json".to_owned(),
+            owner: "example-crate".to_owned(),
+        };
+
+        let error = SemanticRegistryDraft {
+            registry_id: Some("example.registry".to_owned()),
+            registry_version: Some("v0".to_owned()),
+            owner: Some("example-crate".to_owned()),
+            scope: Some("workspace".to_owned()),
+            collections: vec![duplicate.clone(), duplicate],
+            profiles: Vec::new(),
+            adapters: Vec::new(),
+            capabilities: SemanticRegistryCapabilities::default(),
+        }
+        .validate_with_codes(
+            "RUNE-REGISTRY-001",
+            "RUNE-REGISTRY-002",
+            "RUNE-REGISTRY-003",
+            "RUNE-REGISTRY-004",
+            "RUNE-REGISTRY-007",
+        )
+        .expect_err("duplicate collection refs should fail");
+
+        assert!(error.contains("RUNE-REGISTRY-003"));
+        assert!(error.contains("duplicate collection ref"));
+    }
+
+    #[test]
+    fn semantic_registry_rejects_unsupported_scope() {
+        let error = SemanticRegistryDraft {
+            registry_id: Some("example.registry".to_owned()),
+            registry_version: Some("v0".to_owned()),
+            owner: Some("example-crate".to_owned()),
+            scope: Some("cargo_graph".to_owned()),
+            collections: Vec::new(),
+            profiles: Vec::new(),
+            adapters: Vec::new(),
+            capabilities: SemanticRegistryCapabilities::default(),
+        }
+        .validate_with_codes(
+            "RUNE-REGISTRY-001",
+            "RUNE-REGISTRY-002",
+            "RUNE-REGISTRY-003",
+            "RUNE-REGISTRY-004",
+            "RUNE-REGISTRY-007",
+        )
+        .expect_err("unsupported registry scopes should fail");
+
+        assert!(error.contains("RUNE-REGISTRY-004"));
+        assert!(error.contains("cargo_graph"));
+    }
+
+    #[test]
+    fn semantic_registry_blocks_runtime_capability_without_host_boundary() {
+        let error = SemanticRegistryDraft {
+            registry_id: Some("example.registry".to_owned()),
+            registry_version: Some("v0".to_owned()),
+            owner: Some("example-crate".to_owned()),
+            scope: Some("process".to_owned()),
+            collections: Vec::new(),
+            profiles: Vec::new(),
+            adapters: Vec::new(),
+            capabilities: SemanticRegistryCapabilities {
+                runtime: true,
+                ..SemanticRegistryCapabilities::default()
+            },
+        }
+        .validate_with_codes(
+            "RUNE-REGISTRY-001",
+            "RUNE-REGISTRY-002",
+            "RUNE-REGISTRY-003",
+            "RUNE-REGISTRY-004",
+            "RUNE-REGISTRY-007",
+        )
+        .expect_err("runtime capability should remain blocked");
+
+        assert!(error.contains("RUNE-REGISTRY-007"));
+        assert!(error.contains("runtime capability"));
+    }
+
+    #[test]
+    fn retained_semantic_registry_fixture_validates() {
+        let fixture = include_str!("../../rune-cli/tests/fixtures/semantic_registry_crate.json");
+        let draft: SemanticRegistryDraft =
+            serde_json::from_str(fixture).expect("semantic registry fixture parses");
+        let registry = draft
+            .validate_with_codes(
+                "RUNE-REGISTRY-001",
+                "RUNE-REGISTRY-002",
+                "RUNE-REGISTRY-003",
+                "RUNE-REGISTRY-004",
+                "RUNE-REGISTRY-007",
+            )
+            .expect("semantic registry fixture validates");
+
+        assert_eq!(registry.registry_id, "example.registry");
+        assert_eq!(
+            registry.collections[0].source_ref,
+            "docs/rune/contracts.json"
+        );
+    }
+
+    #[test]
+    fn retained_semantic_registry_workspace_fixture_validates() {
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/semantic_registry_workspace.json");
+        let draft: SemanticRegistryDraft =
+            serde_json::from_str(fixture).expect("workspace registry fixture parses");
+        let registry = draft
+            .validate_with_codes(
+                "RUNE-REGISTRY-001",
+                "RUNE-REGISTRY-002",
+                "RUNE-REGISTRY-003",
+                "RUNE-REGISTRY-004",
+                "RUNE-REGISTRY-007",
+            )
+            .expect("workspace registry fixture validates");
+
+        assert_eq!(registry.scope, "workspace");
+        assert_eq!(registry.collections.len(), 2);
+        assert_eq!(registry.adapters[0].adapter_id, "rune.review_packet_json");
+    }
+
+    #[test]
+    fn retained_semantic_registry_duplicate_fixture_fails_closed() {
+        let fixture = include_str!(
+            "../../rune-cli/tests/fixtures/semantic_registry_duplicate_collection.json"
+        );
+        let draft: SemanticRegistryDraft =
+            serde_json::from_str(fixture).expect("duplicate registry fixture parses");
+        let error = draft
+            .validate_with_codes(
+                "RUNE-REGISTRY-001",
+                "RUNE-REGISTRY-002",
+                "RUNE-REGISTRY-003",
+                "RUNE-REGISTRY-004",
+                "RUNE-REGISTRY-007",
+            )
+            .expect_err("duplicate registry fixture should fail");
+
+        assert!(error.contains("RUNE-REGISTRY-003"));
+    }
+
+    #[test]
+    fn retained_semantic_registry_runtime_fixture_fails_closed() {
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/semantic_registry_runtime_blocked.json");
+        let draft: SemanticRegistryDraft =
+            serde_json::from_str(fixture).expect("runtime registry fixture parses");
+        let error = draft
+            .validate_with_codes(
+                "RUNE-REGISTRY-001",
+                "RUNE-REGISTRY-002",
+                "RUNE-REGISTRY-003",
+                "RUNE-REGISTRY-004",
+                "RUNE-REGISTRY-007",
+            )
+            .expect_err("runtime registry fixture should fail");
+
+        assert!(error.contains("RUNE-REGISTRY-007"));
     }
 
     #[test]

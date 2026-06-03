@@ -72,3 +72,18 @@ Implementation must add:
 - No plugin discovery.
 - No mutating agent protocol.
 
+## First implementation status
+
+The first implementation slice is complete for retained semantic registry
+documents:
+
+- `SemanticRegistryDraft`
+- `SemanticRegistryDocument`
+- collection, profile, adapter, and capability reference records
+- fail-closed validation for missing identity, missing version, duplicate
+  collection references, unsupported scope, and runtime capability declarations
+- retained fixtures for crate, workspace, duplicate collection, and runtime
+  blocked scenarios
+
+This slice does not add CLI commands, runtime host behavior, Cargo traversal, or
+source scraping.

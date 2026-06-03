@@ -271,8 +271,9 @@ lane interface docs complete.
 Define crate/workspace/process registry documents over descriptor collections,
 profiles, adapters, ownership, capabilities, and version boundaries.
 
-Status: planning complete in `docs\architecture\semantic-registry-interface.md`;
-ready for a narrow implementation DCR.
+Status: first implementation slice complete. `rune-core` now defines retained
+semantic registry documents and validates missing identity/version, duplicate
+collection refs, unsupported scopes, and blocked runtime capability declarations.
 
 ### Wave 43: State graph interface
 
