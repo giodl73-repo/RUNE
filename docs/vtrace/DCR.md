@@ -135,3 +135,85 @@ outputs, or adapters rather than in RUNE core vocabulary.
 | Should field metadata affect compatibility checks? | Not until profile support is explicit; unsupported concepts must fail closed. |
 | Should docs comments be captured automatically? | No; require explicit metadata until doc capture has its own DCR. |
 | Should trait/function contracts be designed now? | No; keep as the next lane after field metadata. |
+
+## DCR-RUNE-002: Mission 2.0 managed native semantic runtime
+
+| Field | Value |
+|---|---|
+| Status | approved mission direction |
+| Date | 2026-06-03 |
+| Source requirement | RUNE-REQ-077 |
+| Trigger | Portfolio games adoption showed that RUNE descriptors are useful beyond schema generation: they can become the semantic management layer that makes native Rust systems inspectable, comparable, and agent-safe. |
+| Primary repo | RUNE |
+| Coordinating repo | TRACKER |
+| Scenario repos | RALLY, COURT, MUDDLE, RACKET, BAKER, LATTICE |
+
+### Decision
+
+RUNE should upgrade its mission from "derive AI-readable contracts" to "provide
+a managed native semantic runtime layer for Rust." The core remains neutral and
+compile-time/retained-evidence first; runtime and agent surfaces are optional,
+reviewed lanes that build on explicit descriptors, registries, profiles,
+adapters, and field metadata.
+
+### Approved capability lanes
+
+| Lane | First DCR outcome |
+|---|---|
+| Semantic registry | Define a crate/process registry document that can list descriptor collections, profile support, adapter support, ownership, and version boundaries. |
+| State graph | Define retained and optional live state graph documents keyed by descriptor ids, state nodes, transitions, and ownership. |
+| Evidence runtime | Define structured diagnostic, validation, trace, health, and audit packets that reference descriptor ids and field metadata. |
+| Agent protocol | Define a read-first protocol for AI/tool queries over registries, contracts, evidence, and compatibility reports. |
+| Compatibility negotiation | Extend compatibility evidence from profile checks to collection/profile/adapter/runtime-host negotiation. |
+| Capability and sensitivity policy | Promote sensitivity, stability, exportability, authority, and mutability metadata into a reviewed policy lane. |
+| Runtime host | Defer implementation until registry, state, evidence, agent protocol, compatibility, and policy documents are specified. |
+
+### Scope
+
+1. Add `MISSION_2_0.md` to define the managed native thesis and non-goals.
+2. Add requirements and trace rows for Mission 2.0 lanes.
+3. Keep all runtime/agent implementation behind future DCRs.
+4. Preserve current RUNE v1 adopter workflows.
+5. Use RALLY, COURT, MUDDLE, and RACKET adoption evidence as scenario input, not
+   core vocabulary.
+
+### Non-goals
+
+- Do not implement a runtime host in this DCR.
+- Do not add a VM, garbage collector, plugin loader, source scraper, or product
+  orchestrator.
+- Do not expose mutating agent operations before capability metadata and protocol
+  boundaries are reviewed.
+- Do not make current descriptors require a runtime dependency.
+- Do not encode BAKER, LATTICE, AgentMaps, games, or portfolio-specific terms in
+  `rune-core`.
+
+### Proposed wave sequence
+
+1. **Wave 41: Mission 2.0 control package** - record mission, DCR, requirements,
+   trace, verification, validation, and product docs.
+2. **Wave 42: Semantic registry interface** - specify registry documents and
+   deterministic process/crate ownership boundaries.
+3. **Wave 43: State graph interface** - specify retained state graph and
+   transition documents without live runtime requirements.
+4. **Wave 44: Evidence runtime packets** - specify diagnostics, validation,
+   health, audit, and trace packet documents.
+5. **Wave 45: Agent protocol interface** - specify read-first query operations,
+   diagnostics, and capability declarations.
+6. **Wave 46: Compatibility negotiation** - specify collection/profile/adapter
+   and runtime-host compatibility reports.
+7. **Wave 47: Capability and sensitivity policy** - specify exportability,
+   mutability, authority, stability, and sensitivity metadata.
+8. **Wave 48: Optional runtime host design** - decide if and how an embeddable
+   native runtime host should expose approved surfaces.
+
+### Validation expectations
+
+Mission 2.0 control-package waves are documentation-only and must run:
+
+```powershell
+git diff --check
+```
+
+Implementation waves must add code-specific validation before they are treated as
+complete.

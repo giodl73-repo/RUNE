@@ -71,6 +71,24 @@ The v1 boundary does not allow downstream vocabulary to move into `rune-core` or
 the base descriptor model. External profiles and adapters must remain separate,
 traceable surfaces.
 
+## Mission 2.0: managed native semantic runtime
+
+After v1, RUNE's next mission is to make Rust feel managed to AI/tooling while
+still running as native Rust. The goal is not a VM or garbage-collected runtime;
+it is a semantic management layer built from explicit contracts, deterministic
+registries, retained evidence, optional runtime query surfaces, compatibility
+negotiation, and capability/sensitivity metadata.
+
+Mission 2.0 lanes are controlled by DCRs before implementation:
+
+- semantic registry,
+- state graph,
+- evidence runtime packets,
+- agent-safe protocol,
+- compatibility negotiation,
+- capability and sensitivity policy,
+- optional runtime host.
+
 ## Waves
 
 ### Wave 1: Foundation
@@ -238,6 +256,14 @@ diagnostics.
 
 Status: implemented first generic adapter as `rune.review_packet_json` in the
 separate `rune-adapters` crate.
+
+### Wave 41: Mission 2.0 control package
+
+Record the managed native semantic runtime mission and gate semantic registry,
+state graph, evidence runtime, agent protocol, compatibility negotiation,
+capability policy, and runtime host work behind future DCRs.
+
+Status: documentation and VTRACE control package.
 
 ### Wave 29: CLI hardening
 

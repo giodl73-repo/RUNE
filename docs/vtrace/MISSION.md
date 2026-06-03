@@ -26,3 +26,13 @@ product-specific assumptions in the core model.
 
 RUNE should let a Rust crate declare its contract surface once, in code, and then
 generate multiple downstream artifacts from a neutral, versioned source of truth.
+
+## Mission 2.0
+
+RUNE's next mission is a managed native semantic runtime layer for Rust: keep
+Rust native, explicit, and product-neutral, but add the managed-runtime
+affordances AI and tooling need: semantic registries, state graphs, evidence
+runtime packets, agent-safe query protocols, compatibility negotiation, and
+capability/sensitivity metadata.
+
+See `MISSION_2_0.md` for the controlled mission upgrade.

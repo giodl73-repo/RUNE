@@ -32,6 +32,12 @@ Rust code + RUNE derives/attributes
   -> generated schemas, manifests, maps, traces, receipts, docs, and adapters
 ```
 
+Mission 2.0 extends this into a managed native semantic runtime direction:
+native Rust binaries can gain managed-runtime-style semantic affordances
+through explicit registries, retained evidence, state/evidence documents,
+agent-safe protocols, compatibility negotiation, and capability metadata without
+turning RUNE into a VM or product orchestrator.
+
 ## What RUNE is not
 
 - Not a new Rust compiler or custom Rust syntax fork.
@@ -202,6 +208,8 @@ contract feature should trace from mission need to requirement, design,
 implementation, verification, validation, and objective evidence.
 
 The source-of-truth proof package starts under `docs/vtrace/`.
+Mission 2.0 is recorded in `docs\vtrace\MISSION_2_0.md` and
+`docs\vtrace\DCR.md`.
 
 ## Validation
 

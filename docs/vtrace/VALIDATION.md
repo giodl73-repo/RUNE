@@ -121,6 +121,21 @@ event, state, packet, simulation, and runtime-report surfaces than explicit
 traits. RUNE adoption should therefore begin with data contracts and add
 host/client trait contracts after snapshot and command boundaries are stable.
 
+## Mission 2.0 validation direction
+
+The first games adoption sequence validates a broader direction: RUNE evidence
+does more than generate schemas. RALLY, COURT, MUDDLE, and RACKET now expose
+simulation, experience, client/session, and adapter/runtime semantics as retained
+field-metadata descriptor collections. That portfolio evidence supports Mission
+2.0: RUNE can become a managed native semantic runtime layer if future lanes add
+semantic registries, state graphs, evidence packets, agent-safe protocols,
+compatibility negotiation, and capability policy without moving product
+vocabulary into `rune-core`.
+
+Mission 2.0 remains a direction, not an implementation claim. Runtime host and
+agent protocol implementation are blocked until their DCRs define boundaries,
+diagnostics, fixtures, and validation commands.
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for
