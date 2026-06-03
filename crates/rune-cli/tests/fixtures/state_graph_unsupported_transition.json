@@ -1,0 +1,32 @@
+{
+  "state_graph_id": "example.customer_state_graph",
+  "state_graph_version": "v0",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "nodes": [
+    {
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer"
+    },
+    {
+      "node_id": "customer_active",
+      "descriptor_id": "example.customer_lifecycle"
+    }
+  ],
+  "transitions": [
+    {
+      "transition_id": "invalid_entity_transition",
+      "from_node_id": "customer_requested",
+      "to_node_id": "customer_active",
+      "descriptor_id": "example.customer"
+    }
+  ],
+  "ownership": [],
+  "evidence_refs": [],
+  "capabilities": {
+    "retained": true,
+    "live_state": false
+  }
+}

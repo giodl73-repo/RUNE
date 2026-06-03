@@ -1,7 +1,7 @@
 //! Neutral RUNE contract descriptors.
 
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ContractKind {
@@ -284,6 +284,90 @@ pub struct SemanticRegistryCapabilities {
     pub mutate: bool,
     #[serde(default)]
     pub runtime: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
+pub struct StateGraphDraft {
+    pub state_graph_id: Option<String>,
+    pub state_graph_version: Option<String>,
+    pub registry_ref: Option<StateGraphRegistryRef>,
+    #[serde(default)]
+    pub nodes: Vec<StateGraphNode>,
+    #[serde(default)]
+    pub transitions: Vec<StateGraphTransition>,
+    #[serde(default)]
+    pub ownership: Vec<StateGraphOwnership>,
+    #[serde(default)]
+    pub evidence_refs: Vec<StateGraphEvidenceRef>,
+    #[serde(default)]
+    pub capabilities: StateGraphCapabilities,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphDocument {
+    pub state_graph_id: String,
+    pub state_graph_version: String,
+    pub registry_ref: StateGraphRegistryRef,
+    pub nodes: Vec<StateGraphNode>,
+    pub transitions: Vec<StateGraphTransition>,
+    pub ownership: Vec<StateGraphOwnership>,
+    pub evidence_refs: Vec<StateGraphEvidenceRef>,
+    pub capabilities: StateGraphCapabilities,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphRegistryRef {
+    pub registry_id: String,
+    pub registry_version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphNode {
+    pub node_id: String,
+    pub descriptor_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphTransition {
+    pub transition_id: String,
+    pub from_node_id: String,
+    pub to_node_id: String,
+    pub descriptor_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphOwnership {
+    pub owner: String,
+    pub node_ids: Vec<String>,
+    pub transition_ids: Vec<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphEvidenceRef {
+    pub evidence_kind: String,
+    pub source_ref: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct StateGraphCapabilities {
+    #[serde(default)]
+    pub retained: bool,
+    #[serde(default)]
+    pub live_state: bool,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct StateGraphValidationCodes {
+    pub missing_identity: &'static str,
+    pub missing_registry_ref: &'static str,
+    pub unknown_node_descriptor: &'static str,
+    pub unknown_transition_node: &'static str,
+    pub unsupported_transition_descriptor: &'static str,
+    pub live_state_requested: &'static str,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
@@ -604,6 +688,110 @@ impl SemanticRegistryDraft {
             capabilities: self.capabilities,
         })
     }
+}
+
+impl StateGraphDraft {
+    pub fn validate_with_codes(
+        self,
+        registry: &SemanticRegistryDocument,
+        collections: &[DescriptorCollectionDocument],
+        codes: StateGraphValidationCodes,
+    ) -> Result<StateGraphDocument, String> {
+        let state_graph_id = required_non_empty(
+            self.state_graph_id,
+            codes.missing_identity,
+            "state graph identity is missing",
+        )?;
+        let state_graph_version = required_non_empty(
+            self.state_graph_version,
+            codes.missing_identity,
+            "state graph version is missing",
+        )?;
+        let registry_ref = self.registry_ref.ok_or_else(|| {
+            format!(
+                "{} state graph registry reference is missing",
+                codes.missing_registry_ref
+            )
+        })?;
+        if registry_ref.registry_id != registry.registry_id
+            || registry_ref.registry_version != registry.registry_version
+        {
+            return Err(format!(
+                "{} state graph registry reference does not match semantic registry: {}@{}",
+                codes.missing_registry_ref, registry_ref.registry_id, registry_ref.registry_version
+            ));
+        }
+        if self.capabilities.live_state {
+            return Err(format!(
+                "{} live state requires approved runtime host boundary",
+                codes.live_state_requested
+            ));
+        }
+
+        let descriptor_kinds = descriptor_kinds_by_id(collections);
+        for node in &self.nodes {
+            if !descriptor_kinds.contains_key(&node.descriptor_id) {
+                return Err(format!(
+                    "{} node references unknown descriptor id: {}",
+                    codes.unknown_node_descriptor, node.descriptor_id
+                ));
+            }
+        }
+
+        let node_ids: BTreeSet<&str> = self
+            .nodes
+            .iter()
+            .map(|node| node.node_id.as_str())
+            .collect();
+        for transition in &self.transitions {
+            if !node_ids.contains(transition.from_node_id.as_str())
+                || !node_ids.contains(transition.to_node_id.as_str())
+            {
+                return Err(format!(
+                    "{} transition references unknown source or target node: {}",
+                    codes.unknown_transition_node, transition.transition_id
+                ));
+            }
+            match descriptor_kinds.get(&transition.descriptor_id) {
+                Some(kind) if kind == "command" || kind == "event" => {}
+                Some(kind) => {
+                    return Err(format!(
+                        "{} transition descriptor must be command or event: {} ({})",
+                        codes.unsupported_transition_descriptor, transition.descriptor_id, kind
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{} transition references unknown command/event descriptor: {}",
+                        codes.unsupported_transition_descriptor, transition.descriptor_id
+                    ));
+                }
+            }
+        }
+
+        Ok(StateGraphDocument {
+            state_graph_id,
+            state_graph_version,
+            registry_ref,
+            nodes: self.nodes,
+            transitions: self.transitions,
+            ownership: self.ownership,
+            evidence_refs: self.evidence_refs,
+            capabilities: self.capabilities,
+        })
+    }
+}
+
+fn descriptor_kinds_by_id(
+    collections: &[DescriptorCollectionDocument],
+) -> BTreeMap<String, String> {
+    let mut descriptor_kinds = BTreeMap::new();
+    for collection in collections {
+        for descriptor in &collection.descriptors {
+            descriptor_kinds.insert(descriptor.id.clone(), descriptor.kind.clone());
+        }
+    }
+    descriptor_kinds
 }
 
 pub fn collect_known_contract_documents(
@@ -1503,6 +1691,131 @@ mod tests {
             .expect_err("runtime registry fixture should fail");
 
         assert!(error.contains("RUNE-REGISTRY-007"));
+    }
+
+    #[test]
+    fn retained_state_graph_fixture_validates_against_registry_collections() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture = include_str!("../../rune-cli/tests/fixtures/state_graph_workspace.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let graph = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect("state graph fixture validates");
+
+        assert_eq!(graph.state_graph_id, "example.customer_state_graph");
+        assert_eq!(graph.nodes.len(), 2);
+        assert_eq!(
+            graph.transitions[0].descriptor_id,
+            "example.create_customer"
+        );
+        assert!(graph.capabilities.retained);
+        assert!(!graph.capabilities.live_state);
+    }
+
+    #[test]
+    fn retained_state_graph_unknown_descriptor_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/state_graph_unknown_descriptor.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("unknown node descriptor should fail");
+
+        assert!(error.contains("RUNE-STATE-003"));
+    }
+
+    #[test]
+    fn retained_state_graph_unknown_transition_node_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture = include_str!("../../rune-cli/tests/fixtures/state_graph_unknown_node.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("unknown transition node should fail");
+
+        assert!(error.contains("RUNE-STATE-004"));
+    }
+
+    #[test]
+    fn retained_state_graph_unsupported_transition_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/state_graph_unsupported_transition.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("unsupported transition descriptor should fail");
+
+        assert!(error.contains("RUNE-STATE-005"));
+        assert!(error.contains("example.customer"));
+    }
+
+    #[test]
+    fn retained_state_graph_live_state_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture = include_str!("../../rune-cli/tests/fixtures/state_graph_live_blocked.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("live state should fail closed");
+
+        assert!(error.contains("RUNE-STATE-006"));
+    }
+
+    fn state_graph_codes() -> StateGraphValidationCodes {
+        StateGraphValidationCodes {
+            missing_identity: "RUNE-STATE-001",
+            missing_registry_ref: "RUNE-STATE-002",
+            unknown_node_descriptor: "RUNE-STATE-003",
+            unknown_transition_node: "RUNE-STATE-004",
+            unsupported_transition_descriptor: "RUNE-STATE-005",
+            live_state_requested: "RUNE-STATE-006",
+        }
+    }
+
+    fn workspace_registry_fixture() -> SemanticRegistryDocument {
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/semantic_registry_workspace.json");
+        let draft: SemanticRegistryDraft =
+            serde_json::from_str(fixture).expect("workspace registry fixture parses");
+        draft
+            .validate_with_codes(
+                "RUNE-REGISTRY-001",
+                "RUNE-REGISTRY-002",
+                "RUNE-REGISTRY-003",
+                "RUNE-REGISTRY-004",
+                "RUNE-REGISTRY-007",
+            )
+            .expect("workspace registry fixture validates")
+    }
+
+    fn workspace_registry_collections() -> Vec<DescriptorCollectionDocument> {
+        let known_fixture =
+            include_str!("../../rune-cli/tests/fixtures/known_contract_descriptor_collection.json");
+        let adapter_fixture = include_str!(
+            "../../rune-cli/tests/fixtures/semantic_registry_adapter_contracts_collection.json"
+        );
+        [known_fixture, adapter_fixture]
+            .into_iter()
+            .map(|fixture| {
+                let draft: DescriptorCollectionDraft =
+                    serde_json::from_str(fixture).expect("collection fixture parses");
+                draft
+                    .validate_with_codes("RUNE-COLL-001", "RUNE-COLL-002", "RUNE-COLL-003")
+                    .expect("collection fixture validates")
+            })
+            .collect()
     }
 
     #[test]

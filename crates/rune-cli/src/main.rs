@@ -7,7 +7,7 @@ use rune_core::{
     DescriptorKindInventoryDocument, DiscoveryManifestDraft, DocumentationPacketDocument,
     GeneratedArtifactDocument, GeneratedCollectionArtifactDocument, ProfileCatalog,
     ProfileCompatibilityCodes, SemanticRegistryCapabilities, SemanticRegistryDocument,
-    SemanticRegistryDraft,
+    SemanticRegistryDraft, StateGraphCapabilities, StateGraphDraft, StateGraphValidationCodes,
 };
 use serde::Serialize;
 use std::path::Path;
@@ -22,7 +22,7 @@ fn main() {
             println!("approved stage: v1 implementation waves");
             println!("contract kinds: entity,event,command,state,artifact,source,evidence,other");
             println!(
-                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
+                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
                 "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
@@ -42,6 +42,7 @@ fn main() {
         "check-collection" => check_collection(args.collect()),
         "check-registry" => check_registry(args.collect()),
         "inspect-registry" => inspect_registry(args.collect()),
+        "check-state-graph" => check_state_graph(args.collect()),
         "generate" => generate(args.collect()),
         "generate-collection" => generate_collection(args.collect()),
         "profile" => profile(args.collect()),
@@ -81,6 +82,19 @@ struct SemanticRegistryCollectionInspectionDocument {
     owner: String,
     descriptor_count: usize,
     kinds: Vec<DescriptorKindInventoryDocument>,
+}
+
+#[derive(Serialize)]
+struct StateGraphCheckReportDocument {
+    status: String,
+    state_graph_id: String,
+    state_graph_version: String,
+    registry_id: String,
+    registry_version: String,
+    node_count: usize,
+    transition_count: usize,
+    evidence_ref_count: usize,
+    capabilities: StateGraphCapabilities,
 }
 
 fn inspect_collection(args: Vec<String>) -> Result<(), String> {
@@ -377,6 +391,50 @@ fn inspect_registry(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
+fn check_state_graph(args: Vec<String>) -> Result<(), String> {
+    let options = parse_state_graph_args(&args)?;
+    let registry = read_semantic_registry_fixture(&options.registry, "RUNE-STATE-900")?;
+    let registry = registry.validate_with_codes(
+        "RUNE-REGISTRY-001",
+        "RUNE-REGISTRY-002",
+        "RUNE-REGISTRY-003",
+        "RUNE-REGISTRY-004",
+        "RUNE-REGISTRY-007",
+    )?;
+    check_registry_catalog_refs(&registry)?;
+    let collections = load_registry_collection_refs(&registry, &options.registry)?;
+    let graph = read_state_graph_fixture(&options.fixture, "RUNE-STATE-900")?;
+    let graph = graph.validate_with_codes(&registry, &collections, state_graph_codes())?;
+
+    let output = serde_json::to_string_pretty(&StateGraphCheckReportDocument {
+        status: "ok".to_owned(),
+        state_graph_id: graph.state_graph_id,
+        state_graph_version: graph.state_graph_version,
+        registry_id: graph.registry_ref.registry_id,
+        registry_version: graph.registry_ref.registry_version,
+        node_count: graph.nodes.len(),
+        transition_count: graph.transitions.len(),
+        evidence_ref_count: graph.evidence_refs.len(),
+        capabilities: graph.capabilities,
+    })
+    .map_err(|error| {
+        format!("RUNE-STATE-900 error serializing state graph check report: {error}")
+    })?;
+    println!("{output}");
+    Ok(())
+}
+
+fn state_graph_codes() -> StateGraphValidationCodes {
+    StateGraphValidationCodes {
+        missing_identity: "RUNE-STATE-001",
+        missing_registry_ref: "RUNE-STATE-002",
+        unknown_node_descriptor: "RUNE-STATE-003",
+        unknown_transition_node: "RUNE-STATE-004",
+        unsupported_transition_descriptor: "RUNE-STATE-005",
+        live_state_requested: "RUNE-STATE-006",
+    }
+}
+
 fn load_registry_collection_refs(
     registry: &SemanticRegistryDocument,
     registry_fixture: &str,
@@ -669,6 +727,25 @@ struct EvidenceCollectionOptions {
     source: String,
 }
 
+struct StateGraphOptions {
+    fixture: String,
+    registry: String,
+}
+
+fn parse_state_graph_args(args: &[String]) -> Result<StateGraphOptions, String> {
+    match args {
+        [fixture_flag, fixture, registry_flag, registry]
+            if fixture_flag == "--fixture" && registry_flag == "--registry" =>
+        {
+            Ok(StateGraphOptions {
+                fixture: fixture.clone(),
+                registry: registry.clone(),
+            })
+        }
+        _ => Err("usage: rune check-state-graph --fixture <path> --registry <path>".to_owned()),
+    }
+}
+
 fn parse_generate_args(args: &[String]) -> Result<ProfileFixtureOptions, String> {
     parse_profile_fixture_args(
         args,
@@ -745,4 +822,11 @@ fn read_semantic_registry_fixture(
         .map_err(|error| format!("{io_code} error reading semantic registry fixture: {error}"))?;
     serde_json::from_str(&content)
         .map_err(|error| format!("{io_code} error parsing semantic registry fixture JSON: {error}"))
+}
+
+fn read_state_graph_fixture(path: &str, io_code: &'static str) -> Result<StateGraphDraft, String> {
+    let content = std::fs::read_to_string(Path::new(path))
+        .map_err(|error| format!("{io_code} error reading state graph fixture: {error}"))?;
+    serde_json::from_str(&content)
+        .map_err(|error| format!("{io_code} error parsing state graph fixture JSON: {error}"))
 }

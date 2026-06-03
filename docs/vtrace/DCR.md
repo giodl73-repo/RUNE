@@ -305,3 +305,62 @@ collections.
 The next semantic registry slice may add compatibility report documents or
 consumer adoption fixtures, but must stay read-only unless a new DCR approves
 mutation or runtime exposure.
+
+## DCR-RUNE-004: Retained state graph implementation
+
+| Field | Value |
+|---|---|
+| Status | implemented retained evidence slice |
+| Date | 2026-06-03 |
+| Source requirement | RUNE-REQ-090 |
+| Trigger | DCR-RUNE-002 and `docs\architecture\state-graph-interface.md` named state graph evidence as the next Mission 2.0 lane after semantic registry identity and collection source refs existed. |
+| Primary repo | RUNE |
+| Coordinating repo | TRACKER |
+
+### Decision
+
+RUNE should implement the first state graph slice as retained evidence over an
+explicit semantic registry and its retained descriptor collection refs. The
+implementation should validate authored graph documents without adding live
+state inspection, pointer/heap walking, mutation, replay, runtime host behavior,
+Cargo traversal, or source scraping.
+
+### Implemented surface
+
+| Surface | Status |
+|---|---|
+| `StateGraphDraft` | implemented |
+| `StateGraphDocument` | implemented |
+| `StateGraphRegistryRef` | implemented |
+| `StateGraphNode` | implemented |
+| `StateGraphTransition` | implemented |
+| `StateGraphOwnership` | implemented |
+| `StateGraphEvidenceRef` | implemented |
+| `StateGraphCapabilities` | implemented with live state blocked |
+| Retained pass/failure fixtures | implemented |
+| `rune check-state-graph --fixture <path> --registry <path>` | implemented read-only |
+
+### Validation behavior
+
+| Diagnostic | Status |
+|---|---|
+| `RUNE-STATE-001` missing state graph identity/version | implemented |
+| `RUNE-STATE-002` missing or mismatched registry reference | implemented |
+| `RUNE-STATE-003` node references unknown descriptor id | implemented |
+| `RUNE-STATE-004` transition references unknown source or target node | implemented |
+| `RUNE-STATE-005` transition references unsupported command/event descriptor | implemented |
+| `RUNE-STATE-006` live state requested without runtime host approval | implemented |
+
+State graph validation is intentionally bounded to retained graph fixtures,
+semantic registry fixtures, and the registry's retained descriptor collection
+source refs.
+
+### Non-goals
+
+- No runtime host.
+- No live state inspection.
+- No pointer, borrow, or heap graph walking.
+- No mutation or replay.
+- No Cargo graph scanning.
+- No Rust source scraping.
+- No product-specific state vocabulary in `rune-core`.

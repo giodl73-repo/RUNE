@@ -9,7 +9,7 @@ implementation begins.
 | Wave | Lane | Planning artifact | Implementation readiness |
 |---:|---|---|---|
 | 42 | Semantic registry interface | `semantic-registry-interface.md` | first implementable planning target |
-| 43 | State graph interface | `state-graph-interface.md` | requires semantic registry identity model |
+| 43 | State graph interface | `state-graph-interface.md` | retained implementation slice complete; live state remains blocked |
 | 44 | Evidence runtime packets | `evidence-runtime-packets.md` | requires descriptor ids and packet diagnostics |
 | 45 | Agent protocol interface | `agent-protocol-interface.md` | requires registry, evidence packets, and policy declarations |
 | 46 | Compatibility negotiation | `compatibility-negotiation.md` | requires collection/profile/adapter/runtime-host report shapes |
@@ -30,4 +30,3 @@ Planning is complete when every lane has:
 Mission 2.0 planning does not approve runtime behavior. Runtime host, live state
 inspection, mutating agent operations, automatic migration, and policy
 enforcement remain blocked until implementation DCRs add code-specific validation.
-

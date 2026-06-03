@@ -1,0 +1,21 @@
+{
+  "state_graph_id": "example.customer_state_graph",
+  "state_graph_version": "v0",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "nodes": [
+    {
+      "node_id": "unknown",
+      "descriptor_id": "example.unknown_state"
+    }
+  ],
+  "transitions": [],
+  "ownership": [],
+  "evidence_refs": [],
+  "capabilities": {
+    "retained": true,
+    "live_state": false
+  }
+}

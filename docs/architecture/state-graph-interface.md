@@ -54,6 +54,18 @@ Implementation must add:
 - unknown descriptor failure fixture,
 - live-state request rejection fixture.
 
+## Implementation status
+
+Wave 43 implements the retained evidence slice in `rune-core` and `rune-cli`:
+
+- `StateGraphDraft` / `StateGraphDocument`,
+- descriptor-backed nodes and command/event transitions,
+- ownership and evidence refs,
+- `rune check-state-graph --fixture <path> --registry <path>`,
+- fail-closed diagnostics `RUNE-STATE-001` through `RUNE-STATE-006`.
+
+The implementation remains read-only and fixture-backed.
+
 ## Non-goals
 
 - No pointer/borrow inspection.
@@ -61,4 +73,3 @@ Implementation must add:
 - No live process introspection.
 - No mutation or replay.
 - No product-specific state vocabulary in `rune-core`.
-

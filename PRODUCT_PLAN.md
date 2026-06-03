@@ -81,8 +81,8 @@ negotiation, and capability/sensitivity metadata.
 
 Mission 2.0 lanes are controlled by DCRs before implementation:
 
-- semantic registry,
-- state graph,
+- semantic registry (implemented as retained evidence, validation, inspection, and communications readiness),
+- state graph (implemented as retained evidence validation over semantic registry refs),
 - evidence runtime packets,
 - agent-safe protocol,
 - compatibility negotiation,

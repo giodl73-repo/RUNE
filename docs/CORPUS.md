@@ -35,6 +35,8 @@ evolves.
    pass criteria, and validation under the current CLI surface.
 7. A new semantic registry command needs how-to, runbook, example, trace,
    communications strategy, VTRACE, and release/readiness updates.
+8. A new state graph command needs how-to, runbook, retained fixtures, VTRACE,
+   and explicit live-state/runtime-host boundary language.
 
 ## Documentation validation
 

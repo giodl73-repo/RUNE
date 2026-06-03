@@ -221,6 +221,21 @@ semantic registry evidence without claiming runtime behavior.
 | Synchronization rules | pass | `docs/CORPUS.md` and communications strategy name registry update obligations. |
 | Runtime safety messaging | pass | Registry docs repeat blocked runtime, mutation, Cargo traversal, source scraping, plugin discovery, live state, and automatic migration boundaries. |
 
+## Wave 43 retained state graph validation
+
+The first state graph implementation validates retained graph evidence over the
+semantic registry and its retained descriptor collection source refs. It proves
+that state nodes and command/event transitions can be checked without live
+runtime behavior.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Retained graph shape | pass | `StateGraphDocument` and retained workspace graph fixture. |
+| Registry binding | pass | Graph registry refs must match the supplied semantic registry fixture. |
+| Descriptor-backed nodes | pass | Unknown node descriptor ids fail with `RUNE-STATE-003`. |
+| Transition integrity | pass | Unknown source/target nodes fail with `RUNE-STATE-004`; non-command/event transition descriptors fail with `RUNE-STATE-005`. |
+| Runtime safety | pass | `live_state: true` fails with `RUNE-STATE-006`; no runtime host, live inspection, mutation, replay, Cargo traversal, or source scraping was added. |
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for

@@ -1,0 +1,28 @@
+{
+  "state_graph_id": "example.customer_state_graph",
+  "state_graph_version": "v0",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "nodes": [
+    {
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer"
+    }
+  ],
+  "transitions": [
+    {
+      "transition_id": "create_customer",
+      "from_node_id": "customer_requested",
+      "to_node_id": "customer_active",
+      "descriptor_id": "example.create_customer"
+    }
+  ],
+  "ownership": [],
+  "evidence_refs": [],
+  "capabilities": {
+    "retained": true,
+    "live_state": false
+  }
+}

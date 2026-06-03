@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "state_graph_id": "example.customer_state_graph",
+  "state_graph_version": "v0",
+  "registry_id": "example.workspace_registry",
+  "registry_version": "v0",
+  "node_count": 2,
+  "transition_count": 2,
+  "evidence_ref_count": 1,
+  "capabilities": {
+    "retained": true,
+    "live_state": false
+  }
+}

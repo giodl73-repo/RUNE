@@ -5,15 +5,16 @@
 RUNE v1 is ready as publishable contract infrastructure with reviewed discovery,
 external profile, adapter, adopter example, and bakeoff evidence. Mission 2.0
 Wave 42 also has retained semantic registry evidence and read-only registry
-check/inspection commands.
+check/inspection commands. Wave 43 adds retained state graph evidence validation
+without live state inspection or runtime host behavior.
 
 ## Crate surfaces
 
 | Crate | V1 role |
 |---|---|
-| `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, and inventory models. |
+| `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, inventory, semantic registry, and retained state graph models. |
 | `rune-derive` | Compile-time derive macro for annotated Rust contract descriptors. |
-| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, and semantic registry commands. |
+| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, semantic registry, and state graph commands. |
 | `rune-adapters` | Downstream adapter models outside the neutral core. |
 | `examples\rune-adopter` | Non-published adopter workflow example. |
 
@@ -25,6 +26,7 @@ cargo test --workspace
 cargo run -p rune-cli -- status
 cargo run -p rune-cli -- check-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 cargo run -p rune-cli -- inspect-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+cargo run -p rune-cli -- check-state-graph --fixture crates\rune-cli\tests\fixtures\state_graph_workspace.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 git diff --check
 ```
 
@@ -44,13 +46,16 @@ git diff --check
   VTRACE updates.
 - Semantic registry evidence is retained and versioned; registry source refs
   must resolve to retained descriptor collection fixtures.
+- State graph evidence is retained and versioned; graph nodes must reference
+  known descriptors, transitions must reference known nodes and command/event
+  descriptors, and live-state requests fail closed.
 
 ## Release evidence
 
 - VTRACE requirements and trace are complete through v1 release readiness.
 - Retained fixtures cover descriptor, collection, discovery, evidence bundle,
   external profile, adapter, adopter workflow, semantic registry, and QUIVER
-  bakeoff scenarios.
+  bakeoff scenarios plus retained state graph pass/failure scenarios.
 - Full workspace validation passes with the CI-ready commands above.
 
 ## Non-goals for v1

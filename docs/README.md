@@ -28,14 +28,16 @@ product overview, then use this map to choose the right depth.
 | Generate reviewable evidence | [How-to: generate retained evidence](how-to/generate-retained-evidence.md) |
 | Use discovery safely | [How-to: use a discovery manifest](how-to/use-discovery-manifest.md) |
 | Validate semantic registry evidence | [How-to: validate a semantic registry](how-to/validate-semantic-registry.md) |
+| Validate retained state graph evidence | [How-to: validate a state graph](how-to/validate-state-graph.md) |
 | Build a downstream integration | [Concepts: profiles and adapters](concepts/profiles-and-adapters.md) |
 | Evaluate game/simulation adoption | [Traces: games contract candidates](traces/games-contract-candidates.md) |
 | Review Mission 2.0 planning | [Architecture: Mission 2.0 planning index](architecture/mission-2-planning-index.md) |
 
 ## Current boundary
 
-The current docs describe RUNE v1 plus Mission 2.0 planning and Wave 42 retained
-semantic registry evidence. They do not promise arbitrary Rust source scraping,
-Cargo metadata traversal, executable hooks, automatic publishing,
-product-specific vocabulary in `rune-core`, runtime host behavior, live state
-inspection, mutating agent operations, or automatic migration.
+The current docs describe RUNE v1 plus Mission 2.0 planning, Wave 42 retained
+semantic registry evidence, and Wave 43 retained state graph evidence. They do
+not promise arbitrary Rust source scraping, Cargo metadata traversal, executable
+hooks, automatic publishing, product-specific vocabulary in `rune-core`, runtime
+host behavior, live state inspection, mutating agent operations, or automatic
+migration.

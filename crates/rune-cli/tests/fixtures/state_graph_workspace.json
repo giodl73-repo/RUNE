@@ -1,0 +1,53 @@
+{
+  "state_graph_id": "example.customer_state_graph",
+  "state_graph_version": "v0",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "nodes": [
+    {
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer",
+      "label": "Customer requested"
+    },
+    {
+      "node_id": "customer_active",
+      "descriptor_id": "example.customer_lifecycle",
+      "label": "Customer active"
+    }
+  ],
+  "transitions": [
+    {
+      "transition_id": "create_customer",
+      "from_node_id": "customer_requested",
+      "to_node_id": "customer_active",
+      "descriptor_id": "example.create_customer",
+      "label": "Create customer command"
+    },
+    {
+      "transition_id": "customer_created",
+      "from_node_id": "customer_requested",
+      "to_node_id": "customer_active",
+      "descriptor_id": "example.customer_created",
+      "label": "Customer created event"
+    }
+  ],
+  "ownership": [
+    {
+      "owner": "example-crate",
+      "node_ids": ["customer_requested", "customer_active"],
+      "transition_ids": ["create_customer", "customer_created"]
+    }
+  ],
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
+  "capabilities": {
+    "retained": true,
+    "live_state": false
+  }
+}

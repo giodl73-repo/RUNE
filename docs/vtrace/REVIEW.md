@@ -1203,6 +1203,36 @@ Artifacts reviewed:
 Conclusion: final communications/readiness closeout passes for v1 plus Wave 42.
 The next implementation lane is Wave 43 retained state graph evidence.
 
+## Wave 43 retained state graph implementation review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates/rune-core/src/lib.rs`
+- `crates/rune-cli/src/main.rs`
+- `crates/rune-cli/tests/state_graph_cli.rs`
+- `crates/rune-cli/tests/fixtures/state_graph_*.json`
+- `docs/architecture/state-graph-interface.md`
+- `docs/vtrace/DCR.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-03-state-graph/`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Retained evidence boundary | pass | `check-state-graph` reads retained graph and registry fixtures only. |
+| Registry alignment | pass | State graph registry refs are checked against the supplied semantic registry. |
+| Descriptor integrity | pass | Nodes must reference known descriptor ids; transitions must reference known nodes and command/event descriptors. |
+| Runtime safety | pass | Live state requests fail closed and no runtime host, live inspection, pointer walking, mutation, replay, Cargo traversal, or source scraping was added. |
+| Product neutrality | pass | The core model uses generic nodes, transitions, ownership, evidence refs, and capabilities without downstream product vocabulary. |
+
+Conclusion: Wave 43 retained state graph evidence passes as a read-only Mission
+2.0 slice. Evidence runtime packets remain the next planned lane; runtime host
+behavior remains blocked.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor
