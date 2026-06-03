@@ -7,8 +7,12 @@
   },
   "nodes": [
     {
-      "node_id": "unknown",
-      "descriptor_id": "example.unknown_state"
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer"
+    },
+    {
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer_lifecycle"
     }
   ],
   "transitions": [],

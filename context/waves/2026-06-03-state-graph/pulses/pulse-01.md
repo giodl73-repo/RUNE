@@ -10,6 +10,8 @@ Add the first retained state graph evidence slice for Mission 2.0.
   transitions, ownership, evidence refs, capabilities, and validation codes.
 - Added retained pass/failure state graph fixtures.
 - Added `rune check-state-graph --fixture <path> --registry <path>`.
+- Hardened validation after role/panel review so retained evidence refs,
+  ownership refs, and duplicate graph ids fail closed.
 - Updated DCR, requirements, trace, verification, validation, review, product,
   architecture, how-to, and runbook docs.
 

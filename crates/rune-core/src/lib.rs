@@ -368,6 +368,9 @@ pub struct StateGraphValidationCodes {
     pub unknown_transition_node: &'static str,
     pub unsupported_transition_descriptor: &'static str,
     pub live_state_requested: &'static str,
+    pub invalid_evidence_ref: &'static str,
+    pub invalid_ownership_ref: &'static str,
+    pub duplicate_graph_id: &'static str,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
@@ -727,6 +730,37 @@ impl StateGraphDraft {
                 codes.live_state_requested
             ));
         }
+        if !self.capabilities.retained {
+            return Err(format!(
+                "{} state graph must declare retained evidence capability",
+                codes.invalid_evidence_ref
+            ));
+        }
+        if self.evidence_refs.is_empty() {
+            return Err(format!(
+                "{} state graph must reference retained evidence",
+                codes.invalid_evidence_ref
+            ));
+        }
+        let registry_source_refs: BTreeSet<&str> = registry
+            .collections
+            .iter()
+            .map(|collection| collection.source_ref.as_str())
+            .collect();
+        for evidence_ref in &self.evidence_refs {
+            if evidence_ref.evidence_kind != "descriptor_collection_fixture" {
+                return Err(format!(
+                    "{} unsupported state graph evidence kind: {}",
+                    codes.invalid_evidence_ref, evidence_ref.evidence_kind
+                ));
+            }
+            if !registry_source_refs.contains(evidence_ref.source_ref.as_str()) {
+                return Err(format!(
+                    "{} state graph evidence ref is not declared by semantic registry: {}",
+                    codes.invalid_evidence_ref, evidence_ref.source_ref
+                ));
+            }
+        }
 
         let descriptor_kinds = descriptor_kinds_by_id(collections);
         for node in &self.nodes {
@@ -738,12 +772,23 @@ impl StateGraphDraft {
             }
         }
 
-        let node_ids: BTreeSet<&str> = self
-            .nodes
-            .iter()
-            .map(|node| node.node_id.as_str())
-            .collect();
+        let mut node_ids = BTreeSet::new();
+        for node in &self.nodes {
+            if !node_ids.insert(node.node_id.as_str()) {
+                return Err(format!(
+                    "{} duplicate state graph node id: {}",
+                    codes.duplicate_graph_id, node.node_id
+                ));
+            }
+        }
+        let mut transition_ids = BTreeSet::new();
         for transition in &self.transitions {
+            if !transition_ids.insert(transition.transition_id.as_str()) {
+                return Err(format!(
+                    "{} duplicate state graph transition id: {}",
+                    codes.duplicate_graph_id, transition.transition_id
+                ));
+            }
             if !node_ids.contains(transition.from_node_id.as_str())
                 || !node_ids.contains(transition.to_node_id.as_str())
             {
@@ -764,6 +809,24 @@ impl StateGraphDraft {
                     return Err(format!(
                         "{} transition references unknown command/event descriptor: {}",
                         codes.unsupported_transition_descriptor, transition.descriptor_id
+                    ));
+                }
+            }
+        }
+        for ownership in &self.ownership {
+            for node_id in &ownership.node_ids {
+                if !node_ids.contains(node_id.as_str()) {
+                    return Err(format!(
+                        "{} ownership references unknown node id: {}",
+                        codes.invalid_ownership_ref, node_id
+                    ));
+                }
+            }
+            for transition_id in &ownership.transition_ids {
+                if !transition_ids.contains(transition_id.as_str()) {
+                    return Err(format!(
+                        "{} ownership references unknown transition id: {}",
+                        codes.invalid_ownership_ref, transition_id
                     ));
                 }
             }
@@ -1773,6 +1836,80 @@ mod tests {
         assert!(error.contains("RUNE-STATE-006"));
     }
 
+    #[test]
+    fn retained_state_graph_missing_retained_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/state_graph_missing_retained.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("missing retained capability should fail");
+
+        assert!(error.contains("RUNE-STATE-007"));
+    }
+
+    #[test]
+    fn retained_state_graph_unknown_evidence_ref_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/state_graph_unknown_evidence_ref.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("unknown evidence ref should fail");
+
+        assert!(error.contains("RUNE-STATE-007"));
+    }
+
+    #[test]
+    fn retained_state_graph_unknown_ownership_ref_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/state_graph_unknown_ownership_ref.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("unknown ownership ref should fail");
+
+        assert!(error.contains("RUNE-STATE-008"));
+    }
+
+    #[test]
+    fn retained_state_graph_duplicate_node_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture = include_str!("../../rune-cli/tests/fixtures/state_graph_duplicate_node.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("duplicate node id should fail");
+
+        assert!(error.contains("RUNE-STATE-009"));
+    }
+
+    #[test]
+    fn retained_state_graph_duplicate_transition_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/state_graph_duplicate_transition.json");
+        let draft: StateGraphDraft =
+            serde_json::from_str(fixture).expect("state graph fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, state_graph_codes())
+            .expect_err("duplicate transition id should fail");
+
+        assert!(error.contains("RUNE-STATE-009"));
+    }
+
     fn state_graph_codes() -> StateGraphValidationCodes {
         StateGraphValidationCodes {
             missing_identity: "RUNE-STATE-001",
@@ -1781,6 +1918,9 @@ mod tests {
             unknown_transition_node: "RUNE-STATE-004",
             unsupported_transition_descriptor: "RUNE-STATE-005",
             live_state_requested: "RUNE-STATE-006",
+            invalid_evidence_ref: "RUNE-STATE-007",
+            invalid_ownership_ref: "RUNE-STATE-008",
+            duplicate_graph_id: "RUNE-STATE-009",
         }
     }
 

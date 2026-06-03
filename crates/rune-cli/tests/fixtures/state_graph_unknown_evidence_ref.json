@@ -7,8 +7,8 @@
   },
   "nodes": [
     {
-      "node_id": "unknown",
-      "descriptor_id": "example.unknown_state"
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer"
     }
   ],
   "transitions": [],
@@ -16,7 +16,7 @@
   "evidence_refs": [
     {
       "evidence_kind": "descriptor_collection_fixture",
-      "source_ref": "known_contract_descriptor_collection.json"
+      "source_ref": "missing_descriptor_collection.json"
     }
   ],
   "capabilities": {

@@ -48,7 +48,9 @@ git diff --check
   must resolve to retained descriptor collection fixtures.
 - State graph evidence is retained and versioned; graph nodes must reference
   known descriptors, transitions must reference known nodes and command/event
-  descriptors, and live-state requests fail closed.
+  descriptors, evidence refs must match semantic registry collection source
+  refs, ownership refs must resolve to known graph ids, duplicate graph ids fail
+  closed, and live-state requests fail closed.
 
 ## Release evidence
 

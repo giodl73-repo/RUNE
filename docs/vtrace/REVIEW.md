@@ -1226,6 +1226,9 @@ Artifacts reviewed:
 | Retained evidence boundary | pass | `check-state-graph` reads retained graph and registry fixtures only. |
 | Registry alignment | pass | State graph registry refs are checked against the supplied semantic registry. |
 | Descriptor integrity | pass | Nodes must reference known descriptor ids; transitions must reference known nodes and command/event descriptors. |
+| Retained evidence integrity | pass after role-review hardening | Graphs must declare retained capability and evidence refs that match semantic registry collection source refs. |
+| Ownership integrity | pass after role-review hardening | Ownership refs must point to known node and transition ids. |
+| IR identity integrity | pass after role-review hardening | Duplicate node and transition ids fail closed before the graph becomes a stronger IR. |
 | Runtime safety | pass | Live state requests fail closed and no runtime host, live inspection, pointer walking, mutation, replay, Cargo traversal, or source scraping was added. |
 | Product neutrality | pass | The core model uses generic nodes, transitions, ownership, evidence refs, and capabilities without downstream product vocabulary. |
 

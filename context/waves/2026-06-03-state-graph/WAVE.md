@@ -15,13 +15,17 @@ refs before any live inspection or runtime host exists.
 
 | Pulse | Title | Status | Outcome |
 |------:|-------|--------|---------|
-| 01 | Retained state graph validation | complete | Added state graph model, fail-closed diagnostics, retained fixtures, `check-state-graph`, docs, and VTRACE records. |
+| 01 | Retained state graph validation | complete | Added state graph model, fail-closed diagnostics, retained fixtures, `check-state-graph`, docs, VTRACE records, and role-review hardening for retained evidence refs, ownership refs, and duplicate graph ids. |
 
 ## Success criteria
 
 - State graph fixtures have durable graph identity and semantic registry refs.
 - Nodes reference known descriptor ids from retained registry collection refs.
 - Transitions reference known source/target nodes and command/event descriptors.
+- Retained evidence refs are required and must match semantic registry collection
+  source refs.
+- Ownership refs point to known graph node and transition ids.
+- Duplicate node and transition ids fail closed.
 - Live-state requests fail closed.
 - CLI validation is read-only and fixture-backed.
 - Runtime host behavior, live state inspection, mutation, replay, Cargo

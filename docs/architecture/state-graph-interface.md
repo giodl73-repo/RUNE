@@ -44,6 +44,9 @@ Reserve diagnostic families:
 | `RUNE-STATE-004` | Transition references unknown source or target node. |
 | `RUNE-STATE-005` | Transition references unsupported command/event descriptor. |
 | `RUNE-STATE-006` | Live state requested without runtime host approval. |
+| `RUNE-STATE-007` | Missing retained capability, missing evidence ref, unsupported evidence kind, or evidence ref not declared by the semantic registry. |
+| `RUNE-STATE-008` | Ownership references unknown node or transition id. |
+| `RUNE-STATE-009` | Duplicate node or transition id. |
 
 ## Retained fixtures
 
@@ -52,7 +55,10 @@ Implementation must add:
 - retained state graph over an existing descriptor collection,
 - transition graph with command/event links,
 - unknown descriptor failure fixture,
-- live-state request rejection fixture.
+- live-state request rejection fixture,
+- retained evidence ref failure fixture,
+- ownership ref failure fixture,
+- duplicate graph id failure fixture.
 
 ## Implementation status
 
@@ -62,7 +68,7 @@ Wave 43 implements the retained evidence slice in `rune-core` and `rune-cli`:
 - descriptor-backed nodes and command/event transitions,
 - ownership and evidence refs,
 - `rune check-state-graph --fixture <path> --registry <path>`,
-- fail-closed diagnostics `RUNE-STATE-001` through `RUNE-STATE-006`.
+- fail-closed diagnostics `RUNE-STATE-001` through `RUNE-STATE-009`.
 
 The implementation remains read-only and fixture-backed.
 

@@ -61,6 +61,51 @@ fn check_state_graph_rejects_live_state_requests() {
 }
 
 #[test]
+fn check_state_graph_rejects_missing_retained_capability() {
+    let output = run_check_state_graph("state_graph_missing_retained.json");
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).expect("utf8 stderr");
+    assert!(stderr.contains("RUNE-STATE-007"));
+}
+
+#[test]
+fn check_state_graph_rejects_unknown_evidence_ref() {
+    let output = run_check_state_graph("state_graph_unknown_evidence_ref.json");
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).expect("utf8 stderr");
+    assert!(stderr.contains("RUNE-STATE-007"));
+}
+
+#[test]
+fn check_state_graph_rejects_unknown_ownership_ref() {
+    let output = run_check_state_graph("state_graph_unknown_ownership_ref.json");
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).expect("utf8 stderr");
+    assert!(stderr.contains("RUNE-STATE-008"));
+}
+
+#[test]
+fn check_state_graph_rejects_duplicate_node_ids() {
+    let output = run_check_state_graph("state_graph_duplicate_node.json");
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).expect("utf8 stderr");
+    assert!(stderr.contains("RUNE-STATE-009"));
+}
+
+#[test]
+fn check_state_graph_rejects_duplicate_transition_ids() {
+    let output = run_check_state_graph("state_graph_duplicate_transition.json");
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).expect("utf8 stderr");
+    assert!(stderr.contains("RUNE-STATE-009"));
+}
+
+#[test]
 fn check_state_graph_requires_registry_flag() {
     let fixture = fixture_path("state_graph_workspace.json");
 

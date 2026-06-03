@@ -79,8 +79,8 @@ cargo run -p rune-cli -- status
 | Semantic registry source-ref checks | `rune-cli` tests validate retained descriptor collection source refs and reject mismatched collection id/version refs with `RUNE-REGISTRY-005`. | covered |
 | Semantic registry inspection reports | `rune-cli` tests compare retained `inspect-registry` output and reuse source-ref failure coverage. | covered |
 | Final communications readiness | README, docs map, corpus rules, registry how-to/runbook/example/trace, communications strategy, release readiness, and VTRACE rows describe v1 plus Wave 42 without overclaiming runtime behavior. | covered |
-| Retained state graph implementation | `rune-core` tests validate retained state graph fixtures against semantic registry collections and fail closed on unknown descriptors, unknown transition nodes, unsupported transition descriptors, and live-state requests. | covered |
-| State graph CLI checks | `rune-cli` tests compare retained `check-state-graph` output and reject unknown descriptors, unknown transition nodes, unsupported transition descriptors, live-state requests, and invalid usage. | covered |
+| Retained state graph implementation | `rune-core` tests validate retained state graph fixtures against semantic registry collections and fail closed on unknown descriptors, unknown transition nodes, unsupported transition descriptors, live-state requests, missing or mismatched retained evidence refs, unknown ownership refs, and duplicate graph ids. | covered |
+| State graph CLI checks | `rune-cli` tests compare retained `check-state-graph` output and reject unknown descriptors, unknown transition nodes, unsupported transition descriptors, live-state requests, missing or mismatched retained evidence refs, unknown ownership refs, duplicate graph ids, and invalid usage. | covered |
 
 ## Evidence rule
 

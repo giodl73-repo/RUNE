@@ -7,12 +7,18 @@
   },
   "nodes": [
     {
-      "node_id": "unknown",
-      "descriptor_id": "example.unknown_state"
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer"
     }
   ],
   "transitions": [],
-  "ownership": [],
+  "ownership": [
+    {
+      "owner": "example-crate",
+      "node_ids": ["customer_missing"],
+      "transition_ids": []
+    }
+  ],
   "evidence_refs": [
     {
       "evidence_kind": "descriptor_collection_fixture",

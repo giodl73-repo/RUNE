@@ -7,8 +7,8 @@
   },
   "nodes": [
     {
-      "node_id": "unknown",
-      "descriptor_id": "example.unknown_state"
+      "node_id": "customer_requested",
+      "descriptor_id": "example.customer"
     }
   ],
   "transitions": [],
@@ -20,7 +20,7 @@
     }
   ],
   "capabilities": {
-    "retained": true,
+    "retained": false,
     "live_state": false
   }
 }

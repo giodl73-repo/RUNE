@@ -40,6 +40,9 @@ The check report confirms:
 | `RUNE-STATE-004` | Transition references an unknown source or target node. |
 | `RUNE-STATE-005` | Transition references an unknown or unsupported command/event descriptor. |
 | `RUNE-STATE-006` | Live state was requested without an approved runtime host boundary. |
+| `RUNE-STATE-007` | Retained evidence is missing, unsupported, or not declared by the semantic registry. |
+| `RUNE-STATE-008` | Ownership references an unknown node or transition id. |
+| `RUNE-STATE-009` | Duplicate node or transition id. |
 
 ## Boundaries
 

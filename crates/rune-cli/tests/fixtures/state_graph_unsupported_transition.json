@@ -24,7 +24,12 @@
     }
   ],
   "ownership": [],
-  "evidence_refs": [],
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
   "capabilities": {
     "retained": true,
     "live_state": false

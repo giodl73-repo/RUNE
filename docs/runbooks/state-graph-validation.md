@@ -28,6 +28,11 @@ Retained failure fixtures cover:
 | `state_graph_unknown_node.json` | `RUNE-STATE-004` |
 | `state_graph_unsupported_transition.json` | `RUNE-STATE-005` |
 | `state_graph_live_blocked.json` | `RUNE-STATE-006` |
+| `state_graph_missing_retained.json` | `RUNE-STATE-007` |
+| `state_graph_unknown_evidence_ref.json` | `RUNE-STATE-007` |
+| `state_graph_unknown_ownership_ref.json` | `RUNE-STATE-008` |
+| `state_graph_duplicate_node.json` | `RUNE-STATE-009` |
+| `state_graph_duplicate_transition.json` | `RUNE-STATE-009` |
 
 ## Blocked behavior
 

@@ -234,6 +234,9 @@ runtime behavior.
 | Registry binding | pass | Graph registry refs must match the supplied semantic registry fixture. |
 | Descriptor-backed nodes | pass | Unknown node descriptor ids fail with `RUNE-STATE-003`. |
 | Transition integrity | pass | Unknown source/target nodes fail with `RUNE-STATE-004`; non-command/event transition descriptors fail with `RUNE-STATE-005`. |
+| Retained evidence integrity | pass | Graphs must declare retained capability and evidence refs that match semantic registry collection source refs; failures use `RUNE-STATE-007`. |
+| Ownership integrity | pass | Ownership node/transition refs must point to known graph ids; failures use `RUNE-STATE-008`. |
+| Graph id uniqueness | pass | Duplicate node or transition ids fail with `RUNE-STATE-009`. |
 | Runtime safety | pass | `live_state: true` fails with `RUNE-STATE-006`; no runtime host, live inspection, mutation, replay, Cargo traversal, or source scraping was added. |
 
 ## Wave 4 readiness decision

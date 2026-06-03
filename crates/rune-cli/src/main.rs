@@ -432,6 +432,9 @@ fn state_graph_codes() -> StateGraphValidationCodes {
         unknown_transition_node: "RUNE-STATE-004",
         unsupported_transition_descriptor: "RUNE-STATE-005",
         live_state_requested: "RUNE-STATE-006",
+        invalid_evidence_ref: "RUNE-STATE-007",
+        invalid_ownership_ref: "RUNE-STATE-008",
+        duplicate_graph_id: "RUNE-STATE-009",
     }
 }
 

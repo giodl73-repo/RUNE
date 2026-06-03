@@ -350,6 +350,9 @@ Cargo traversal, or source scraping.
 | `RUNE-STATE-004` transition references unknown source or target node | implemented |
 | `RUNE-STATE-005` transition references unsupported command/event descriptor | implemented |
 | `RUNE-STATE-006` live state requested without runtime host approval | implemented |
+| `RUNE-STATE-007` missing/unsupported/mismatched retained evidence ref | implemented |
+| `RUNE-STATE-008` ownership references unknown node or transition id | implemented |
+| `RUNE-STATE-009` duplicate node or transition id | implemented |
 
 State graph validation is intentionally bounded to retained graph fixtures,
 semantic registry fixtures, and the registry's retained descriptor collection
