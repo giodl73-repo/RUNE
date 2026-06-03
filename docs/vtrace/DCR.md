@@ -207,6 +207,22 @@ adapters, and field metadata.
 8. **Wave 48: Optional runtime host design** - decide if and how an embeddable
    native runtime host should expose approved surfaces.
 
+### Implementation readiness
+
+Mission 2.0 is ready for the next planning slice, not broad implementation.
+Proceed with **Wave 42: Semantic registry interface** first. All later lanes
+remain gated:
+
+| Lane | Readiness |
+|---|---|
+| Semantic registry | ready for interface DCR/spec |
+| State graph | gated until registry shape is specified |
+| Evidence runtime packets | gated until packet documents, diagnostics, and fixtures are specified |
+| Agent protocol | gated until read-first operations, capability declarations, and command examples are specified |
+| Compatibility negotiation | gated until collection/profile/adapter/runtime-host report shapes are specified |
+| Capability and sensitivity policy | gated until exportability, mutability, authority, and enforcement boundaries are specified |
+| Runtime host | blocked until all prior lanes have approved boundaries |
+
 ### Validation expectations
 
 Mission 2.0 control-package waves are documentation-only and must run:

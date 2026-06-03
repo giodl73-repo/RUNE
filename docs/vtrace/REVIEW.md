@@ -995,9 +995,8 @@ Artifacts reviewed:
 - `PRODUCT_PLAN.md`
 - `context/waves/2026-06-03-mission-2-managed-native-runtime/`
 
-Role lens source: the current checkout does not contain physical `.roles/`
-files, so this review uses the established RUNE role lenses already recorded in
-this VTRACE review package.
+Role lens source: `.roles/` and the established RUNE role lenses already
+recorded in this VTRACE review package.
 
 | Role | Result | Finding |
 |---|---|---|
@@ -1015,6 +1014,20 @@ Conclusion: Mission 2.0 passes role-lens review as a controlled direction. It
 does not approve runtime host, live state inspection, mutating agent operations,
 or automatic compatibility migration. Those remain blocked behind future DCRs
 and validation evidence.
+
+## Wave 41 implementation readiness review
+
+Date: 2026-06-03
+
+| Question | Decision | Finding |
+|---|---|---|
+| Can Mission 2.0 implementation begin immediately? | no | The mission and role review are ready, but implementation must proceed lane by lane through DCR/interface waves. |
+| What is ready now? | Wave 42 planning | The semantic registry interface is the first implementable planning target because it builds on existing descriptor collections and explicit registries. |
+| What remains gated? | Waves 43-48 | State graph, evidence runtime packets, agent protocol, compatibility negotiation, capability policy, and runtime host design still need specs, fixtures, diagnostics, and validation commands. |
+| What must not be built yet? | blocked | Runtime host, live state inspection, mutating agent operations, automatic migration, and policy enforcement are blocked until their DCRs are approved. |
+
+Conclusion: proceed with **Wave 42: Semantic registry interface** as the next
+docs/spec slice. Do not implement Mission 2.0 runtime behavior yet.
 
 ## Review gate
 
