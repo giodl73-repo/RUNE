@@ -17,6 +17,7 @@ letting crates and workspaces retain explicit semantic registry documents.
 | 01 | Retained registry model | complete | Added semantic registry document types, validation, retained fixtures, and VTRACE records. |
 | 02 | Read-only registry CLI checks | complete | Added `check-registry` fixture validation and approved profile/adapter catalog cross-checks. |
 | 03 | Registry source-ref checks | complete | Added retained descriptor collection source-ref loading and `RUNE-REGISTRY-005` mismatch diagnostics. |
+| 04 | Registry inspection reports | complete | Added `inspect-registry` reports with validated registry metadata and collection summaries. |
 
 ## Success criteria
 
@@ -32,6 +33,8 @@ letting crates and workspaces retain explicit semantic registry documents.
   declared profile/adapter catalog references.
 - Registry collection source refs load retained local descriptor collection
   fixtures and fail closed on id/version mismatches.
+- `inspect-registry --fixture <path>` emits validated registry and retained
+  collection summary evidence without runtime behavior.
 
 ## Validation
 
@@ -40,5 +43,6 @@ cargo fmt --check
 cargo test --workspace
 cargo run -q -p rune-cli -- status
 cargo run -q -p rune-cli -- check-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+cargo run -q -p rune-cli -- inspect-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 git diff --check
 ```

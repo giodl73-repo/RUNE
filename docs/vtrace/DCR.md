@@ -273,6 +273,7 @@ behavior, or agent protocol operations.
 | `SemanticRegistryCapabilities` | implemented |
 | Retained crate/workspace/failure fixtures | implemented |
 | `rune check-registry --fixture <path>` | implemented |
+| `rune inspect-registry --fixture <path>` | implemented |
 | Retained collection source-ref loading | implemented for local fixture-relative refs |
 
 ### Validation behavior
@@ -301,6 +302,6 @@ collections.
 
 ### Next allowed work
 
-The next semantic registry slice may add richer inspection reports over loaded
-retained collection refs, but must stay read-only unless a new DCR approves
+The next semantic registry slice may add compatibility report documents or
+consumer adoption fixtures, but must stay read-only unless a new DCR approves
 mutation or runtime exposure.

@@ -77,6 +77,7 @@ cargo run -p rune-cli -- status
 | Semantic registry implementation | `rune-core` tests cover retained semantic registry validation, duplicate collection failure, unsupported scope failure, and runtime capability blocking. | covered |
 | Semantic registry CLI checks | `rune-cli` tests compare retained registry check output and reject duplicate collection refs, runtime capability, unknown profile refs, and invalid usage. | covered |
 | Semantic registry source-ref checks | `rune-cli` tests validate retained descriptor collection source refs and reject mismatched collection id/version refs with `RUNE-REGISTRY-005`. | covered |
+| Semantic registry inspection reports | `rune-cli` tests compare retained `inspect-registry` output and reuse source-ref failure coverage. | covered |
 
 ## Evidence rule
 

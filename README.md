@@ -77,6 +77,7 @@ cargo run -p rune-cli -- adapt-collection --adapter rune.review_packet_json --fi
 cargo run -p rune-cli -- check --profile rune.neutral_descriptor_json --fixture <descriptor.json>
 cargo run -p rune-cli -- check-collection --profile rune.neutral_descriptor_json --fixture <collection.json>
 cargo run -p rune-cli -- check-registry --fixture <semantic-registry.json>
+cargo run -p rune-cli -- inspect-registry --fixture <semantic-registry.json>
 cargo run -p rune-cli -- generate --profile rune.neutral_descriptor_json --fixture <descriptor.json>
 cargo run -p rune-cli -- generate-collection --profile rune.neutral_descriptor_json --fixture <collection.json>
 cargo run -p rune-cli -- generate --profile rune.documentation_packet_json --fixture <descriptor.json>
@@ -100,11 +101,13 @@ The first downstream adapter is `rune.review_packet_json`. It lives in
 `rune-adapters` and converts validated descriptor collections into deterministic
 review packets without adding adapter vocabulary to `rune-core`.
 
-The first semantic registry command is `check-registry`. It validates retained
-registry metadata and cross-checks declared profile/adapter ids against approved
-catalogs. It also validates retained descriptor collection source refs relative
-to the registry fixture. It does not inspect Cargo metadata, scrape source,
-discover plugins, mutate registry state, or enable runtime host behavior.
+The first semantic registry commands are `check-registry` and `inspect-registry`.
+They validate retained registry metadata, cross-check declared profile/adapter
+ids against approved catalogs, and validate retained descriptor collection source
+refs relative to the registry fixture. `inspect-registry` additionally emits
+collection summaries and kind inventories. These commands do not inspect Cargo
+metadata, scrape source, discover plugins, mutate registry state, or enable
+runtime host behavior.
 
 CLI hardening covers current status text, unknown commands, usage failures,
 malformed JSON diagnostics, invalid adapter argument order, and adapter

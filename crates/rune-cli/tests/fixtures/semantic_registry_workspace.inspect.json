@@ -1,0 +1,98 @@
+{
+  "status": "ok",
+  "registry": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0",
+    "owner": "example-workspace",
+    "scope": "workspace",
+    "collections": [
+      {
+        "collection_id": "example.known_contracts",
+        "collection_version": "v0",
+        "source_ref": "known_contract_descriptor_collection.json",
+        "owner": "example-crate"
+      },
+      {
+        "collection_id": "example.adapter_contracts",
+        "collection_version": "v0",
+        "source_ref": "semantic_registry_adapter_contracts_collection.json",
+        "owner": "example-adapter"
+      }
+    ],
+    "profiles": [
+      {
+        "profile_id": "rune.neutral_descriptor_json",
+        "profile_version": "v0"
+      },
+      {
+        "profile_id": "rune.documentation_packet_json",
+        "profile_version": "v0"
+      }
+    ],
+    "adapters": [
+      {
+        "adapter_id": "rune.review_packet_json",
+        "adapter_version": "v0"
+      }
+    ],
+    "capabilities": {
+      "read": true,
+      "query": true,
+      "generate": true,
+      "mutate": false,
+      "runtime": false
+    }
+  },
+  "collections": [
+    {
+      "collection_id": "example.known_contracts",
+      "collection_version": "v0",
+      "source_ref": "known_contract_descriptor_collection.json",
+      "owner": "example-crate",
+      "descriptor_count": 7,
+      "kinds": [
+        {
+          "kind": "artifact",
+          "descriptor_count": 1
+        },
+        {
+          "kind": "command",
+          "descriptor_count": 1
+        },
+        {
+          "kind": "entity",
+          "descriptor_count": 1
+        },
+        {
+          "kind": "event",
+          "descriptor_count": 1
+        },
+        {
+          "kind": "evidence",
+          "descriptor_count": 1
+        },
+        {
+          "kind": "source",
+          "descriptor_count": 1
+        },
+        {
+          "kind": "state",
+          "descriptor_count": 1
+        }
+      ]
+    },
+    {
+      "collection_id": "example.adapter_contracts",
+      "collection_version": "v0",
+      "source_ref": "semantic_registry_adapter_contracts_collection.json",
+      "owner": "example-adapter",
+      "descriptor_count": 1,
+      "kinds": [
+        {
+          "kind": "artifact",
+          "descriptor_count": 1
+        }
+      ]
+    }
+  ]
+}

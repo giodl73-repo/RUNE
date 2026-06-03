@@ -276,7 +276,8 @@ semantic registry documents and validates missing identity/version, duplicate
 collection refs, unsupported scopes, and blocked runtime capability declarations.
 The CLI also provides `check-registry --fixture <path>` for read-only registry
 validation, retained collection source-ref checks, and approved profile/adapter
-catalog cross-checks.
+catalog cross-checks. `inspect-registry --fixture <path>` adds a read-only
+inspection report over the validated registry and retained collection summaries.
 
 ### Wave 43: State graph interface
 

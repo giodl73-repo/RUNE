@@ -4,9 +4,10 @@ use rune_adapters::{
 use rune_core::{
     CheckCollectionReportDocument, CheckReportDocument, CollectionEvidenceBundleDocument,
     DataContractDocument, DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
-    DiscoveryManifestDraft, DocumentationPacketDocument, GeneratedArtifactDocument,
-    GeneratedCollectionArtifactDocument, ProfileCatalog, ProfileCompatibilityCodes,
-    SemanticRegistryCapabilities, SemanticRegistryDocument, SemanticRegistryDraft,
+    DescriptorKindInventoryDocument, DiscoveryManifestDraft, DocumentationPacketDocument,
+    GeneratedArtifactDocument, GeneratedCollectionArtifactDocument, ProfileCatalog,
+    ProfileCompatibilityCodes, SemanticRegistryCapabilities, SemanticRegistryDocument,
+    SemanticRegistryDraft,
 };
 use serde::Serialize;
 use std::path::Path;
@@ -21,7 +22,7 @@ fn main() {
             println!("approved stage: v1 implementation waves");
             println!("contract kinds: entity,event,command,state,artifact,source,evidence,other");
             println!(
-                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
+                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
                 "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
@@ -40,6 +41,7 @@ fn main() {
         "check" => check(args.collect()),
         "check-collection" => check_collection(args.collect()),
         "check-registry" => check_registry(args.collect()),
+        "inspect-registry" => inspect_registry(args.collect()),
         "generate" => generate(args.collect()),
         "generate-collection" => generate_collection(args.collect()),
         "profile" => profile(args.collect()),
@@ -62,6 +64,23 @@ struct SemanticRegistryCheckReportDocument {
     profile_count: usize,
     adapter_count: usize,
     capabilities: SemanticRegistryCapabilities,
+}
+
+#[derive(Serialize)]
+struct SemanticRegistryInspectionDocument {
+    status: String,
+    registry: SemanticRegistryDocument,
+    collections: Vec<SemanticRegistryCollectionInspectionDocument>,
+}
+
+#[derive(Serialize)]
+struct SemanticRegistryCollectionInspectionDocument {
+    collection_id: String,
+    collection_version: String,
+    source_ref: String,
+    owner: String,
+    descriptor_count: usize,
+    kinds: Vec<DescriptorKindInventoryDocument>,
 }
 
 fn inspect_collection(args: Vec<String>) -> Result<(), String> {
@@ -298,7 +317,7 @@ fn check_registry(args: Vec<String>) -> Result<(), String> {
         "RUNE-REGISTRY-007",
     )?;
     check_registry_catalog_refs(&registry)?;
-    check_registry_collection_refs(&registry, &fixture)?;
+    let collections = load_registry_collection_refs(&registry, &fixture)?;
 
     let output = serde_json::to_string_pretty(&SemanticRegistryCheckReportDocument {
         status: "ok".to_owned(),
@@ -314,16 +333,58 @@ fn check_registry(args: Vec<String>) -> Result<(), String> {
         format!("RUNE-REGISTRY-900 error serializing registry check report: {error}")
     })?;
     println!("{output}");
+    drop(collections);
     Ok(())
 }
 
-fn check_registry_collection_refs(
+fn inspect_registry(args: Vec<String>) -> Result<(), String> {
+    let fixture = parse_fixture_arg(&args, "usage: rune inspect-registry --fixture <path>")?;
+    let registry = read_semantic_registry_fixture(&fixture, "RUNE-REGISTRY-900")?;
+    let registry = registry.validate_with_codes(
+        "RUNE-REGISTRY-001",
+        "RUNE-REGISTRY-002",
+        "RUNE-REGISTRY-003",
+        "RUNE-REGISTRY-004",
+        "RUNE-REGISTRY-007",
+    )?;
+    check_registry_catalog_refs(&registry)?;
+    let collections = load_registry_collection_refs(&registry, &fixture)?;
+    let collection_summaries = collections
+        .into_iter()
+        .zip(registry.collections.iter())
+        .map(|(collection, collection_ref)| {
+            let inventory = collection.inventory();
+            SemanticRegistryCollectionInspectionDocument {
+                collection_id: collection.collection_id,
+                collection_version: collection.collection_version,
+                source_ref: collection_ref.source_ref.clone(),
+                owner: collection_ref.owner.clone(),
+                descriptor_count: inventory.descriptor_count,
+                kinds: inventory.kinds,
+            }
+        })
+        .collect();
+
+    let output = serde_json::to_string_pretty(&SemanticRegistryInspectionDocument {
+        status: "ok".to_owned(),
+        registry,
+        collections: collection_summaries,
+    })
+    .map_err(|error| {
+        format!("RUNE-REGISTRY-900 error serializing registry inspection report: {error}")
+    })?;
+    println!("{output}");
+    Ok(())
+}
+
+fn load_registry_collection_refs(
     registry: &SemanticRegistryDocument,
     registry_fixture: &str,
-) -> Result<(), String> {
+) -> Result<Vec<DescriptorCollectionDocument>, String> {
     let registry_dir = Path::new(registry_fixture)
         .parent()
         .unwrap_or(Path::new(""));
+    let mut collections = Vec::with_capacity(registry.collections.len());
     for collection_ref in &registry.collections {
         let source_path = registry_dir.join(&collection_ref.source_ref);
         let collection =
@@ -344,9 +405,10 @@ fn check_registry_collection_refs(
                 collection.collection_version
             ));
         }
+        collections.push(collection);
     }
 
-    Ok(())
+    Ok(collections)
 }
 
 fn check_registry_catalog_refs(registry: &SemanticRegistryDocument) -> Result<(), String> {

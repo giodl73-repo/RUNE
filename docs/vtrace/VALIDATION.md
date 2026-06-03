@@ -196,6 +196,18 @@ registry fixture.
 | Collection identity/version match | pass | Mismatched collection id/version refs fail with `RUNE-REGISTRY-005`. |
 | Read-only boundary | pass | The command reads retained local JSON only and does not traverse Cargo metadata, scrape source, discover plugins, mutate registry state, or enable runtime behavior. |
 
+## Wave 42 semantic registry inspection validation
+
+The inspection slice exposes a richer read-only report after the same validation
+pipeline used by `check-registry`.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Registry inspection report | pass | `rune inspect-registry --fixture <path>` emits validated registry metadata. |
+| Collection summaries | pass | The report includes retained collection source refs, owners, descriptor counts, and kind inventories. |
+| Fail-closed reuse | pass | Inspection reuses catalog and source-ref validation, including `RUNE-REGISTRY-005` failures. |
+| Runtime safety | pass | No host behavior, mutation, Cargo traversal, source scraping, or plugin discovery was added. |
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for

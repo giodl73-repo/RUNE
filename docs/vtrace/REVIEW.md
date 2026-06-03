@@ -1143,6 +1143,34 @@ Artifacts reviewed:
 Conclusion: Wave 42 source-ref validation passes. Next semantic registry work may
 add richer inspection reports, but runtime behavior and mutation remain blocked.
 
+## Wave 42 semantic registry inspection review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates/rune-cli/src/main.rs`
+- `crates/rune-cli/tests/registry_cli.rs`
+- `crates/rune-cli/tests/fixtures/semantic_registry_workspace.inspect.json`
+- `docs/architecture/semantic-registry-interface.md`
+- `docs/vtrace/DCR.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-03-semantic-registry/pulses/pulse-04.md`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Inspection boundary | pass | `inspect-registry` reports validated retained registry and collection summaries only. |
+| Fail-closed reuse | pass | The command reuses registry identity, scope, runtime capability, catalog, and source-ref checks. |
+| Runtime safety | pass | No host behavior, mutation, source scraping, Cargo traversal, or plugin discovery was added. |
+| Product neutrality | pass | The output remains generic registry/collection/profile/adapter metadata. |
+
+Conclusion: Wave 42 inspection reports pass. Next work should move to the next
+approved Mission 2.0 lane or add read-only compatibility reports under a future
+DCR.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor
