@@ -57,7 +57,7 @@ their terms.
 | `rune-adapters` | Downstream adapter surfaces over validated RUNE evidence. |
 | `rune-core` | Neutral contract descriptor types and traits. |
 | `rune-derive` | Procedural macros that derive RUNE descriptors from Rust types. |
-| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, and semantic registry check commands. |
+| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, and semantic registry commands. |
 
 ## Current CLI surface
 
@@ -193,6 +193,9 @@ The full adoption documentation package starts at `docs\README.md`:
 - `docs\tutorials\` walks through the adopter path lesson by lesson.
 - `docs\examples\` indexes copyable adopter and fixture references.
 - `docs\traces\` connects commands and retained artifacts to review decisions.
+- `docs\how-to\validate-semantic-registry.md` and
+  `docs\runbooks\semantic-registry-validation.md` cover Mission 2.0 Wave 42
+  retained registry evidence.
 - `docs\CORPUS.md` records documentation update obligations.
 
 ## V1 completion target

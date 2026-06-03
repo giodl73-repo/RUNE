@@ -18,6 +18,8 @@ downstream product vocabulary.
 | COMMS-RUNE-EXAMPLES-001 | RUNE-REQ-055 / RUNE-REQ-056 / RUNE-REQ-057 / RUNE-REQ-065 / RUNE-REQ-067 | implementer / integrator | What can I copy and what output should I expect? | `docs/examples/`, retained fixtures in `docs/vtrace/fixtures/` | when profile, adapter, or fixture outputs change | RUNE examples owner | accepted |
 | COMMS-RUNE-TRACES-001 | RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 | reviewer / future agent | How did RUNE prove usefulness and release readiness? | `docs/traces/`, `docs/vtrace/BAKEOFF.md`, `docs/release-readiness.md` | when bakeoff or release evidence changes | RUNE evidence owner | accepted |
 | COMMS-RUNE-CORPUS-001 | RUNE-REQ-072 / REVIEW.md | docs owner / future agent | Who owns each docs surface and update obligation? | `docs/CORPUS.md` | every docs wave | RUNE docs owner | accepted |
+| COMMS-RUNE-REGISTRY-001 | RUNE-REQ-085 / RUNE-REQ-086 / RUNE-REQ-087 / RUNE-REQ-088 | Rust maintainer / adopter / future agent | How do I validate and inspect semantic registry evidence? | `docs/how-to/validate-semantic-registry.md`, `docs/runbooks/semantic-registry-validation.md`, `docs/examples/semantic-registry.md`, `docs/traces/semantic-registry-walkthrough.md` | when registry commands or fixtures change | RUNE registry owner | accepted |
+| COMMS-RUNE-BOUNDARY-001 | RUNE-REQ-084 / DCR-RUNE-002 / DCR-RUNE-003 | reviewer / platform owner | What is still blocked after Wave 42? | README, release readiness, architecture docs, VTRACE review | every Mission 2.0 lane | RUNE maintainer | accepted |
 
 ## Review Checklist
 
@@ -27,3 +29,4 @@ downstream product vocabulary.
 | Concepts/tutorials/examples do not overclaim unvalidated behavior. | yes | accepted | Rows keep generated docs, profiles, adapters, and bakeoff evidence tied to retained proof. |
 | Public interfaces have expected usage or expected output docs. | if applicable | accepted | How-to, examples, tutorial, and trace rows map to CLI/profile/adapter workflows. |
 | `docs/CORPUS.md` names ownership and update obligations. | if multiple surfaces exist | accepted | The existing corpus surface is part of the planned docs package. |
+| Mission 2.0 registry docs distinguish retained evidence from runtime behavior. | yes | accepted | Registry how-to/runbook/example/trace and release readiness repeat blocked runtime, mutation, Cargo traversal, source scraping, plugin discovery, and live state boundaries. |

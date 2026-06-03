@@ -33,6 +33,8 @@ evolves.
    `docs\vtrace\VALIDATION.md` updates.
 6. A new runbook needs concrete command inputs, retained evidence references,
    pass criteria, and validation under the current CLI surface.
+7. A new semantic registry command needs how-to, runbook, example, trace,
+   communications strategy, VTRACE, and release/readiness updates.
 
 ## Documentation validation
 

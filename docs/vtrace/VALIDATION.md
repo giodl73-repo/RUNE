@@ -208,6 +208,19 @@ pipeline used by `check-registry`.
 | Fail-closed reuse | pass | Inspection reuses catalog and source-ref validation, including `RUNE-REGISTRY-005` failures. |
 | Runtime safety | pass | No host behavior, mutation, Cargo traversal, source scraping, or plugin discovery was added. |
 
+## Wave 49 communications readiness validation
+
+The communications closeout validates that RUNE's public and adopter-facing docs
+describe both completed v1 contract infrastructure and Mission 2.0 Wave 42
+semantic registry evidence without claiming runtime behavior.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Registry docs discoverability | pass | Docs map, how-to, runbook, examples, and trace walkthrough link registry validation and inspection. |
+| Readiness clarity | pass | README and release readiness distinguish v1 readiness from Mission 2.0 retained registry evidence. |
+| Synchronization rules | pass | `docs/CORPUS.md` and communications strategy name registry update obligations. |
+| Runtime safety messaging | pass | Registry docs repeat blocked runtime, mutation, Cargo traversal, source scraping, plugin discovery, live state, and automatic migration boundaries. |
+
 ## Wave 4 readiness decision
 
 Wave 4 passes for controlled scenario-level usefulness and remains blocked for

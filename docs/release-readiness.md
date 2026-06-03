@@ -3,7 +3,9 @@
 ## Status
 
 RUNE v1 is ready as publishable contract infrastructure with reviewed discovery,
-external profile, adapter, adopter example, and bakeoff evidence.
+external profile, adapter, adopter example, and bakeoff evidence. Mission 2.0
+Wave 42 also has retained semantic registry evidence and read-only registry
+check/inspection commands.
 
 ## Crate surfaces
 
@@ -11,7 +13,7 @@ external profile, adapter, adopter example, and bakeoff evidence.
 |---|---|
 | `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, and inventory models. |
 | `rune-derive` | Compile-time derive macro for annotated Rust contract descriptors. |
-| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, and adapter commands. |
+| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, and semantic registry commands. |
 | `rune-adapters` | Downstream adapter models outside the neutral core. |
 | `examples\rune-adopter` | Non-published adopter workflow example. |
 
@@ -21,6 +23,8 @@ external profile, adapter, adopter example, and bakeoff evidence.
 cargo fmt --check
 cargo test --workspace
 cargo run -p rune-cli -- status
+cargo run -p rune-cli -- check-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+cargo run -p rune-cli -- inspect-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 git diff --check
 ```
 
@@ -38,12 +42,15 @@ git diff --check
   fixtures plus fail-closed diagnostics.
 - Diagnostic families are treated as review-facing contracts; changes require
   VTRACE updates.
+- Semantic registry evidence is retained and versioned; registry source refs
+  must resolve to retained descriptor collection fixtures.
 
 ## Release evidence
 
 - VTRACE requirements and trace are complete through v1 release readiness.
 - Retained fixtures cover descriptor, collection, discovery, evidence bundle,
-  external profile, adapter, adopter workflow, and QUIVER bakeoff scenarios.
+  external profile, adapter, adopter workflow, semantic registry, and QUIVER
+  bakeoff scenarios.
 - Full workspace validation passes with the CI-ready commands above.
 
 ## Non-goals for v1
@@ -53,3 +60,5 @@ git diff --check
 - No executable registry hooks.
 - No product-specific vocabulary in `rune-core`.
 - No automatic publishing to downstream systems.
+- No runtime host, live state inspection, mutating agent operations, plugin
+  discovery, automatic migration, or policy enforcement.

@@ -78,6 +78,7 @@ cargo run -p rune-cli -- status
 | Semantic registry CLI checks | `rune-cli` tests compare retained registry check output and reject duplicate collection refs, runtime capability, unknown profile refs, and invalid usage. | covered |
 | Semantic registry source-ref checks | `rune-cli` tests validate retained descriptor collection source refs and reject mismatched collection id/version refs with `RUNE-REGISTRY-005`. | covered |
 | Semantic registry inspection reports | `rune-cli` tests compare retained `inspect-registry` output and reuse source-ref failure coverage. | covered |
+| Final communications readiness | README, docs map, corpus rules, registry how-to/runbook/example/trace, communications strategy, release readiness, and VTRACE rows describe v1 plus Wave 42 without overclaiming runtime behavior. | covered |
 
 ## Evidence rule
 

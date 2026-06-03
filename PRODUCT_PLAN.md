@@ -327,6 +327,15 @@ registry, state, evidence, agent protocol, compatibility, and policy lanes.
 Status: planning complete in `docs\architecture\runtime-host-design.md`;
 implementation blocked until prerequisite lanes are implemented and reviewed.
 
+### Wave 49: Communications readiness closeout
+
+Finalize the public and adopter-facing communications package for RUNE v1 plus
+Mission 2.0 Wave 42 retained semantic registry evidence.
+
+Status: docs package planned to cover communications strategy, registry how-to,
+registry runbook, examples, traces, corpus obligations, release readiness, and
+VTRACE closeout without claiming runtime behavior.
+
 ### Wave 29: CLI hardening
 
 Normalize CLI usage, diagnostics, parse errors, and output shapes across

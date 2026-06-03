@@ -1171,6 +1171,38 @@ Conclusion: Wave 42 inspection reports pass. Next work should move to the next
 approved Mission 2.0 lane or add read-only compatibility reports under a future
 DCR.
 
+## Wave 49 communications readiness review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `README.md`
+- `docs/README.md`
+- `docs/CORPUS.md`
+- `docs/release-readiness.md`
+- `docs/vtrace/COMMUNICATIONS_STRATEGY.md`
+- `docs/how-to/validate-semantic-registry.md`
+- `docs/runbooks/semantic-registry-validation.md`
+- `docs/examples/semantic-registry.md`
+- `docs/traces/semantic-registry-walkthrough.md`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VERIFICATION.md`
+- `docs/vtrace/VALIDATION.md`
+- `context/waves/2026-06-03-final-comms-readiness/`
+
+| Review area | Result | Finding |
+|---|---|---|
+| User-facing completeness | pass | Registry check and inspection workflows are documented in how-to, runbook, examples, and trace surfaces. |
+| Synchronization | pass | Corpus and communications strategy now identify registry docs and blocked-behavior messaging obligations. |
+| Readiness clarity | pass | Release readiness explains v1 readiness plus Wave 42 registry evidence without promoting runtime behavior. |
+| Product neutrality | pass | Docs do not move BAKER, LATTICE, AgentMaps, games, or other consumer vocabulary into core RUNE claims. |
+| Runtime safety | pass | Runtime host, live state inspection, mutation, Cargo traversal, source scraping, plugin discovery, automatic migration, and policy enforcement remain blocked. |
+
+Conclusion: final communications/readiness closeout passes for v1 plus Wave 42.
+The next implementation lane is Wave 43 retained state graph evidence.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor
