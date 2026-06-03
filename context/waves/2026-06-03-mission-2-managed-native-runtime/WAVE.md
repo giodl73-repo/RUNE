@@ -16,6 +16,7 @@ compatibility negotiation, capability policy, and optional runtime hosts.
 | Pulse | Title | Status | Outcome |
 |------:|-------|--------|---------|
 | 01 | Mission 2.0 control package | complete | Added Mission 2.0, DCR-RUNE-002, requirements, trace, validation, and product-doc updates. |
+| 02 | Mission 2.0 role review | complete | Reviewed the control package with established RUNE role lenses and preserved runtime/agent implementation blockers. |
 
 ## Success criteria
 
@@ -24,6 +25,8 @@ compatibility negotiation, capability policy, and optional runtime hosts.
 - Requirements and trace rows cover semantic registry, state graph, evidence
   runtime, agent protocol, compatibility negotiation, capability policy, and
   optional runtime host lanes.
+- Role-lens review passes while keeping runtime host, live state inspection,
+  mutating agent operations, and automatic migration blocked behind future DCRs.
 - Product-facing docs explain the direction without claiming implementation.
 - `git diff --check` passes.
 
@@ -32,4 +35,3 @@ compatibility negotiation, capability policy, and optional runtime hosts.
 ```powershell
 git diff --check
 ```
-

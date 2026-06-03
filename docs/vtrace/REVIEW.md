@@ -979,6 +979,43 @@ Reviewed surfaces:
 Conclusion: Wave 34 closes the adopter validation runbook without broadening the
 RUNE code surface.
 
+## Wave 41 Mission 2.0 role-lens review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `docs/vtrace/MISSION_2_0.md`
+- `docs/vtrace/DCR.md#dcr-rune-002-mission-20-managed-native-semantic-runtime`
+- `docs/vtrace/REQUIREMENTS.md`
+- `docs/vtrace/TRACE.md`
+- `docs/vtrace/VALIDATION.md`
+- `docs/vtrace/VERIFICATION.md`
+- `README.md`
+- `PRODUCT_PLAN.md`
+- `context/waves/2026-06-03-mission-2-managed-native-runtime/`
+
+Role lens source: the current checkout does not contain physical `.roles/`
+files, so this review uses the established RUNE role lenses already recorded in
+this VTRACE review package.
+
+| Role | Result | Finding |
+|---|---|---|
+| Contract Model Steward | pass | Mission 2.0 keeps the neutral core vocabulary intact and gates semantic registry, state graph, evidence runtime, agent protocol, compatibility, policy, and runtime-host work behind future DCRs. |
+| Macro Safety Steward | pass | No derive behavior or macro API changed; Mission 2.0 remains a documentation/control package and does not add hidden runtime side effects. |
+| Generator Interop Steward | pass | Profiles and adapters remain separate surfaces; compatibility negotiation is named as a future lane rather than implied automatic conversion. |
+| VTRACE Traceability Auditor | pass | DCR-RUNE-002, RUNE-REQ-077 through RUNE-REQ-083, trace rows, verification, validation, and Wave 41 records align. |
+| AI Contract Consumer | pass | The mission names agent-safe query protocols and fail-closed diagnostics while preserving source-scraping as a non-goal. |
+| Rust Maintainer | pass | The managed-native thesis preserves idiomatic Rust, native binaries, explicit authoring, and no VM/GC/runtime dependency requirement. |
+| Platform Adapter Author | pass | BAKER, LATTICE, AgentMaps, games, and other consumer vocabularies are explicitly kept outside `rune-core` and future integration is adapter/protocol-owned. |
+| Security and Privacy Reviewer | pass with follow-up | Capability and sensitivity policy is correctly called out before private data, mutating actions, or runtime-host endpoints are exposed; future policy DCR must define enforcement boundaries before implementation. |
+| Future Agent | pass with follow-up | The lane sequence is clear enough for future work; semantic registry and agent protocol DCRs should include concrete retained fixtures and command examples before implementation. |
+
+Conclusion: Mission 2.0 passes role-lens review as a controlled direction. It
+does not approve runtime host, live state inspection, mutating agent operations,
+or automatic compatibility migration. Those remain blocked behind future DCRs
+and validation evidence.
+
 ## Review gate
 
 Do not broaden RUNE into a consumer-specific adapter until the neutral descriptor
