@@ -19,7 +19,7 @@ preceding VTRACE stage exits.
 | 5 | Implementation slices | Implement the smallest complete crate and CLI surfaces. | Interface specs identify the allowed slice. | Code compiles, tests pass, and generated behavior is inspectable. | pass |
 | 6 | Verification | Prove implementation satisfies requirements. | Implementation slice exists. | Formatting, tests, CLI checks, macro checks, and generated artifact checks pass. | pass |
 | 7 | Validation | Prove RUNE solves the intended problem in representative Rust repos. | Verified slice exists. | Bakeoff scenarios show improved contract generation, AI comprehension, review, or handoff. | deferred with plan |
-| 8 | Review and readiness | Decide whether the stage can broaden adoption or must loop back. | Verification and validation evidence exist. | `.roles` review findings are resolved, waived, or converted into follow-up pulses. | pass with limits |
+| 8 | Review and readiness | Decide whether the stage can broaden adoption or must loop back. | Verification and validation evidence exist. | `.roles` review findings are resolved, waived, or converted into follow-up pulses. | pass with role-review hardening |
 
 ## Stage gates
 
@@ -80,8 +80,12 @@ Current findings:
 - Stage 2 review passed on 2026-06-01 for the foundation wave.
 - Requirements are now split across stage control, neutral descriptors, macros,
   CLI/generators, verification, and validation.
-- Later interface work must still refine these requirements before declaring any
-  implementation surface contract-stable.
+- Mission 2.0 DCRs now add requirements for retained semantic registry evidence
+  (`RUNE-REQ-085` through `RUNE-REQ-089`) and hardened retained state graph
+  validation (`RUNE-REQ-090`).
+- Later Mission 2.0 lanes still require new requirements/DCRs before declaring
+  evidence runtime, agent protocol, compatibility, policy, or runtime host
+  surfaces contract-stable.
 
 ### Stage 3: Concept and architecture
 
@@ -126,8 +130,12 @@ Current findings:
   neutral descriptor records, `RuneContract`, `#[derive(RuneContract)]`,
   bounded `status` CLI behavior, generator/profile boundaries, and diagnostics
   concepts.
-- Existing `rune-core`, `rune-derive`, and `rune-cli` code is still scaffold
-  until Stage 5 aligns it with the interface-control spec.
+- Mission 2.0 interface docs now exist for semantic registry, state graph,
+  evidence runtime packets, agent protocol, compatibility negotiation,
+  capability/sensitivity policy, and optional runtime host design.
+- DCR-RUNE-003 and DCR-RUNE-004 have moved semantic registry and state graph from
+  interface planning into implemented retained-evidence slices; all later lanes
+  remain interface-only until their own implementation DCRs.
 
 ### Stage 5: Implementation slices
 
@@ -151,7 +159,15 @@ Current findings:
 - `rune-derive` supports the approved `id`, `version`, and `kind` attributes for
   the first derive slice.
 - `rune-cli status` is bounded and names deferred commands honestly.
-- No generators, adapters, or broader CLI commands were added.
+- V1 implementation later added reviewed fixture-backed inspection, generation,
+  profile, adapter, discovery, evidence, registry, and state graph CLI commands.
+- DCR-RUNE-003 implements read-only semantic registry validation/inspection.
+- DCR-RUNE-004 implements hardened retained state graph validation with
+  fail-closed retained evidence, ownership, duplicate graph-id, and live-state
+  diagnostics.
+- Runtime host behavior, live state inspection, replay/mutation, Cargo traversal,
+  source scraping, plugin discovery, automatic migration, and policy enforcement
+  remain blocked.
 
 ### Stage 6: Verification
 
@@ -173,8 +189,10 @@ Current findings:
 - Formatting, workspace tests, CLI status, and whitespace checks pass.
 - Proc-macro compile-pass and compile-fail fixtures exist for the approved
   derive slice.
-- Generated artifact checks are not applicable until a generator surface is
-  approved by a later stage.
+- Verification now covers descriptor/collection/profile/adapter/discovery
+  evidence, semantic registry checks/inspection, and hardened state graph checks.
+- State graph verification includes `RUNE-STATE-001` through `RUNE-STATE-009`
+  fixtures and CLI tests.
 
 ### Stage 7: Validation
 
@@ -219,8 +237,14 @@ Current findings:
 - Role files exist.
 - Stage 8 review passed with limits on 2026-06-01 for the foundation wave.
 - Foundation is ready as a verified scaffold and VTRACE baseline.
-- Foundation is not validated for broad adoption; bakeoff execution waits for an
-  approved inspection or generator surface.
+- V1 release readiness passed with retained evidence and representative bakeoff
+  evidence.
+- Mission 2.0 role/panel review identified Wave 43 hardening needs; those are
+  now resolved in DCR-RUNE-004 through retained evidence ref, ownership ref, and
+  duplicate graph-id validation.
+- Broad runtime adoption remains blocked until evidence runtime, agent protocol,
+  compatibility, policy, and optional runtime host lanes have their own approved
+  DCRs and validation packages.
 
 ## Trace links expected
 

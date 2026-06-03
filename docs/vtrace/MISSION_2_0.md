@@ -44,12 +44,21 @@ Idiomatic Rust
 | Lane | Purpose | Boundary |
 |---|---|---|
 | Semantic registry | Discover descriptor collections, versions, profiles, adapters, and ownership boundaries at crate or process scope. | Registry is explicit and deterministic; no arbitrary source scraping. |
-| State graph | Describe live or retained state nodes, transitions, ownership, and references. | State graph is opt-in and contract-backed; it does not pierce Rust privacy or borrow rules. |
+| State graph | Describe retained state nodes, transitions, ownership, retained evidence refs, and optional future live-state references. | State graph is opt-in and contract-backed; it does not pierce Rust privacy or borrow rules. |
 | Evidence runtime | Emit validation, diagnostic, trace, health, and audit packets tied to descriptor ids. | Evidence packets are structured artifacts, not free-form logging replacements. |
 | Agent protocol | Give tools/AI a read/query/generate/migrate surface with declared capabilities and diagnostics. | Mutating operations are separately authorized and fail closed by default. |
 | Compatibility negotiation | Compare descriptor/profile/adapter/runtime versions and report safe, degraded, or blocked paths. | Compatibility is explicit evidence, not implicit best-effort conversion. |
 | Capability and sensitivity policy | Mark data, operations, and evidence with exportability, sensitivity, stability, and authority metadata. | Policy metadata is descriptive first; enforcement requires a later runtime host DCR. |
 | Runtime host | Optional embeddable native host that exposes selected registry, state, evidence, and protocol endpoints. | RUNE core stays neutral; host integrations remain optional crates or adapters. |
+
+## DCR and implementation status
+
+| DCR | Lane | Status | Implemented / blocked boundary |
+|---|---|---|---|
+| DCR-RUNE-002 | Mission 2.0 direction | approved | Managed native semantic runtime direction is approved; runtime host and agent mutation remain blocked. |
+| DCR-RUNE-003 | Semantic registry | implemented read-only registry slices | Retained registry documents, `check-registry`, `inspect-registry`, catalog checks, and retained collection source-ref validation are implemented without Cargo traversal, source scraping, mutation, plugin discovery, or runtime host behavior. |
+| DCR-RUNE-004 | State graph | implemented and role-review hardened | Retained `check-state-graph` validates semantic registry refs, descriptor-backed nodes/transitions, retained evidence refs, ownership refs, duplicate graph ids, and live-state blocking. No live state inspection, replay, mutation, pointer/heap walking, Cargo traversal, source scraping, or runtime host behavior is approved. |
+| Future DCR | Evidence runtime packets | next planned lane | Must define retained diagnostic/validation/trace/health/audit packet documents and fail-closed diagnostics before implementation. |
 
 ## Non-goals
 
@@ -68,13 +77,14 @@ Idiomatic Rust
 
 Mission 2.0 is credible when RUNE can:
 
-1. Retain and discover multi-crate semantic registries with stable ownership and
+1. Retain and validate multi-crate semantic registries with stable ownership and
    version boundaries.
-2. Produce state/evidence/diagnostic packets that reference descriptor ids and
-   field metadata.
-3. Define an agent-safe protocol where tools can query contracts and evidence
+2. Retain and validate state graphs that reference descriptor ids, semantic
+   registry refs, ownership refs, and retained evidence.
+3. Produce evidence/diagnostic packets that reference descriptor ids and field
+   metadata.
+4. Define an agent-safe protocol where tools can query contracts and evidence
    without source scraping.
-4. Report compatibility between descriptor collections, profiles, adapters, and
+5. Report compatibility between descriptor collections, profiles, adapters, and
    runtime hosts.
-5. Preserve native Rust execution and product-neutral core vocabulary.
-
+6. Preserve native Rust execution and product-neutral core vocabulary.

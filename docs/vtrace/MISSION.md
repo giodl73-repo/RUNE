@@ -35,4 +35,10 @@ affordances AI and tooling need: semantic registries, state graphs, evidence
 runtime packets, agent-safe query protocols, compatibility negotiation, and
 capability/sensitivity metadata.
 
-See `MISSION_2_0.md` for the controlled mission upgrade.
+Current Mission 2.0 implementation is DCR-gated: DCR-RUNE-003 implements retained
+semantic registry evidence, and DCR-RUNE-004 implements hardened retained state
+graph validation. Runtime host behavior, live state inspection, mutation/replay,
+Cargo traversal, source scraping, plugin discovery, automatic migration, and
+policy enforcement remain blocked.
+
+See `MISSION_2_0.md` for the controlled mission upgrade and DCR status.

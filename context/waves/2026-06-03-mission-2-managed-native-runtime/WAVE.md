@@ -19,6 +19,7 @@ compatibility negotiation, capability policy, and optional runtime hosts.
 | 02 | Mission 2.0 role review | complete | Reviewed the control package with established RUNE role lenses and preserved runtime/agent implementation blockers. |
 | 03 | Roles and implementation gate | complete | Restored physical `.roles/` files and recorded that Wave 42 semantic registry interface is next; runtime behavior remains blocked. |
 | 04 | Mission 2.0 planning closeout | complete | Added interface docs for Waves 42-48 and marked semantic registry as the first implementation target. |
+| 05 | DCR implementation package sync | complete | Updated mission/stage/work-package records for DCR-RUNE-003 semantic registry and DCR-RUNE-004 hardened retained state graph validation. |
 
 ## Success criteria
 
@@ -34,7 +35,10 @@ compatibility negotiation, capability policy, and optional runtime hosts.
   start next; runtime behavior remains blocked.
 - All Mission 2.0 planning lanes have interface docs, diagnostics, fixture
   expectations, non-goals, and blockers.
-- Product-facing docs explain the direction without claiming implementation.
+- Product-facing docs explain the direction and identify which DCR-gated retained
+  evidence slices are implemented.
+- DCR-RUNE-003 and DCR-RUNE-004 are reflected in mission, stage, planning-index,
+  and work-package records.
 - `git diff --check` passes.
 
 ## Validation

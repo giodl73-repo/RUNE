@@ -209,15 +209,15 @@ adapters, and field metadata.
 
 ### Implementation readiness
 
-Mission 2.0 is ready for the next planning slice, not broad implementation.
-Proceed with **Wave 42: Semantic registry interface** first. All later lanes
-remain gated:
+Mission 2.0 implementation remains lane-gated. DCR-RUNE-003 and DCR-RUNE-004
+completed the first two retained-evidence slices; broad runtime implementation
+is still blocked:
 
 | Lane | Readiness |
 |---|---|
-| Semantic registry | interface planning complete in `docs/architecture/semantic-registry-interface.md`; ready for implementation DCR |
-| State graph | interface planning complete in `docs/architecture/state-graph-interface.md`; implementation gated until semantic registry shape exists |
-| Evidence runtime packets | interface planning complete in `docs/architecture/evidence-runtime-packets.md`; implementation gated until packet fixtures and diagnostics are added |
+| Semantic registry | implemented by DCR-RUNE-003 as retained registry documents, read-only CLI checks, inspection reports, catalog checks, and retained collection source-ref validation |
+| State graph | implemented and role-review hardened by DCR-RUNE-004 as retained graph validation over registry refs, descriptor-backed nodes/transitions, retained evidence refs, ownership refs, duplicate graph-id diagnostics, and live-state blocking |
+| Evidence runtime packets | interface planning complete in `docs/architecture/evidence-runtime-packets.md`; next implementation DCR must add packet fixtures and diagnostics |
 | Agent protocol | interface planning complete in `docs/architecture/agent-protocol-interface.md`; implementation gated until registry, evidence, and policy surfaces exist |
 | Compatibility negotiation | interface planning complete in `docs/architecture/compatibility-negotiation.md`; implementation gated until report fixtures are added |
 | Capability and sensitivity policy | interface planning complete in `docs/architecture/capability-sensitivity-policy.md`; implementation gated until enforcement boundaries are approved |
@@ -228,9 +228,11 @@ remain gated:
 Mission 2.0 planning is complete as a docs/spec package. The planning index is
 `docs/architecture/mission-2-planning-index.md`.
 
-Next allowed implementation-oriented work is a narrow DCR for **Wave 42:
-Semantic registry implementation**. All other lanes remain blocked until their
-dependencies have retained fixtures, diagnostics, and validation commands.
+Next allowed implementation-oriented work is a narrow DCR for **Wave 44:
+Evidence runtime packet implementation**. It must stay retained-evidence-first
+and must not add runtime host behavior, live process inspection, mutation/replay,
+Cargo traversal, source scraping, plugin discovery, automatic migration, or
+policy enforcement.
 
 ### Validation expectations
 
