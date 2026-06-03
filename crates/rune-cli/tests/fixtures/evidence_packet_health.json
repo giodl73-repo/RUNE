@@ -1,0 +1,25 @@
+{
+  "packet_id": "example.evidence.health",
+  "packet_version": "v0",
+  "packet_kind": "health",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "descriptor_refs": [
+    {
+      "descriptor_id": "example.adapter_review",
+      "descriptor_version": "v0"
+    }
+  ],
+  "severity": "warning",
+  "status": "degraded",
+  "message": "Retained health packet for registry-adapter evidence readiness.",
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "semantic_registry_adapter_contracts_collection.json"
+    }
+  ],
+  "diagnostics": []
+}

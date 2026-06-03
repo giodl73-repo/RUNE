@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "packet_id": "example.evidence.diagnostic",
+  "packet_version": "v0",
+  "packet_kind": "diagnostic",
+  "registry_id": "example.workspace_registry",
+  "registry_version": "v0",
+  "severity": "warning",
+  "packet_status": "observed",
+  "descriptor_ref_count": 1,
+  "evidence_ref_count": 1,
+  "diagnostic_count": 1,
+  "has_capability_decision": false
+}

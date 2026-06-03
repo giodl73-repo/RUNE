@@ -20,7 +20,8 @@ downstream product vocabulary.
 | COMMS-RUNE-CORPUS-001 | RUNE-REQ-072 / REVIEW.md | docs owner / future agent | Who owns each docs surface and update obligation? | `docs/CORPUS.md` | every docs wave | RUNE docs owner | accepted |
 | COMMS-RUNE-REGISTRY-001 | RUNE-REQ-085 / RUNE-REQ-086 / RUNE-REQ-087 / RUNE-REQ-088 | Rust maintainer / adopter / future agent | How do I validate and inspect semantic registry evidence? | `docs/how-to/validate-semantic-registry.md`, `docs/runbooks/semantic-registry-validation.md`, `docs/examples/semantic-registry.md`, `docs/traces/semantic-registry-walkthrough.md` | when registry commands or fixtures change | RUNE registry owner | accepted |
 | COMMS-RUNE-STATE-001 | RUNE-REQ-079 / RUNE-REQ-090 | Rust maintainer / future agent | How do I validate retained state graph evidence? | `docs/how-to/validate-state-graph.md`, `docs/runbooks/state-graph-validation.md`, state graph fixtures | when state graph commands or fixtures change | RUNE state graph owner | accepted |
-| COMMS-RUNE-BOUNDARY-001 | RUNE-REQ-084 / DCR-RUNE-002 / DCR-RUNE-003 / DCR-RUNE-004 | reviewer / platform owner | What is still blocked after Wave 43? | README, release readiness, architecture docs, VTRACE review | every Mission 2.0 lane | RUNE maintainer | accepted |
+| COMMS-RUNE-EVIDENCE-001 | RUNE-REQ-080 / RUNE-REQ-091 | Rust maintainer / future agent | How do I validate retained evidence runtime packets? | `docs/how-to/validate-evidence-packet.md`, `docs/runbooks/evidence-packet-validation.md`, evidence packet fixtures | when evidence packet commands or fixtures change | RUNE evidence owner | accepted |
+| COMMS-RUNE-BOUNDARY-001 | RUNE-REQ-084 / DCR-RUNE-002 / DCR-RUNE-003 / DCR-RUNE-004 / DCR-RUNE-005 | reviewer / platform owner | What is still blocked after Wave 44? | README, release readiness, architecture docs, VTRACE review | every Mission 2.0 lane | RUNE maintainer | accepted |
 
 ## Review Checklist
 
@@ -30,4 +31,4 @@ downstream product vocabulary.
 | Concepts/tutorials/examples do not overclaim unvalidated behavior. | yes | accepted | Rows keep generated docs, profiles, adapters, and bakeoff evidence tied to retained proof. |
 | Public interfaces have expected usage or expected output docs. | if applicable | accepted | How-to, examples, tutorial, and trace rows map to CLI/profile/adapter workflows. |
 | `docs/CORPUS.md` names ownership and update obligations. | if multiple surfaces exist | accepted | The existing corpus surface is part of the planned docs package. |
-| Mission 2.0 registry and state graph docs distinguish retained evidence from runtime behavior. | yes | accepted | Registry and state graph how-to/runbook docs plus release readiness repeat blocked runtime, mutation, Cargo traversal, source scraping, plugin discovery, and live state boundaries. |
+| Mission 2.0 registry, state graph, and evidence packet docs distinguish retained evidence from runtime behavior. | yes | accepted | Registry, state graph, and evidence packet how-to/runbook docs plus release readiness repeat blocked runtime, mutation, Cargo traversal, source scraping, plugin discovery, live state, and policy boundaries. |

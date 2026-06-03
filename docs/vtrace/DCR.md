@@ -217,8 +217,8 @@ is still blocked:
 |---|---|
 | Semantic registry | implemented by DCR-RUNE-003 as retained registry documents, read-only CLI checks, inspection reports, catalog checks, and retained collection source-ref validation |
 | State graph | implemented and role-review hardened by DCR-RUNE-004 as retained graph validation over registry refs, descriptor-backed nodes/transitions, retained evidence refs, ownership refs, duplicate graph-id diagnostics, and live-state blocking |
-| Evidence runtime packets | interface planning complete in `docs/architecture/evidence-runtime-packets.md`; next implementation DCR must add packet fixtures and diagnostics |
-| Agent protocol | interface planning complete in `docs/architecture/agent-protocol-interface.md`; implementation gated until registry, evidence, and policy surfaces exist |
+| Evidence runtime packets | implemented by DCR-RUNE-005 as retained packet documents, read-only CLI checks, packet family fixtures, descriptor/evidence ref validation, and audit capability decision checks |
+| Agent protocol | interface planning complete in `docs/architecture/agent-protocol-interface.md`; next implementation DCR must stay read-first and remain gated by policy boundaries |
 | Compatibility negotiation | interface planning complete in `docs/architecture/compatibility-negotiation.md`; implementation gated until report fixtures are added |
 | Capability and sensitivity policy | interface planning complete in `docs/architecture/capability-sensitivity-policy.md`; implementation gated until enforcement boundaries are approved |
 | Runtime host | design planning complete in `docs/architecture/runtime-host-design.md`; implementation blocked until all prior lanes have approved implementations |
@@ -228,11 +228,10 @@ is still blocked:
 Mission 2.0 planning is complete as a docs/spec package. The planning index is
 `docs/architecture/mission-2-planning-index.md`.
 
-Next allowed implementation-oriented work is a narrow DCR for **Wave 44:
-Evidence runtime packet implementation**. It must stay retained-evidence-first
-and must not add runtime host behavior, live process inspection, mutation/replay,
-Cargo traversal, source scraping, plugin discovery, automatic migration, or
-policy enforcement.
+Next allowed implementation-oriented work is a narrow DCR for **Wave 45: Agent
+protocol interface implementation**. It must stay read-first and must not add
+runtime host behavior, live process inspection, mutation/replay, Cargo traversal,
+source scraping, plugin discovery, automatic migration, or policy enforcement.
 
 ### Validation expectations
 
@@ -369,3 +368,63 @@ source refs.
 - No Cargo graph scanning.
 - No Rust source scraping.
 - No product-specific state vocabulary in `rune-core`.
+
+## DCR-RUNE-005: Retained evidence runtime packet implementation
+
+| Field | Value |
+|---|---|
+| Status | implemented retained evidence slice |
+| Date | 2026-06-03 |
+| Source requirement | RUNE-REQ-091 |
+| Trigger | DCR-RUNE-002 and `docs\architecture\evidence-runtime-packets.md` named evidence runtime packets as the next Mission 2.0 lane after retained registry and state graph evidence existed. |
+| Primary repo | RUNE |
+| Coordinating repo | TRACKER |
+
+### Decision
+
+RUNE should implement evidence runtime packets as retained diagnostic,
+validation, trace, health, and audit artifacts over explicit semantic registry
+and descriptor collection refs. The implementation validates authored packet
+documents without adding a logging framework, observability backend, runtime host,
+private payload capture, mutation authorization, Cargo traversal, source
+scraping, plugin discovery, automatic migration, or policy enforcement.
+
+### Implemented surface
+
+| Surface | Status |
+|---|---|
+| `EvidenceRuntimePacketDraft` | implemented |
+| `EvidenceRuntimePacketDocument` | implemented |
+| `EvidencePacketRegistryRef` | implemented |
+| `EvidenceDescriptorRef` | implemented |
+| `EvidencePacketDiagnostic` | implemented |
+| `EvidenceCapabilityDecision` | implemented for audit packets |
+| Retained diagnostic/validation/trace/health/audit fixtures | implemented |
+| `rune check-evidence-packet --fixture <path> --registry <path>` | implemented read-only |
+
+### Validation behavior
+
+| Diagnostic | Status |
+|---|---|
+| `RUNE-EVIDENCE-001` missing packet identity/version | implemented |
+| `RUNE-EVIDENCE-002` unsupported packet kind | implemented |
+| `RUNE-EVIDENCE-003` unknown or mismatched descriptor reference | implemented |
+| `RUNE-EVIDENCE-004` unsupported severity or status | implemented |
+| `RUNE-EVIDENCE-005` audit packet missing capability decision | implemented |
+| `RUNE-EVIDENCE-006` mismatched registry reference | implemented |
+| `RUNE-EVIDENCE-007` unsupported or undeclared retained evidence ref | implemented |
+
+Evidence packet validation is intentionally bounded to retained packet fixtures,
+semantic registry fixtures, and the registry's retained descriptor collection
+source refs.
+
+### Non-goals
+
+- No replacement for `tracing`, logs, metrics, or observability backends.
+- No runtime host.
+- No live state inspection.
+- No private payload capture.
+- No mutation authorization or replay.
+- No Cargo graph scanning.
+- No Rust source scraping.
+- No plugin discovery, automatic migration, or policy enforcement.

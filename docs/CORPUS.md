@@ -37,6 +37,9 @@ evolves.
    communications strategy, VTRACE, and release/readiness updates.
 8. A new state graph command needs how-to, runbook, retained fixtures, VTRACE,
    and explicit live-state/runtime-host boundary language.
+9. A new evidence packet command needs how-to, runbook, retained pass/failure
+   fixtures, VTRACE, release/readiness updates, and explicit logging/runtime-host
+   non-goals.
 
 ## Documentation validation
 

@@ -374,6 +374,77 @@ pub struct StateGraphValidationCodes {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
+pub struct EvidenceRuntimePacketDraft {
+    pub packet_id: Option<String>,
+    pub packet_version: Option<String>,
+    pub packet_kind: Option<String>,
+    pub registry_ref: Option<EvidencePacketRegistryRef>,
+    #[serde(default)]
+    pub descriptor_refs: Vec<EvidenceDescriptorRef>,
+    pub severity: Option<String>,
+    pub status: Option<String>,
+    pub message: Option<String>,
+    #[serde(default)]
+    pub evidence_refs: Vec<StateGraphEvidenceRef>,
+    #[serde(default)]
+    pub diagnostics: Vec<EvidencePacketDiagnostic>,
+    #[serde(default)]
+    pub capability_decision: Option<EvidenceCapabilityDecision>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct EvidenceRuntimePacketDocument {
+    pub packet_id: String,
+    pub packet_version: String,
+    pub packet_kind: String,
+    pub registry_ref: Option<EvidencePacketRegistryRef>,
+    pub descriptor_refs: Vec<EvidenceDescriptorRef>,
+    pub severity: String,
+    pub status: String,
+    pub message: String,
+    pub evidence_refs: Vec<StateGraphEvidenceRef>,
+    pub diagnostics: Vec<EvidencePacketDiagnostic>,
+    pub capability_decision: Option<EvidenceCapabilityDecision>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct EvidencePacketRegistryRef {
+    pub registry_id: String,
+    pub registry_version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct EvidenceDescriptorRef {
+    pub descriptor_id: String,
+    pub descriptor_version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct EvidencePacketDiagnostic {
+    pub code: String,
+    pub message: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct EvidenceCapabilityDecision {
+    pub capability: String,
+    pub decision: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct EvidenceRuntimePacketValidationCodes {
+    pub missing_identity: &'static str,
+    pub unsupported_kind: &'static str,
+    pub unknown_descriptor_ref: &'static str,
+    pub unsupported_severity_or_status: &'static str,
+    pub missing_audit_decision: &'static str,
+    pub invalid_registry_ref: &'static str,
+    pub invalid_evidence_ref: &'static str,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 pub struct DescriptorCollectionDraft {
     pub collection_id: Option<String>,
     pub collection_version: Option<String>,
@@ -845,6 +916,133 @@ impl StateGraphDraft {
     }
 }
 
+impl EvidenceRuntimePacketDraft {
+    pub fn validate_with_codes(
+        self,
+        registry: &SemanticRegistryDocument,
+        collections: &[DescriptorCollectionDocument],
+        codes: EvidenceRuntimePacketValidationCodes,
+    ) -> Result<EvidenceRuntimePacketDocument, String> {
+        let packet_id = required_non_empty(
+            self.packet_id,
+            codes.missing_identity,
+            "evidence runtime packet identity is missing",
+        )?;
+        let packet_version = required_non_empty(
+            self.packet_version,
+            codes.missing_identity,
+            "evidence runtime packet version is missing",
+        )?;
+        let packet_kind = required_non_empty(
+            self.packet_kind,
+            codes.unsupported_kind,
+            "evidence runtime packet kind is missing",
+        )?;
+        if !is_supported_evidence_packet_kind(&packet_kind) {
+            return Err(format!(
+                "{} unsupported evidence runtime packet kind: {}",
+                codes.unsupported_kind, packet_kind
+            ));
+        }
+        let severity = required_non_empty(
+            self.severity,
+            codes.unsupported_severity_or_status,
+            "evidence runtime packet severity is missing",
+        )?;
+        if !is_supported_evidence_packet_severity(&severity) {
+            return Err(format!(
+                "{} unsupported evidence runtime packet severity: {}",
+                codes.unsupported_severity_or_status, severity
+            ));
+        }
+        let status = required_non_empty(
+            self.status,
+            codes.unsupported_severity_or_status,
+            "evidence runtime packet status is missing",
+        )?;
+        if !is_supported_evidence_packet_status(&status) {
+            return Err(format!(
+                "{} unsupported evidence runtime packet status: {}",
+                codes.unsupported_severity_or_status, status
+            ));
+        }
+        if packet_kind == "audit" && self.capability_decision.is_none() {
+            return Err(format!(
+                "{} audit evidence runtime packet requires a capability decision",
+                codes.missing_audit_decision
+            ));
+        }
+        if let Some(registry_ref) = &self.registry_ref {
+            if registry_ref.registry_id != registry.registry_id
+                || registry_ref.registry_version != registry.registry_version
+            {
+                return Err(format!(
+                    "{} evidence packet registry reference does not match semantic registry: {}@{}",
+                    codes.invalid_registry_ref,
+                    registry_ref.registry_id,
+                    registry_ref.registry_version
+                ));
+            }
+        }
+
+        let descriptor_versions = descriptor_versions_by_id(collections);
+        for descriptor_ref in &self.descriptor_refs {
+            match descriptor_versions.get(&descriptor_ref.descriptor_id) {
+                Some(version) if version == &descriptor_ref.descriptor_version => {}
+                Some(version) => {
+                    return Err(format!(
+                        "{} descriptor reference version mismatch: {}@{} declared, registry has {}",
+                        codes.unknown_descriptor_ref,
+                        descriptor_ref.descriptor_id,
+                        descriptor_ref.descriptor_version,
+                        version
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{} evidence packet references unknown descriptor id: {}",
+                        codes.unknown_descriptor_ref, descriptor_ref.descriptor_id
+                    ));
+                }
+            }
+        }
+
+        let registry_source_refs: BTreeSet<&str> = registry
+            .collections
+            .iter()
+            .map(|collection| collection.source_ref.as_str())
+            .collect();
+        for evidence_ref in &self.evidence_refs {
+            if evidence_ref.evidence_kind != "descriptor_collection_fixture" {
+                return Err(format!(
+                    "{} unsupported evidence packet evidence kind: {}",
+                    codes.invalid_evidence_ref, evidence_ref.evidence_kind
+                ));
+            }
+            if !registry_source_refs.contains(evidence_ref.source_ref.as_str()) {
+                return Err(format!(
+                    "{} evidence packet evidence ref is not declared by semantic registry: {}",
+                    codes.invalid_evidence_ref, evidence_ref.source_ref
+                ));
+            }
+        }
+
+        Ok(EvidenceRuntimePacketDocument {
+            packet_id,
+            packet_version,
+            packet_kind,
+            registry_ref: self.registry_ref,
+            descriptor_refs: self.descriptor_refs,
+            severity,
+            status,
+            message: self.message.unwrap_or_default(),
+            evidence_refs: self.evidence_refs,
+            diagnostics: self.diagnostics,
+            capability_decision: self.capability_decision,
+        })
+    }
+}
+
 fn descriptor_kinds_by_id(
     collections: &[DescriptorCollectionDocument],
 ) -> BTreeMap<String, String> {
@@ -855,6 +1053,18 @@ fn descriptor_kinds_by_id(
         }
     }
     descriptor_kinds
+}
+
+fn descriptor_versions_by_id(
+    collections: &[DescriptorCollectionDocument],
+) -> BTreeMap<String, String> {
+    let mut descriptor_versions = BTreeMap::new();
+    for collection in collections {
+        for descriptor in &collection.descriptors {
+            descriptor_versions.insert(descriptor.id.clone(), descriptor.version.clone());
+        }
+    }
+    descriptor_versions
 }
 
 pub fn collect_known_contract_documents(
@@ -890,6 +1100,24 @@ pub fn is_supported_kind(kind: &str) -> bool {
 
 pub fn is_supported_registry_scope(scope: &str) -> bool {
     matches!(scope, "crate" | "workspace" | "process" | "retained_bundle")
+}
+
+pub fn is_supported_evidence_packet_kind(kind: &str) -> bool {
+    matches!(
+        kind,
+        "diagnostic" | "validation" | "trace" | "health" | "audit"
+    )
+}
+
+pub fn is_supported_evidence_packet_severity(severity: &str) -> bool {
+    matches!(severity, "info" | "warning" | "error" | "blocked")
+}
+
+pub fn is_supported_evidence_packet_status(status: &str) -> bool {
+    matches!(
+        status,
+        "pass" | "fail" | "blocked" | "degraded" | "observed"
+    )
 }
 
 fn required_non_empty(
@@ -1910,6 +2138,158 @@ mod tests {
         assert!(error.contains("RUNE-STATE-009"));
     }
 
+    #[test]
+    fn retained_evidence_packet_family_fixtures_validate_against_registry_collections() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixtures = [
+            (
+                "diagnostic",
+                include_str!("../../rune-cli/tests/fixtures/evidence_packet_diagnostic.json"),
+            ),
+            (
+                "validation",
+                include_str!("../../rune-cli/tests/fixtures/evidence_packet_validation.json"),
+            ),
+            (
+                "trace",
+                include_str!("../../rune-cli/tests/fixtures/evidence_packet_trace.json"),
+            ),
+            (
+                "health",
+                include_str!("../../rune-cli/tests/fixtures/evidence_packet_health.json"),
+            ),
+            (
+                "audit",
+                include_str!("../../rune-cli/tests/fixtures/evidence_packet_audit.json"),
+            ),
+        ];
+
+        for (expected_kind, fixture) in fixtures {
+            let draft: EvidenceRuntimePacketDraft =
+                serde_json::from_str(fixture).expect("evidence packet fixture parses");
+            let packet = draft
+                .validate_with_codes(&registry, &collections, evidence_packet_codes())
+                .expect("evidence packet fixture validates");
+
+            assert_eq!(packet.packet_kind, expected_kind);
+            assert_eq!(
+                packet.registry_ref.as_ref().unwrap().registry_id,
+                registry.registry_id
+            );
+            assert!(!packet.descriptor_refs.is_empty());
+            assert!(!packet.evidence_refs.is_empty());
+        }
+    }
+
+    #[test]
+    fn retained_evidence_packet_missing_identity_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/evidence_packet_missing_identity.json");
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("missing packet identity should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-001"));
+    }
+
+    #[test]
+    fn retained_evidence_packet_unsupported_kind_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/evidence_packet_unsupported_kind.json");
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("unsupported packet kind should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-002"));
+        assert!(error.contains("metric"));
+    }
+
+    #[test]
+    fn retained_evidence_packet_unknown_descriptor_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/evidence_packet_unknown_descriptor.json");
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("unknown descriptor reference should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-003"));
+    }
+
+    #[test]
+    fn retained_evidence_packet_unsupported_status_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/evidence_packet_unsupported_status.json");
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("unsupported severity should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-004"));
+        assert!(error.contains("fatal"));
+    }
+
+    #[test]
+    fn retained_evidence_packet_audit_missing_decision_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture = include_str!(
+            "../../rune-cli/tests/fixtures/evidence_packet_audit_missing_decision.json"
+        );
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("audit packet without capability decision should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-005"));
+    }
+
+    #[test]
+    fn retained_evidence_packet_mismatched_registry_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/evidence_packet_mismatched_registry.json");
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("mismatched registry reference should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-006"));
+    }
+
+    #[test]
+    fn retained_evidence_packet_unknown_evidence_ref_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/evidence_packet_unknown_evidence_ref.json");
+        let draft: EvidenceRuntimePacketDraft =
+            serde_json::from_str(fixture).expect("evidence packet fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, evidence_packet_codes())
+            .expect_err("unknown evidence ref should fail");
+
+        assert!(error.contains("RUNE-EVIDENCE-007"));
+    }
+
     fn state_graph_codes() -> StateGraphValidationCodes {
         StateGraphValidationCodes {
             missing_identity: "RUNE-STATE-001",
@@ -1921,6 +2301,18 @@ mod tests {
             invalid_evidence_ref: "RUNE-STATE-007",
             invalid_ownership_ref: "RUNE-STATE-008",
             duplicate_graph_id: "RUNE-STATE-009",
+        }
+    }
+
+    fn evidence_packet_codes() -> EvidenceRuntimePacketValidationCodes {
+        EvidenceRuntimePacketValidationCodes {
+            missing_identity: "RUNE-EVIDENCE-001",
+            unsupported_kind: "RUNE-EVIDENCE-002",
+            unknown_descriptor_ref: "RUNE-EVIDENCE-003",
+            unsupported_severity_or_status: "RUNE-EVIDENCE-004",
+            missing_audit_decision: "RUNE-EVIDENCE-005",
+            invalid_registry_ref: "RUNE-EVIDENCE-006",
+            invalid_evidence_ref: "RUNE-EVIDENCE-007",
         }
     }
 

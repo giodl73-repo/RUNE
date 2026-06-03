@@ -1,0 +1,30 @@
+{
+  "packet_id": "example.evidence.diagnostic",
+  "packet_version": "v0",
+  "packet_kind": "diagnostic",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "descriptor_refs": [
+    {
+      "descriptor_id": "example.customer",
+      "descriptor_version": "v0"
+    }
+  ],
+  "severity": "warning",
+  "status": "observed",
+  "message": "Retained diagnostic packet for descriptor evidence.",
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "RUNE-STATE-006",
+      "message": "Live state remains blocked without runtime host approval."
+    }
+  ]
+}

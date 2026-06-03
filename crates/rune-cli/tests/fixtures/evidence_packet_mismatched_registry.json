@@ -1,0 +1,25 @@
+{
+  "packet_id": "example.evidence.mismatched_registry",
+  "packet_version": "v0",
+  "packet_kind": "validation",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v9"
+  },
+  "descriptor_refs": [
+    {
+      "descriptor_id": "example.customer",
+      "descriptor_version": "v0"
+    }
+  ],
+  "severity": "error",
+  "status": "fail",
+  "message": "Mismatched registry refs should fail closed.",
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
+  "diagnostics": []
+}

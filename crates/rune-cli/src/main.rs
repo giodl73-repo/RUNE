@@ -5,9 +5,10 @@ use rune_core::{
     CheckCollectionReportDocument, CheckReportDocument, CollectionEvidenceBundleDocument,
     DataContractDocument, DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
     DescriptorKindInventoryDocument, DiscoveryManifestDraft, DocumentationPacketDocument,
-    GeneratedArtifactDocument, GeneratedCollectionArtifactDocument, ProfileCatalog,
-    ProfileCompatibilityCodes, SemanticRegistryCapabilities, SemanticRegistryDocument,
-    SemanticRegistryDraft, StateGraphCapabilities, StateGraphDraft, StateGraphValidationCodes,
+    EvidenceRuntimePacketDraft, EvidenceRuntimePacketValidationCodes, GeneratedArtifactDocument,
+    GeneratedCollectionArtifactDocument, ProfileCatalog, ProfileCompatibilityCodes,
+    SemanticRegistryCapabilities, SemanticRegistryDocument, SemanticRegistryDraft,
+    StateGraphCapabilities, StateGraphDraft, StateGraphValidationCodes,
 };
 use serde::Serialize;
 use std::path::Path;
@@ -22,7 +23,7 @@ fn main() {
             println!("approved stage: v1 implementation waves");
             println!("contract kinds: entity,event,command,state,artifact,source,evidence,other");
             println!(
-                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
+                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,check-evidence-packet --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
                 "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
@@ -43,6 +44,7 @@ fn main() {
         "check-registry" => check_registry(args.collect()),
         "inspect-registry" => inspect_registry(args.collect()),
         "check-state-graph" => check_state_graph(args.collect()),
+        "check-evidence-packet" => check_evidence_packet(args.collect()),
         "generate" => generate(args.collect()),
         "generate-collection" => generate_collection(args.collect()),
         "profile" => profile(args.collect()),
@@ -95,6 +97,22 @@ struct StateGraphCheckReportDocument {
     transition_count: usize,
     evidence_ref_count: usize,
     capabilities: StateGraphCapabilities,
+}
+
+#[derive(Serialize)]
+struct EvidencePacketCheckReportDocument {
+    status: String,
+    packet_id: String,
+    packet_version: String,
+    packet_kind: String,
+    registry_id: String,
+    registry_version: String,
+    severity: String,
+    packet_status: String,
+    descriptor_ref_count: usize,
+    evidence_ref_count: usize,
+    diagnostic_count: usize,
+    has_capability_decision: bool,
 }
 
 fn inspect_collection(args: Vec<String>) -> Result<(), String> {
@@ -424,6 +442,52 @@ fn check_state_graph(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
+fn check_evidence_packet(args: Vec<String>) -> Result<(), String> {
+    let options = parse_evidence_packet_args(&args)?;
+    let registry = read_semantic_registry_fixture(&options.registry, "RUNE-EVIDENCE-900")?;
+    let registry = registry.validate_with_codes(
+        "RUNE-REGISTRY-001",
+        "RUNE-REGISTRY-002",
+        "RUNE-REGISTRY-003",
+        "RUNE-REGISTRY-004",
+        "RUNE-REGISTRY-007",
+    )?;
+    check_registry_catalog_refs(&registry)?;
+    let collections = load_registry_collection_refs(&registry, &options.registry)?;
+    let packet = read_evidence_packet_fixture(&options.fixture, "RUNE-EVIDENCE-900")?;
+    let packet = packet.validate_with_codes(&registry, &collections, evidence_packet_codes())?;
+    let (registry_id, registry_version) = packet
+        .registry_ref
+        .as_ref()
+        .map(|reference| {
+            (
+                reference.registry_id.clone(),
+                reference.registry_version.clone(),
+            )
+        })
+        .unwrap_or_default();
+
+    let output = serde_json::to_string_pretty(&EvidencePacketCheckReportDocument {
+        status: "ok".to_owned(),
+        packet_id: packet.packet_id,
+        packet_version: packet.packet_version,
+        packet_kind: packet.packet_kind,
+        registry_id,
+        registry_version,
+        severity: packet.severity,
+        packet_status: packet.status,
+        descriptor_ref_count: packet.descriptor_refs.len(),
+        evidence_ref_count: packet.evidence_refs.len(),
+        diagnostic_count: packet.diagnostics.len(),
+        has_capability_decision: packet.capability_decision.is_some(),
+    })
+    .map_err(|error| {
+        format!("RUNE-EVIDENCE-900 error serializing evidence packet check report: {error}")
+    })?;
+    println!("{output}");
+    Ok(())
+}
+
 fn state_graph_codes() -> StateGraphValidationCodes {
     StateGraphValidationCodes {
         missing_identity: "RUNE-STATE-001",
@@ -435,6 +499,18 @@ fn state_graph_codes() -> StateGraphValidationCodes {
         invalid_evidence_ref: "RUNE-STATE-007",
         invalid_ownership_ref: "RUNE-STATE-008",
         duplicate_graph_id: "RUNE-STATE-009",
+    }
+}
+
+fn evidence_packet_codes() -> EvidenceRuntimePacketValidationCodes {
+    EvidenceRuntimePacketValidationCodes {
+        missing_identity: "RUNE-EVIDENCE-001",
+        unsupported_kind: "RUNE-EVIDENCE-002",
+        unknown_descriptor_ref: "RUNE-EVIDENCE-003",
+        unsupported_severity_or_status: "RUNE-EVIDENCE-004",
+        missing_audit_decision: "RUNE-EVIDENCE-005",
+        invalid_registry_ref: "RUNE-EVIDENCE-006",
+        invalid_evidence_ref: "RUNE-EVIDENCE-007",
     }
 }
 
@@ -735,6 +811,11 @@ struct StateGraphOptions {
     registry: String,
 }
 
+struct EvidencePacketOptions {
+    fixture: String,
+    registry: String,
+}
+
 fn parse_state_graph_args(args: &[String]) -> Result<StateGraphOptions, String> {
     match args {
         [fixture_flag, fixture, registry_flag, registry]
@@ -746,6 +827,20 @@ fn parse_state_graph_args(args: &[String]) -> Result<StateGraphOptions, String> 
             })
         }
         _ => Err("usage: rune check-state-graph --fixture <path> --registry <path>".to_owned()),
+    }
+}
+
+fn parse_evidence_packet_args(args: &[String]) -> Result<EvidencePacketOptions, String> {
+    match args {
+        [fixture_flag, fixture, registry_flag, registry]
+            if fixture_flag == "--fixture" && registry_flag == "--registry" =>
+        {
+            Ok(EvidencePacketOptions {
+                fixture: fixture.clone(),
+                registry: registry.clone(),
+            })
+        }
+        _ => Err("usage: rune check-evidence-packet --fixture <path> --registry <path>".to_owned()),
     }
 }
 
@@ -832,4 +927,14 @@ fn read_state_graph_fixture(path: &str, io_code: &'static str) -> Result<StateGr
         .map_err(|error| format!("{io_code} error reading state graph fixture: {error}"))?;
     serde_json::from_str(&content)
         .map_err(|error| format!("{io_code} error parsing state graph fixture JSON: {error}"))
+}
+
+fn read_evidence_packet_fixture(
+    path: &str,
+    io_code: &'static str,
+) -> Result<EvidenceRuntimePacketDraft, String> {
+    let content = std::fs::read_to_string(Path::new(path))
+        .map_err(|error| format!("{io_code} error reading evidence packet fixture: {error}"))?;
+    serde_json::from_str(&content)
+        .map_err(|error| format!("{io_code} error parsing evidence packet fixture JSON: {error}"))
 }

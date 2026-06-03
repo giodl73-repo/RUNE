@@ -148,10 +148,10 @@ Validation posture:
 
 | Lane | Planning status | Implementation status |
 |---|---|---|
-| Semantic registry | complete | ready for narrow implementation DCR |
-| State graph | complete | blocked until registry implementation exists |
-| Evidence runtime packets | complete | blocked until packet fixtures and diagnostics are designed in implementation DCR |
-| Agent protocol | complete | blocked until registry, evidence, and policy prerequisites exist |
+| Semantic registry | complete | implemented retained evidence slice |
+| State graph | complete | implemented retained evidence slice |
+| Evidence runtime packets | complete | implemented retained evidence slice |
+| Agent protocol | complete | next planned lane; blocked until read-first protocol DCR |
 | Compatibility negotiation | complete | blocked until report fixtures are implemented |
 | Capability and sensitivity policy | complete | blocked until enforcement boundary DCR |
 | Runtime host | complete as design blocker | blocked until prior lanes are implemented and reviewed |
@@ -238,6 +238,21 @@ runtime behavior.
 | Ownership integrity | pass | Ownership node/transition refs must point to known graph ids; failures use `RUNE-STATE-008`. |
 | Graph id uniqueness | pass | Duplicate node or transition ids fail with `RUNE-STATE-009`. |
 | Runtime safety | pass | `live_state: true` fails with `RUNE-STATE-006`; no runtime host, live inspection, mutation, replay, Cargo traversal, or source scraping was added. |
+
+## Wave 44 retained evidence packet validation
+
+Evidence runtime packets validate retained diagnostic, validation, trace, health,
+and audit evidence over semantic registry and descriptor collection refs.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Retained packet shape | pass | `EvidenceRuntimePacketDocument` and retained packet family fixtures. |
+| Registry binding | pass | Packet registry refs must match the supplied semantic registry fixture. |
+| Descriptor refs | pass | Unknown or mismatched descriptor ids fail with `RUNE-EVIDENCE-003`. |
+| Packet vocabulary | pass | Unsupported packet kinds fail with `RUNE-EVIDENCE-002`; unsupported severity/status values fail with `RUNE-EVIDENCE-004`. |
+| Audit decisions | pass | Audit packets require `capability_decision`; failures use `RUNE-EVIDENCE-005`. |
+| Retained evidence integrity | pass | Packet evidence refs must match semantic registry collection source refs; failures use `RUNE-EVIDENCE-007`. |
+| Runtime safety | pass | No logging backend, runtime host, live inspection, mutation, private payload capture, Cargo traversal, source scraping, plugin discovery, automatic migration, or policy enforcement was added. |
 
 ## Wave 4 readiness decision
 

@@ -1,0 +1,29 @@
+{
+  "packet_id": "example.evidence.trace",
+  "packet_version": "v0",
+  "packet_kind": "trace",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "descriptor_refs": [
+    {
+      "descriptor_id": "example.create_customer",
+      "descriptor_version": "v0"
+    },
+    {
+      "descriptor_id": "example.customer_created",
+      "descriptor_version": "v0"
+    }
+  ],
+  "severity": "info",
+  "status": "observed",
+  "message": "Retained trace packet linking command and event descriptors.",
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
+  "diagnostics": []
+}

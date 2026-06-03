@@ -58,7 +58,7 @@ Idiomatic Rust
 | DCR-RUNE-002 | Mission 2.0 direction | approved | Managed native semantic runtime direction is approved; runtime host and agent mutation remain blocked. |
 | DCR-RUNE-003 | Semantic registry | implemented read-only registry slices | Retained registry documents, `check-registry`, `inspect-registry`, catalog checks, and retained collection source-ref validation are implemented without Cargo traversal, source scraping, mutation, plugin discovery, or runtime host behavior. |
 | DCR-RUNE-004 | State graph | implemented and role-review hardened | Retained `check-state-graph` validates semantic registry refs, descriptor-backed nodes/transitions, retained evidence refs, ownership refs, duplicate graph ids, and live-state blocking. No live state inspection, replay, mutation, pointer/heap walking, Cargo traversal, source scraping, or runtime host behavior is approved. |
-| Future DCR | Evidence runtime packets | next planned lane | Must define retained diagnostic/validation/trace/health/audit packet documents and fail-closed diagnostics before implementation. |
+| DCR-RUNE-005 | Evidence runtime packets | implemented retained evidence slice | Retained `check-evidence-packet` validates diagnostic, validation, trace, health, and audit packets against semantic registry and descriptor collection refs. No logging backend, runtime host, live inspection, mutation, private payload capture, Cargo traversal, source scraping, plugin discovery, migration, or policy enforcement is approved. |
 
 ## Non-goals
 

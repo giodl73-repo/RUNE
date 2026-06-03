@@ -1,0 +1,25 @@
+{
+  "packet_id": "example.evidence.audit_missing_decision",
+  "packet_version": "v0",
+  "packet_kind": "audit",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "descriptor_refs": [
+    {
+      "descriptor_id": "example.customer",
+      "descriptor_version": "v0"
+    }
+  ],
+  "severity": "info",
+  "status": "observed",
+  "message": "Audit packet without a capability decision should fail closed.",
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
+  "diagnostics": []
+}

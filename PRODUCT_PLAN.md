@@ -83,7 +83,7 @@ Mission 2.0 lanes are controlled by DCRs before implementation:
 
 - semantic registry (implemented as retained evidence, validation, inspection, and communications readiness),
 - state graph (implemented as retained evidence validation over semantic registry refs),
-- evidence runtime packets,
+- evidence runtime packets (implemented as retained diagnostic, validation, trace, health, and audit packet validation),
 - agent-safe protocol,
 - compatibility negotiation,
 - capability and sensitivity policy,
@@ -284,15 +284,20 @@ inspection report over the validated registry and retained collection summaries.
 Define retained state graph and transition evidence keyed by descriptor ids,
 registry refs, ownership, and evidence links.
 
-Status: planning complete in `docs\architecture\state-graph-interface.md`;
-implementation waits for semantic registry.
+Status: implementation complete and role-review hardened. `rune-core` now
+defines retained state graph documents; `rune-cli` provides
+`check-state-graph --fixture <path> --registry <path>`; live state remains
+blocked.
 
 ### Wave 44: Evidence runtime packets
 
 Define diagnostic, validation, trace, health, and audit packets tied to
 descriptor ids and semantic registries.
 
-Status: planning complete in `docs\architecture\evidence-runtime-packets.md`.
+Status: implementation complete. `rune-core` now defines retained evidence
+runtime packet documents; `rune-cli` provides
+`check-evidence-packet --fixture <path> --registry <path>` over retained packet
+and semantic registry fixtures; logging/runtime behavior remains blocked.
 
 ### Wave 45: Agent protocol interface
 
@@ -300,7 +305,7 @@ Define read-first agent/tool query operations over registries, descriptors,
 evidence, compatibility reports, profiles, and adapters.
 
 Status: planning complete in `docs\architecture\agent-protocol-interface.md`;
-mutating operations remain blocked.
+next planned lane. Mutating operations remain blocked.
 
 ### Wave 46: Compatibility negotiation
 

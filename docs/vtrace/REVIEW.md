@@ -1759,3 +1759,26 @@ Artifacts reviewed:
 
 Conclusion: RUNE now has retained evidence for entity and command contract
 scenarios.
+
+## Wave 44 evidence runtime packet review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates\rune-core\src\lib.rs`
+- `crates\rune-cli\src\main.rs`
+- `crates\rune-cli\tests\evidence_packet_cli.rs`
+- retained evidence packet fixtures under `crates\rune-cli\tests\fixtures\`
+- `docs\architecture\evidence-runtime-packets.md`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Retained evidence boundary | pass | Evidence packets validate retained JSON fixtures against semantic registry collection refs only. |
+| Packet vocabulary | pass | Diagnostic, validation, trace, health, and audit are the only approved packet families. |
+| Audit capability decision | pass | Audit packets fail closed unless `capability_decision` is present. |
+| Descriptor/evidence integrity | pass | Descriptor refs and retained evidence refs are validated against supplied registry evidence. |
+| Runtime safety | pass | No logging backend, runtime host, live inspection, mutation, private payload capture, Cargo traversal, source scraping, plugin discovery, automatic migration, or policy enforcement was added. |
+
+Conclusion: DCR-RUNE-005 is accepted as a retained-evidence implementation
+slice. Agent protocol work remains blocked until its own read-first DCR.

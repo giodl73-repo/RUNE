@@ -1,0 +1,30 @@
+{
+  "packet_id": "example.evidence.audit",
+  "packet_version": "v0",
+  "packet_kind": "audit",
+  "registry_ref": {
+    "registry_id": "example.workspace_registry",
+    "registry_version": "v0"
+  },
+  "descriptor_refs": [
+    {
+      "descriptor_id": "example.customer",
+      "descriptor_version": "v0"
+    }
+  ],
+  "severity": "info",
+  "status": "observed",
+  "message": "Retained audit packet for descriptor read access.",
+  "evidence_refs": [
+    {
+      "evidence_kind": "descriptor_collection_fixture",
+      "source_ref": "known_contract_descriptor_collection.json"
+    }
+  ],
+  "diagnostics": [],
+  "capability_decision": {
+    "capability": "read",
+    "decision": "allowed",
+    "reason": "Retained descriptor evidence is public in the fixture."
+  }
+}

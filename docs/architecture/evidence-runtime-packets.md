@@ -21,7 +21,7 @@ artifacts that can be emitted by tests, tools, or future runtime hosts.
 
 ## Packet document shape
 
-First planning target:
+Implemented retained shape:
 
 | Field | Purpose |
 |---|---|
@@ -35,6 +35,7 @@ First planning target:
 | `message` | Human-readable summary. |
 | `evidence_refs` | Retained evidence links. |
 | `diagnostics` | Packet construction diagnostics. |
+| `capability_decision` | Required for audit packets; records the capability checked and decision. |
 
 ## Diagnostics
 
@@ -47,11 +48,25 @@ Reserve diagnostic families:
 | `RUNE-EVIDENCE-003` | Unknown descriptor reference. |
 | `RUNE-EVIDENCE-004` | Unsupported severity or status. |
 | `RUNE-EVIDENCE-005` | Audit packet missing capability decision. |
+| `RUNE-EVIDENCE-006` | Packet registry reference does not match the supplied semantic registry. |
+| `RUNE-EVIDENCE-007` | Packet evidence ref is unsupported or not declared by the supplied semantic registry. |
 
 ## Retained fixtures
 
-Implementation must add one retained packet fixture per approved packet kind and
-one failure fixture for an unknown descriptor reference.
+Implementation retains one packet fixture per approved packet kind and failure
+fixtures for missing identity, unsupported kind, unknown descriptor reference,
+unsupported severity/status, missing audit capability decision, mismatched
+registry reference, and unknown retained evidence reference.
+
+## Implemented command
+
+```powershell
+cargo run -q -p rune-cli -- check-evidence-packet --fixture crates\rune-cli\tests\fixtures\evidence_packet_diagnostic.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+```
+
+The command validates retained packet JSON against a retained semantic registry
+and the registry's descriptor collection source refs. It emits a small packet
+check report; it does not stream runtime logs or inspect a live process.
 
 ## Non-goals
 
@@ -59,4 +74,3 @@ one failure fixture for an unknown descriptor reference.
 - No live runtime host requirement.
 - No private payload capture by default.
 - No mutation authorization.
-

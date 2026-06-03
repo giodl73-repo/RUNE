@@ -81,8 +81,9 @@ Current findings:
 - Requirements are now split across stage control, neutral descriptors, macros,
   CLI/generators, verification, and validation.
 - Mission 2.0 DCRs now add requirements for retained semantic registry evidence
-  (`RUNE-REQ-085` through `RUNE-REQ-089`) and hardened retained state graph
-  validation (`RUNE-REQ-090`).
+  (`RUNE-REQ-085` through `RUNE-REQ-089`), hardened retained state graph
+  validation (`RUNE-REQ-090`), and retained evidence runtime packets
+  (`RUNE-REQ-091`).
 - Later Mission 2.0 lanes still require new requirements/DCRs before declaring
   evidence runtime, agent protocol, compatibility, policy, or runtime host
   surfaces contract-stable.
@@ -133,9 +134,10 @@ Current findings:
 - Mission 2.0 interface docs now exist for semantic registry, state graph,
   evidence runtime packets, agent protocol, compatibility negotiation,
   capability/sensitivity policy, and optional runtime host design.
-- DCR-RUNE-003 and DCR-RUNE-004 have moved semantic registry and state graph from
-  interface planning into implemented retained-evidence slices; all later lanes
-  remain interface-only until their own implementation DCRs.
+- DCR-RUNE-003, DCR-RUNE-004, and DCR-RUNE-005 have moved semantic registry,
+  state graph, and evidence runtime packets from interface planning into
+  implemented retained-evidence slices; all later lanes remain interface-only
+  until their own implementation DCRs.
 
 ### Stage 5: Implementation slices
 
@@ -165,6 +167,9 @@ Current findings:
 - DCR-RUNE-004 implements hardened retained state graph validation with
   fail-closed retained evidence, ownership, duplicate graph-id, and live-state
   diagnostics.
+- DCR-RUNE-005 implements retained evidence runtime packet validation with
+  fail-closed packet identity, family, descriptor ref, severity/status, audit
+  decision, registry ref, and evidence ref diagnostics.
 - Runtime host behavior, live state inspection, replay/mutation, Cargo traversal,
   source scraping, plugin discovery, automatic migration, and policy enforcement
   remain blocked.
@@ -190,9 +195,12 @@ Current findings:
 - Proc-macro compile-pass and compile-fail fixtures exist for the approved
   derive slice.
 - Verification now covers descriptor/collection/profile/adapter/discovery
-  evidence, semantic registry checks/inspection, and hardened state graph checks.
+  evidence, semantic registry checks/inspection, hardened state graph checks, and
+  retained evidence packet checks.
 - State graph verification includes `RUNE-STATE-001` through `RUNE-STATE-009`
   fixtures and CLI tests.
+- Evidence packet verification includes `RUNE-EVIDENCE-001` through
+  `RUNE-EVIDENCE-007` validation paths and CLI tests.
 
 ### Stage 7: Validation
 

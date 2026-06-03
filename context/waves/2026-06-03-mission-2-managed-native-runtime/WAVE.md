@@ -20,6 +20,7 @@ compatibility negotiation, capability policy, and optional runtime hosts.
 | 03 | Roles and implementation gate | complete | Restored physical `.roles/` files and recorded that Wave 42 semantic registry interface is next; runtime behavior remains blocked. |
 | 04 | Mission 2.0 planning closeout | complete | Added interface docs for Waves 42-48 and marked semantic registry as the first implementation target. |
 | 05 | DCR implementation package sync | complete | Updated mission/stage/work-package records for DCR-RUNE-003 semantic registry and DCR-RUNE-004 hardened retained state graph validation. |
+| 06 | Evidence packet implementation package sync | complete | Updated mission/stage/work-package records for DCR-RUNE-005 retained evidence runtime packet validation and set Wave 45 agent protocol as next. |
 
 ## Success criteria
 
@@ -39,6 +40,8 @@ compatibility negotiation, capability policy, and optional runtime hosts.
   evidence slices are implemented.
 - DCR-RUNE-003 and DCR-RUNE-004 are reflected in mission, stage, planning-index,
   and work-package records.
+- DCR-RUNE-005 is reflected in mission, stage, planning-index, and work-package
+  records.
 - `git diff --check` passes.
 
 ## Validation

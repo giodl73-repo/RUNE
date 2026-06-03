@@ -57,7 +57,7 @@ their terms.
 | `rune-adapters` | Downstream adapter surfaces over validated RUNE evidence. |
 | `rune-core` | Neutral contract descriptor types and traits. |
 | `rune-derive` | Procedural macros that derive RUNE descriptors from Rust types. |
-| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, semantic registry commands, and retained state graph checks. |
+| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, semantic registry commands, retained state graph checks, and evidence packet checks. |
 
 ## Current CLI surface
 
@@ -79,6 +79,7 @@ cargo run -p rune-cli -- check-collection --profile rune.neutral_descriptor_json
 cargo run -p rune-cli -- check-registry --fixture <semantic-registry.json>
 cargo run -p rune-cli -- inspect-registry --fixture <semantic-registry.json>
 cargo run -p rune-cli -- check-state-graph --fixture <state-graph.json> --registry <semantic-registry.json>
+cargo run -p rune-cli -- check-evidence-packet --fixture <evidence-packet.json> --registry <semantic-registry.json>
 cargo run -p rune-cli -- generate --profile rune.neutral_descriptor_json --fixture <descriptor.json>
 cargo run -p rune-cli -- generate-collection --profile rune.neutral_descriptor_json --fixture <collection.json>
 cargo run -p rune-cli -- generate --profile rune.documentation_packet_json --fixture <descriptor.json>
@@ -114,6 +115,12 @@ The first state graph command is `check-state-graph`. It validates retained grap
 fixtures against a semantic registry and the registry's retained descriptor
 collection source refs. It does not inspect live process state, walk pointers or
 heap graphs, replay transitions, mutate state, or enable runtime host behavior.
+
+The first evidence runtime command is `check-evidence-packet`. It validates
+retained diagnostic, validation, trace, health, and audit packet fixtures against
+a semantic registry and retained descriptor collection source refs. It does not
+replace logging, metrics, observability backends, private payload capture, policy
+enforcement, or runtime host behavior.
 
 CLI hardening covers current status text, unknown commands, usage failures,
 malformed JSON diagnostics, invalid adapter argument order, and adapter
@@ -202,6 +209,11 @@ The full adoption documentation package starts at `docs\README.md`:
 - `docs\how-to\validate-semantic-registry.md` and
   `docs\runbooks\semantic-registry-validation.md` cover Mission 2.0 Wave 42
   retained registry evidence.
+- `docs\how-to\validate-state-graph.md` and
+  `docs\runbooks\state-graph-validation.md` cover retained state graph evidence.
+- `docs\how-to\validate-evidence-packet.md` and
+  `docs\runbooks\evidence-packet-validation.md` cover retained evidence runtime
+  packets.
 - `docs\CORPUS.md` records documentation update obligations.
 
 ## V1 completion target
