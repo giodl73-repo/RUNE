@@ -152,8 +152,8 @@ Validation posture:
 | State graph | complete | implemented retained evidence slice |
 | Evidence runtime packets | complete | implemented retained evidence slice |
 | Agent protocol | complete | implemented retained evidence slice |
-| Compatibility negotiation | complete | next planned lane; blocked until report fixtures are implemented |
-| Capability and sensitivity policy | complete | blocked until enforcement boundary DCR |
+| Compatibility negotiation | complete | implemented retained evidence slice |
+| Capability and sensitivity policy | complete | next planned lane; blocked until enforcement boundary DCR |
 | Runtime host | complete as design blocker | blocked until prior lanes are implemented and reviewed |
 
 ## Wave 42 semantic registry validation
@@ -268,6 +268,21 @@ semantic registry and descriptor collection refs.
 | Input refs | pass | Unknown registry, collection, descriptor, evidence, profile, or adapter refs fail with `RUNE-AGENT-004`. |
 | Restricted data | pass | Restricted-data requests fail with `RUNE-AGENT-005`. |
 | Runtime safety | pass | No live endpoint, runtime host, mutation/replay, prompt-only authority, private data exposure, Cargo traversal, source scraping, plugin discovery, automatic migration, or policy enforcement was added. |
+
+## Wave 46 retained compatibility validation
+
+Compatibility reports validate retained compatibility evidence over semantic
+registry source/target refs.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Retained report shape | pass | `CompatibilityReportDocument` and retained compatibility report fixtures. |
+| Source and target refs | pass | Unknown source and target artifacts fail with `RUNE-COMPAT-001` and `RUNE-COMPAT-002`. |
+| Version checks | pass | Mismatched retained ref versions fail with `RUNE-COMPAT-003`. |
+| Unsupported concepts | pass | Reports claiming `compatible` while listing unsupported concepts fail with `RUNE-COMPAT-004`. |
+| Degraded behavior | pass | Unapproved degraded behavior and automatic migration requests fail with `RUNE-COMPAT-005`. |
+| Runtime host boundary | pass | Runtime-host compatibility requests fail with `RUNE-COMPAT-006`. |
+| Runtime safety | pass | No automatic migration, best-effort conversion, live inspection, mutation/replay, runtime host behavior, source scraping, Cargo traversal, plugin discovery, or policy enforcement was added. |
 
 ## Wave 4 readiness decision
 

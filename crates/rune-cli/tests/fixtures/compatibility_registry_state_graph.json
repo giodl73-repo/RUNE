@@ -1,0 +1,28 @@
+{
+  "compatibility_report_id": "example.compat.registry_state_graph",
+  "compatibility_report_version": "v0",
+  "source_ref": {
+    "artifact_kind": "state_graph",
+    "artifact_id": "example.checkout_graph",
+    "artifact_version": "v0"
+  },
+  "target_ref": {
+    "artifact_kind": "registry",
+    "artifact_id": "example.workspace_registry",
+    "artifact_version": "v0"
+  },
+  "status": "compatible_with_warnings",
+  "supported_concepts": [
+    "state_node",
+    "command_transition"
+  ],
+  "unsupported_concepts": [],
+  "degraded_concepts": [
+    {
+      "concept": "live_state_projection",
+      "approved": true,
+      "reason": "retained report records that live projection remains unavailable"
+    }
+  ],
+  "diagnostics": []
+}

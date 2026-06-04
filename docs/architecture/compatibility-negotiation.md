@@ -21,7 +21,7 @@ Compatibility is evidence. It must not silently migrate or degrade behavior.
 
 ## Report document shape
 
-First planning target:
+Implemented retained report target:
 
 | Field | Purpose |
 |---|---|
@@ -34,6 +34,7 @@ First planning target:
 | `unsupported_concepts` | Concepts rejected or blocked. |
 | `degraded_concepts` | Concepts requiring explicit degraded behavior. |
 | `diagnostics` | Fail-closed compatibility diagnostics. |
+| `automatic_migration_requested` | Must remain false; automatic migration is blocked. |
 
 ## Diagnostics
 
@@ -50,7 +51,7 @@ Reserve diagnostic families:
 
 ## Retained fixtures
 
-Implementation must add:
+Implementation adds:
 
 - compatible collection/profile report,
 - incompatible collection/adapter report,
@@ -58,10 +59,19 @@ Implementation must add:
 - degraded behavior blocked report,
 - runtime host compatibility blocked report.
 
+## CLI
+
+```powershell
+cargo run -p rune-cli -- check-compatibility --fixture crates\rune-cli\tests\fixtures\compatibility_collection_profile.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+```
+
+The command validates retained report evidence only. It does not load runtime
+hosts, execute migrations, inspect live state, mutate data, scrape source, or
+enforce policy.
+
 ## Non-goals
 
 - No automatic migration.
 - No best-effort conversion.
 - No runtime host implementation.
 - No compatibility claims without retained report evidence.
-

@@ -85,7 +85,7 @@ Mission 2.0 lanes are controlled by DCRs before implementation:
 - state graph (implemented as retained evidence validation over semantic registry refs),
 - evidence runtime packets (implemented as retained diagnostic, validation, trace, health, and audit packet validation),
 - agent-safe protocol (implemented as retained read-first protocol request validation),
-- compatibility negotiation,
+- compatibility negotiation (implemented as retained compatibility report validation),
 - capability and sensitivity policy,
 - optional runtime host.
 
@@ -315,8 +315,10 @@ blocked.
 Define compatibility reports across collections, profiles, adapters, registries,
 state graphs, protocols, and optional runtime hosts.
 
-Status: planning complete in `docs\architecture\compatibility-negotiation.md`;
-next planned lane. Automatic migration remains blocked.
+Status: implementation complete. `rune-core` now defines retained compatibility
+report documents; `rune-cli` provides
+`check-compatibility --fixture <path> --registry <path>` over retained report and
+semantic registry fixtures. Automatic migration remains blocked.
 
 ### Wave 47: Capability and sensitivity policy
 

@@ -210,7 +210,7 @@ adapters, and field metadata.
 ### Implementation readiness
 
 Mission 2.0 implementation remains lane-gated. DCR-RUNE-003 through
-DCR-RUNE-006 completed the first four retained-evidence slices; broad runtime
+DCR-RUNE-007 completed the first five retained-evidence slices; broad runtime
 implementation is still blocked:
 
 | Lane | Readiness |
@@ -219,8 +219,8 @@ implementation is still blocked:
 | State graph | implemented and role-review hardened by DCR-RUNE-004 as retained graph validation over registry refs, descriptor-backed nodes/transitions, retained evidence refs, ownership refs, duplicate graph-id diagnostics, and live-state blocking |
 | Evidence runtime packets | implemented by DCR-RUNE-005 as retained packet documents, read-only CLI checks, packet family fixtures, descriptor/evidence ref validation, and audit capability decision checks |
 | Agent protocol | implemented by DCR-RUNE-006 as retained read-first protocol request documents, read-only CLI checks, capability/ref validation, mutating-operation blocking, and restricted-data blocking |
-| Compatibility negotiation | interface planning complete in `docs/architecture/compatibility-negotiation.md`; next implementation DCR must stay retained-evidence-first and must not approve automatic migration |
-| Capability and sensitivity policy | interface planning complete in `docs/architecture/capability-sensitivity-policy.md`; implementation gated until enforcement boundaries are approved |
+| Compatibility negotiation | implemented by DCR-RUNE-007 as retained compatibility report documents, read-only CLI checks, source/target/version validation, degraded-behavior blocking, and runtime-host blocking |
+| Capability and sensitivity policy | interface planning complete in `docs/architecture/capability-sensitivity-policy.md`; next implementation DCR must stay retained-evidence-first and must not approve private data exposure, mutation, or enforcement without approved boundaries |
 | Runtime host | design planning complete in `docs/architecture/runtime-host-design.md`; implementation blocked until all prior lanes have approved implementations |
 
 ### Planning closeout
@@ -228,11 +228,11 @@ implementation is still blocked:
 Mission 2.0 planning is complete as a docs/spec package. The planning index is
 `docs/architecture/mission-2-planning-index.md`.
 
-Next allowed implementation-oriented work is a narrow DCR for **Wave 46:
-Compatibility negotiation implementation**. It must stay retained-evidence-first
-and must not add runtime host behavior, live process inspection, mutation/replay,
-Cargo traversal, source scraping, plugin discovery, automatic migration, or
-policy enforcement.
+Next allowed implementation-oriented work is a narrow DCR for **Wave 47:
+Capability and sensitivity policy implementation**. It must stay
+retained-evidence-first and must not add runtime host behavior, live process
+inspection, mutation/replay, private data exposure, Cargo traversal, source
+scraping, plugin discovery, automatic migration, or policy enforcement.
 
 ### Validation expectations
 
@@ -486,3 +486,60 @@ refs, and registry-declared profile/adapter refs.
 - No Cargo graph scanning.
 - No Rust source scraping.
 - No plugin discovery, automatic migration, or policy enforcement.
+
+## DCR-RUNE-007: Retained compatibility negotiation implementation
+
+| Field | Value |
+|---|---|
+| Status | implemented retained evidence slice |
+| Date | 2026-06-03 |
+| Source requirement | RUNE-REQ-093 |
+| Trigger | DCR-RUNE-002 and `docs\architecture\compatibility-negotiation.md` named compatibility negotiation as the next Mission 2.0 lane after retained registry, state graph, evidence packet, and agent protocol surfaces existed. |
+| Primary repo | RUNE |
+| Coordinating repo | TRACKER |
+
+### Decision
+
+RUNE should implement the first compatibility negotiation slice as retained report
+evidence over explicit source and target artifact refs. The slice validates
+authored compatibility reports without performing migration, conversion,
+runtime-host negotiation, live inspection, mutation, source scraping, Cargo
+traversal, plugin discovery, or policy enforcement.
+
+### Implemented surface
+
+| Surface | Status |
+|---|---|
+| `CompatibilityReportDraft` | implemented |
+| `CompatibilityReportDocument` | implemented |
+| `CompatibilityArtifactRef` | implemented |
+| `CompatibilityDegradedConcept` | implemented |
+| Retained collection/profile, collection/adapter, and registry/state-graph fixtures | implemented |
+| Retained unknown source, unknown target, unsupported version, unsupported concept, unapproved degradation, and runtime-host blocked fixtures | implemented |
+| `rune check-compatibility --fixture <path> --registry <path>` | implemented read-only |
+
+### Validation behavior
+
+| Diagnostic | Status |
+|---|---|
+| `RUNE-COMPAT-001` unknown source artifact | implemented |
+| `RUNE-COMPAT-002` unknown target artifact | implemented |
+| `RUNE-COMPAT-003` unsupported source or target version | implemented |
+| `RUNE-COMPAT-004` unsupported concept in compatible claim | implemented |
+| `RUNE-COMPAT-005` degraded behavior or migration requested without explicit approval | implemented |
+| `RUNE-COMPAT-006` runtime host compatibility requested before host DCR approval | implemented |
+
+Compatibility validation is intentionally bounded to retained report fixtures,
+semantic registry fixtures, registry-declared collection/profile/adapter refs,
+and explicit state graph or agent protocol refs.
+
+### Non-goals
+
+- No automatic migration or best-effort conversion.
+- No runtime host negotiation or live endpoint.
+- No live state inspection.
+- No mutation or replay.
+- No private data exposure.
+- No Cargo graph scanning.
+- No Rust source scraping.
+- No plugin discovery or policy enforcement.

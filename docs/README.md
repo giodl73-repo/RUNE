@@ -31,6 +31,7 @@ product overview, then use this map to choose the right depth.
 | Validate retained state graph evidence | [How-to: validate a state graph](how-to/validate-state-graph.md) |
 | Validate retained evidence packets | [How-to: validate an evidence packet](how-to/validate-evidence-packet.md) |
 | Validate retained agent protocol requests | [How-to: validate an agent protocol request](how-to/validate-agent-protocol.md) |
+| Validate retained compatibility reports | [How-to: validate a compatibility report](how-to/validate-compatibility.md) |
 | Build a downstream integration | [Concepts: profiles and adapters](concepts/profiles-and-adapters.md) |
 | Evaluate game/simulation adoption | [Traces: games contract candidates](traces/games-contract-candidates.md) |
 | Review Mission 2.0 planning | [Architecture: Mission 2.0 planning index](architecture/mission-2-planning-index.md) |
@@ -40,7 +41,7 @@ product overview, then use this map to choose the right depth.
 The current docs describe RUNE v1 plus Mission 2.0 planning, Wave 42 retained
 semantic registry evidence, Wave 43 retained state graph evidence, Wave 44
 retained evidence runtime packets, and Wave 45 retained read-first agent protocol
-requests. They do not promise arbitrary Rust source scraping, Cargo metadata
+requests, and Wave 46 retained compatibility reports. They do not promise arbitrary Rust source scraping, Cargo metadata
 traversal, executable hooks, automatic publishing, product-specific vocabulary in
 `rune-core`, runtime host behavior, live state inspection, mutating agent
 operations, automatic migration, or policy enforcement.

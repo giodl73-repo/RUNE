@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "compatibility_report_id": "example.compat.collection_profile",
+  "compatibility_report_version": "v0",
+  "source_kind": "collection",
+  "source_id": "example.known_contracts",
+  "target_kind": "profile",
+  "target_id": "rune.neutral_descriptor_json",
+  "compatibility_status": "compatible",
+  "supported_concept_count": 2,
+  "unsupported_concept_count": 0,
+  "degraded_concept_count": 0,
+  "diagnostic_count": 0
+}

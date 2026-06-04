@@ -6,15 +6,16 @@ RUNE v1 is ready as publishable contract infrastructure with reviewed discovery,
 external profile, adapter, adopter example, and bakeoff evidence. Mission 2.0
 now has retained semantic registry evidence, retained state graph evidence,
 retained evidence runtime packets, and retained read-first agent protocol
-requests without live state inspection or runtime host behavior.
+requests, and retained compatibility reports without live state inspection,
+automatic migration, or runtime host behavior.
 
 ## Crate surfaces
 
 | Crate | V1 role |
 |---|---|
-| `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, inventory, semantic registry, retained state graph, evidence runtime packet, and agent protocol models. |
+| `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, inventory, semantic registry, retained state graph, evidence runtime packet, agent protocol, and compatibility report models. |
 | `rune-derive` | Compile-time derive macro for annotated Rust contract descriptors. |
-| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, semantic registry, state graph, evidence packet, and agent protocol commands. |
+| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, semantic registry, state graph, evidence packet, agent protocol, and compatibility commands. |
 | `rune-adapters` | Downstream adapter models outside the neutral core. |
 | `examples\rune-adopter` | Non-published adopter workflow example. |
 
@@ -29,6 +30,7 @@ cargo run -p rune-cli -- inspect-registry --fixture crates\rune-cli\tests\fixtur
 cargo run -p rune-cli -- check-state-graph --fixture crates\rune-cli\tests\fixtures\state_graph_workspace.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 cargo run -p rune-cli -- check-evidence-packet --fixture crates\rune-cli\tests\fixtures\evidence_packet_diagnostic.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 cargo run -p rune-cli -- check-agent-protocol --fixture crates\rune-cli\tests\fixtures\agent_protocol_registry_describe.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+cargo run -p rune-cli -- check-compatibility --fixture crates\rune-cli\tests\fixtures\compatibility_collection_profile.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 git diff --check
 ```
 

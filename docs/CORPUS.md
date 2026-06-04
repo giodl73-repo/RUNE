@@ -43,6 +43,9 @@ evolves.
 10. A new agent protocol command needs how-to, runbook, retained pass/failure
     fixtures, VTRACE, release/readiness updates, and explicit read-first,
     no-live-endpoint, no-mutation boundary language.
+11. A new compatibility command needs how-to, runbook, retained pass/failure
+    fixtures, VTRACE, release/readiness updates, and explicit no-migration,
+    no-runtime-host, no-policy-enforcement boundary language.
 
 ## Documentation validation
 

@@ -510,6 +510,65 @@ pub struct AgentProtocolValidationCodes {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
+pub struct CompatibilityReportDraft {
+    pub compatibility_report_id: Option<String>,
+    pub compatibility_report_version: Option<String>,
+    pub source_ref: Option<CompatibilityArtifactRef>,
+    pub target_ref: Option<CompatibilityArtifactRef>,
+    pub status: Option<String>,
+    #[serde(default)]
+    pub supported_concepts: Vec<String>,
+    #[serde(default)]
+    pub unsupported_concepts: Vec<String>,
+    #[serde(default)]
+    pub degraded_concepts: Vec<CompatibilityDegradedConcept>,
+    #[serde(default)]
+    pub diagnostics: Vec<EvidencePacketDiagnostic>,
+    #[serde(default)]
+    pub automatic_migration_requested: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityReportDocument {
+    pub compatibility_report_id: String,
+    pub compatibility_report_version: String,
+    pub source_ref: CompatibilityArtifactRef,
+    pub target_ref: CompatibilityArtifactRef,
+    pub status: String,
+    pub supported_concepts: Vec<String>,
+    pub unsupported_concepts: Vec<String>,
+    pub degraded_concepts: Vec<CompatibilityDegradedConcept>,
+    pub diagnostics: Vec<EvidencePacketDiagnostic>,
+    pub automatic_migration_requested: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityArtifactRef {
+    pub artifact_kind: String,
+    pub artifact_id: String,
+    pub artifact_version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityDegradedConcept {
+    pub concept: String,
+    #[serde(default)]
+    pub approved: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct CompatibilityReportValidationCodes {
+    pub unknown_source: &'static str,
+    pub unknown_target: &'static str,
+    pub unsupported_version: &'static str,
+    pub unsupported_concept: &'static str,
+    pub unapproved_degradation: &'static str,
+    pub runtime_host_blocked: &'static str,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 pub struct DescriptorCollectionDraft {
     pub collection_id: Option<String>,
     pub collection_version: Option<String>,
@@ -1288,6 +1347,206 @@ impl AgentProtocolRequestDraft {
     }
 }
 
+impl CompatibilityReportDraft {
+    pub fn validate_with_codes(
+        self,
+        registry: &SemanticRegistryDocument,
+        codes: CompatibilityReportValidationCodes,
+    ) -> Result<CompatibilityReportDocument, String> {
+        let compatibility_report_id = required_non_empty(
+            self.compatibility_report_id,
+            codes.unsupported_version,
+            "compatibility report identity is missing",
+        )?;
+        let compatibility_report_version = required_non_empty(
+            self.compatibility_report_version,
+            codes.unsupported_version,
+            "compatibility report version is missing",
+        )?;
+        let source_ref = self.source_ref.ok_or_else(|| {
+            format!(
+                "{} compatibility report source reference is missing",
+                codes.unknown_source
+            )
+        })?;
+        let target_ref = self.target_ref.ok_or_else(|| {
+            format!(
+                "{} compatibility report target reference is missing",
+                codes.unknown_target
+            )
+        })?;
+        let status = required_non_empty(
+            self.status,
+            codes.unsupported_concept,
+            "compatibility report status is missing",
+        )?;
+        if !is_supported_compatibility_status(&status) {
+            return Err(format!(
+                "{} unsupported compatibility report status: {}",
+                codes.unsupported_concept, status
+            ));
+        }
+        if self.automatic_migration_requested {
+            return Err(format!(
+                "{} automatic compatibility migration is not approved",
+                codes.unapproved_degradation
+            ));
+        }
+        validate_compatibility_ref(&source_ref, registry, codes.unknown_source, codes)?;
+        validate_compatibility_ref(&target_ref, registry, codes.unknown_target, codes)?;
+        if source_ref.artifact_kind == "runtime_host" || target_ref.artifact_kind == "runtime_host"
+        {
+            return Err(format!(
+                "{} runtime host compatibility requires approved runtime host DCR",
+                codes.runtime_host_blocked
+            ));
+        }
+        if status == "compatible" && !self.unsupported_concepts.is_empty() {
+            return Err(format!(
+                "{} compatible reports cannot include unsupported concepts",
+                codes.unsupported_concept
+            ));
+        }
+        for degraded in &self.degraded_concepts {
+            if degraded.concept.trim().is_empty() {
+                return Err(format!(
+                    "{} degraded compatibility concept is missing",
+                    codes.unapproved_degradation
+                ));
+            }
+            if !degraded.approved {
+                return Err(format!(
+                    "{} degraded compatibility concept requires explicit approval: {}",
+                    codes.unapproved_degradation, degraded.concept
+                ));
+            }
+        }
+
+        Ok(CompatibilityReportDocument {
+            compatibility_report_id,
+            compatibility_report_version,
+            source_ref,
+            target_ref,
+            status,
+            supported_concepts: self.supported_concepts,
+            unsupported_concepts: self.unsupported_concepts,
+            degraded_concepts: self.degraded_concepts,
+            diagnostics: self.diagnostics,
+            automatic_migration_requested: self.automatic_migration_requested,
+        })
+    }
+}
+
+fn validate_compatibility_ref(
+    reference: &CompatibilityArtifactRef,
+    registry: &SemanticRegistryDocument,
+    unknown_code: &'static str,
+    codes: CompatibilityReportValidationCodes,
+) -> Result<(), String> {
+    if reference.artifact_id.trim().is_empty() || reference.artifact_version.trim().is_empty() {
+        return Err(format!(
+            "{unknown_code} compatibility artifact reference identity is missing"
+        ));
+    }
+    if !is_supported_compatibility_artifact_kind(&reference.artifact_kind) {
+        return Err(format!(
+            "{unknown_code} unsupported compatibility artifact kind: {}",
+            reference.artifact_kind
+        ));
+    }
+    if reference.artifact_kind == "runtime_host" {
+        return Ok(());
+    }
+    match reference.artifact_kind.as_str() {
+        "registry" => {
+            if reference.artifact_id != registry.registry_id
+                || reference.artifact_version != registry.registry_version
+            {
+                return Err(format!(
+                    "{unknown_code} compatibility registry ref does not match semantic registry: {}@{}",
+                    reference.artifact_id, reference.artifact_version
+                ));
+            }
+        }
+        "collection" => {
+            match registry
+                .collections
+                .iter()
+                .find(|collection| collection.collection_id == reference.artifact_id)
+            {
+                Some(collection) if collection.collection_version == reference.artifact_version => {
+                }
+                Some(collection) => {
+                    return Err(format!(
+                        "{} compatibility collection version mismatch: {}@{} declared, registry has {}",
+                        codes.unsupported_version,
+                        reference.artifact_id,
+                        reference.artifact_version,
+                        collection.collection_version
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{unknown_code} compatibility references unknown collection: {}",
+                        reference.artifact_id
+                    ));
+                }
+            }
+        }
+        "profile" => {
+            match registry
+                .profiles
+                .iter()
+                .find(|profile| profile.profile_id == reference.artifact_id)
+            {
+                Some(profile) if profile.profile_version == reference.artifact_version => {}
+                Some(profile) => {
+                    return Err(format!(
+                        "{} compatibility profile version mismatch: {}@{} declared, registry has {}",
+                        codes.unsupported_version,
+                        reference.artifact_id,
+                        reference.artifact_version,
+                        profile.profile_version
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{unknown_code} compatibility references unknown profile: {}",
+                        reference.artifact_id
+                    ));
+                }
+            }
+        }
+        "adapter" => {
+            match registry
+                .adapters
+                .iter()
+                .find(|adapter| adapter.adapter_id == reference.artifact_id)
+            {
+                Some(adapter) if adapter.adapter_version == reference.artifact_version => {}
+                Some(adapter) => {
+                    return Err(format!(
+                        "{} compatibility adapter version mismatch: {}@{} declared, registry has {}",
+                        codes.unsupported_version,
+                        reference.artifact_id,
+                        reference.artifact_version,
+                        adapter.adapter_version
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{unknown_code} compatibility references unknown adapter: {}",
+                        reference.artifact_id
+                    ));
+                }
+            }
+        }
+        "state_graph" | "agent_protocol" => {}
+        _ => unreachable!("unsupported compatibility artifact kind was checked"),
+    }
+    Ok(())
+}
+
 fn descriptor_kinds_by_id(
     collections: &[DescriptorCollectionDocument],
 ) -> BTreeMap<String, String> {
@@ -1393,6 +1652,26 @@ pub fn required_agent_protocol_capability(operation: &str) -> &'static str {
         "profile.generate.preview" | "adapter.generate.preview" => "generate",
         _ => "read",
     }
+}
+
+pub fn is_supported_compatibility_artifact_kind(kind: &str) -> bool {
+    matches!(
+        kind,
+        "collection"
+            | "profile"
+            | "adapter"
+            | "registry"
+            | "state_graph"
+            | "agent_protocol"
+            | "runtime_host"
+    )
+}
+
+pub fn is_supported_compatibility_status(status: &str) -> bool {
+    matches!(
+        status,
+        "compatible" | "compatible_with_warnings" | "incompatible" | "blocked"
+    )
 }
 
 fn semantic_registry_capability_enabled(
@@ -2684,6 +2963,121 @@ mod tests {
         assert!(error.contains("RUNE-AGENT-005"));
     }
 
+    #[test]
+    fn retained_compatibility_success_fixtures_validate() {
+        let registry = workspace_registry_fixture();
+        let fixtures = [
+            (
+                "compatible",
+                include_str!("../../rune-cli/tests/fixtures/compatibility_collection_profile.json"),
+            ),
+            (
+                "incompatible",
+                include_str!("../../rune-cli/tests/fixtures/compatibility_collection_adapter.json"),
+            ),
+            (
+                "compatible_with_warnings",
+                include_str!(
+                    "../../rune-cli/tests/fixtures/compatibility_registry_state_graph.json"
+                ),
+            ),
+        ];
+
+        for (expected_status, fixture) in fixtures {
+            let draft: CompatibilityReportDraft =
+                serde_json::from_str(fixture).expect("compatibility fixture parses");
+            let report = draft
+                .validate_with_codes(&registry, compatibility_report_codes())
+                .expect("compatibility fixture validates");
+
+            assert_eq!(report.status, expected_status);
+        }
+    }
+
+    #[test]
+    fn retained_compatibility_unknown_source_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/compatibility_unknown_source.json");
+        let draft: CompatibilityReportDraft =
+            serde_json::from_str(fixture).expect("compatibility fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, compatibility_report_codes())
+            .expect_err("unknown source should fail");
+
+        assert!(error.contains("RUNE-COMPAT-001"));
+    }
+
+    #[test]
+    fn retained_compatibility_unknown_target_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/compatibility_unknown_target.json");
+        let draft: CompatibilityReportDraft =
+            serde_json::from_str(fixture).expect("compatibility fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, compatibility_report_codes())
+            .expect_err("unknown target should fail");
+
+        assert!(error.contains("RUNE-COMPAT-002"));
+    }
+
+    #[test]
+    fn retained_compatibility_unsupported_version_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/compatibility_unsupported_version.json");
+        let draft: CompatibilityReportDraft =
+            serde_json::from_str(fixture).expect("compatibility fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, compatibility_report_codes())
+            .expect_err("unsupported version should fail");
+
+        assert!(error.contains("RUNE-COMPAT-003"));
+    }
+
+    #[test]
+    fn retained_compatibility_unsupported_concept_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/compatibility_unsupported_concept.json");
+        let draft: CompatibilityReportDraft =
+            serde_json::from_str(fixture).expect("compatibility fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, compatibility_report_codes())
+            .expect_err("unsupported concept should fail");
+
+        assert!(error.contains("RUNE-COMPAT-004"));
+    }
+
+    #[test]
+    fn retained_compatibility_degraded_unapproved_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/compatibility_degraded_unapproved.json");
+        let draft: CompatibilityReportDraft =
+            serde_json::from_str(fixture).expect("compatibility fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, compatibility_report_codes())
+            .expect_err("unapproved degradation should fail");
+
+        assert!(error.contains("RUNE-COMPAT-005"));
+    }
+
+    #[test]
+    fn retained_compatibility_runtime_host_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/compatibility_runtime_host_blocked.json");
+        let draft: CompatibilityReportDraft =
+            serde_json::from_str(fixture).expect("compatibility fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, compatibility_report_codes())
+            .expect_err("runtime host compatibility should fail");
+
+        assert!(error.contains("RUNE-COMPAT-006"));
+    }
+
     fn state_graph_codes() -> StateGraphValidationCodes {
         StateGraphValidationCodes {
             missing_identity: "RUNE-STATE-001",
@@ -2717,6 +3111,17 @@ mod tests {
             mutating_operation: "RUNE-AGENT-003",
             unknown_ref: "RUNE-AGENT-004",
             restricted_data: "RUNE-AGENT-005",
+        }
+    }
+
+    fn compatibility_report_codes() -> CompatibilityReportValidationCodes {
+        CompatibilityReportValidationCodes {
+            unknown_source: "RUNE-COMPAT-001",
+            unknown_target: "RUNE-COMPAT-002",
+            unsupported_version: "RUNE-COMPAT-003",
+            unsupported_concept: "RUNE-COMPAT-004",
+            unapproved_degradation: "RUNE-COMPAT-005",
+            runtime_host_blocked: "RUNE-COMPAT-006",
         }
     }
 

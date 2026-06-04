@@ -3,10 +3,11 @@ use rune_adapters::{
 };
 use rune_core::{
     AgentProtocolRequestDraft, AgentProtocolValidationCodes, CheckCollectionReportDocument,
-    CheckReportDocument, CollectionEvidenceBundleDocument, DataContractDocument,
-    DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
-    DescriptorKindInventoryDocument, DiscoveryManifestDraft, DocumentationPacketDocument,
-    EvidenceRuntimePacketDraft, EvidenceRuntimePacketValidationCodes, GeneratedArtifactDocument,
+    CheckReportDocument, CollectionEvidenceBundleDocument, CompatibilityReportDraft,
+    CompatibilityReportValidationCodes, DataContractDocument, DescriptorCollectionDocument,
+    DescriptorCollectionDraft, DescriptorDraft, DescriptorKindInventoryDocument,
+    DiscoveryManifestDraft, DocumentationPacketDocument, EvidenceRuntimePacketDraft,
+    EvidenceRuntimePacketValidationCodes, GeneratedArtifactDocument,
     GeneratedCollectionArtifactDocument, ProfileCatalog, ProfileCompatibilityCodes,
     SemanticRegistryCapabilities, SemanticRegistryDocument, SemanticRegistryDraft,
     StateGraphCapabilities, StateGraphDraft, StateGraphValidationCodes,
@@ -24,7 +25,7 @@ fn main() {
             println!("approved stage: v1 implementation waves");
             println!("contract kinds: entity,event,command,state,artifact,source,evidence,other");
             println!(
-                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,check-evidence-packet --fixture <path> --registry <path>,check-agent-protocol --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
+                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,check-evidence-packet --fixture <path> --registry <path>,check-agent-protocol --fixture <path> --registry <path>,check-compatibility --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
                 "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
@@ -47,6 +48,7 @@ fn main() {
         "check-state-graph" => check_state_graph(args.collect()),
         "check-evidence-packet" => check_evidence_packet(args.collect()),
         "check-agent-protocol" => check_agent_protocol(args.collect()),
+        "check-compatibility" => check_compatibility(args.collect()),
         "generate" => generate(args.collect()),
         "generate-collection" => generate_collection(args.collect()),
         "profile" => profile(args.collect()),
@@ -133,6 +135,22 @@ struct AgentProtocolCheckReportDocument {
     adapter_ref_count: usize,
     diagnostic_count: usize,
     result_status: String,
+}
+
+#[derive(Serialize)]
+struct CompatibilityCheckReportDocument {
+    status: String,
+    compatibility_report_id: String,
+    compatibility_report_version: String,
+    source_kind: String,
+    source_id: String,
+    target_kind: String,
+    target_id: String,
+    compatibility_status: String,
+    supported_concept_count: usize,
+    unsupported_concept_count: usize,
+    degraded_concept_count: usize,
+    diagnostic_count: usize,
 }
 
 fn inspect_collection(args: Vec<String>) -> Result<(), String> {
@@ -562,6 +580,41 @@ fn check_agent_protocol(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
+fn check_compatibility(args: Vec<String>) -> Result<(), String> {
+    let options = parse_compatibility_args(&args)?;
+    let registry = read_semantic_registry_fixture(&options.registry, "RUNE-COMPAT-900")?;
+    let registry = registry.validate_with_codes(
+        "RUNE-REGISTRY-001",
+        "RUNE-REGISTRY-002",
+        "RUNE-REGISTRY-003",
+        "RUNE-REGISTRY-004",
+        "RUNE-REGISTRY-007",
+    )?;
+    check_registry_catalog_refs(&registry)?;
+    let report = read_compatibility_fixture(&options.fixture, "RUNE-COMPAT-900")?;
+    let report = report.validate_with_codes(&registry, compatibility_report_codes())?;
+
+    let output = serde_json::to_string_pretty(&CompatibilityCheckReportDocument {
+        status: "ok".to_owned(),
+        compatibility_report_id: report.compatibility_report_id,
+        compatibility_report_version: report.compatibility_report_version,
+        source_kind: report.source_ref.artifact_kind,
+        source_id: report.source_ref.artifact_id,
+        target_kind: report.target_ref.artifact_kind,
+        target_id: report.target_ref.artifact_id,
+        compatibility_status: report.status,
+        supported_concept_count: report.supported_concepts.len(),
+        unsupported_concept_count: report.unsupported_concepts.len(),
+        degraded_concept_count: report.degraded_concepts.len(),
+        diagnostic_count: report.diagnostics.len(),
+    })
+    .map_err(|error| {
+        format!("RUNE-COMPAT-900 error serializing compatibility check report: {error}")
+    })?;
+    println!("{output}");
+    Ok(())
+}
+
 fn state_graph_codes() -> StateGraphValidationCodes {
     StateGraphValidationCodes {
         missing_identity: "RUNE-STATE-001",
@@ -583,6 +636,17 @@ fn agent_protocol_codes() -> AgentProtocolValidationCodes {
         mutating_operation: "RUNE-AGENT-003",
         unknown_ref: "RUNE-AGENT-004",
         restricted_data: "RUNE-AGENT-005",
+    }
+}
+
+fn compatibility_report_codes() -> CompatibilityReportValidationCodes {
+    CompatibilityReportValidationCodes {
+        unknown_source: "RUNE-COMPAT-001",
+        unknown_target: "RUNE-COMPAT-002",
+        unsupported_version: "RUNE-COMPAT-003",
+        unsupported_concept: "RUNE-COMPAT-004",
+        unapproved_degradation: "RUNE-COMPAT-005",
+        runtime_host_blocked: "RUNE-COMPAT-006",
     }
 }
 
@@ -905,6 +969,11 @@ struct AgentProtocolOptions {
     registry: String,
 }
 
+struct CompatibilityOptions {
+    fixture: String,
+    registry: String,
+}
+
 fn parse_state_graph_args(args: &[String]) -> Result<StateGraphOptions, String> {
     match args {
         [fixture_flag, fixture, registry_flag, registry]
@@ -944,6 +1013,20 @@ fn parse_agent_protocol_args(args: &[String]) -> Result<AgentProtocolOptions, St
             })
         }
         _ => Err("usage: rune check-agent-protocol --fixture <path> --registry <path>".to_owned()),
+    }
+}
+
+fn parse_compatibility_args(args: &[String]) -> Result<CompatibilityOptions, String> {
+    match args {
+        [fixture_flag, fixture, registry_flag, registry]
+            if fixture_flag == "--fixture" && registry_flag == "--registry" =>
+        {
+            Ok(CompatibilityOptions {
+                fixture: fixture.clone(),
+                registry: registry.clone(),
+            })
+        }
+        _ => Err("usage: rune check-compatibility --fixture <path> --registry <path>".to_owned()),
     }
 }
 
@@ -1050,4 +1133,14 @@ fn read_agent_protocol_fixture(
         .map_err(|error| format!("{io_code} error reading agent protocol fixture: {error}"))?;
     serde_json::from_str(&content)
         .map_err(|error| format!("{io_code} error parsing agent protocol fixture JSON: {error}"))
+}
+
+fn read_compatibility_fixture(
+    path: &str,
+    io_code: &'static str,
+) -> Result<CompatibilityReportDraft, String> {
+    let content = std::fs::read_to_string(Path::new(path))
+        .map_err(|error| format!("{io_code} error reading compatibility fixture: {error}"))?;
+    serde_json::from_str(&content)
+        .map_err(|error| format!("{io_code} error parsing compatibility fixture JSON: {error}"))
 }

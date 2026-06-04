@@ -35,7 +35,7 @@ Rust code + RUNE derives/attributes
 Mission 2.0 extends this into a managed native semantic runtime direction:
 native Rust binaries can gain managed-runtime-style semantic affordances
 through explicit registries, retained evidence, state/evidence documents,
-agent-safe protocols, compatibility negotiation, and capability metadata without
+agent-safe protocols, compatibility reports, and capability metadata without
 turning RUNE into a VM or product orchestrator.
 
 ## What RUNE is not
@@ -57,7 +57,7 @@ their terms.
 | `rune-adapters` | Downstream adapter surfaces over validated RUNE evidence. |
 | `rune-core` | Neutral contract descriptor types and traits. |
 | `rune-derive` | Procedural macros that derive RUNE descriptors from Rust types. |
-| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, semantic registry commands, retained state graph checks, evidence packet checks, and read-first agent protocol checks. |
+| `rune-cli` | Fixture-backed inspection, compatibility checks, neutral generation, collection inventory, profile catalog, adapter catalog, semantic registry commands, retained state graph checks, evidence packet checks, read-first agent protocol checks, and retained compatibility report checks. |
 
 ## Current CLI surface
 
@@ -81,6 +81,7 @@ cargo run -p rune-cli -- inspect-registry --fixture <semantic-registry.json>
 cargo run -p rune-cli -- check-state-graph --fixture <state-graph.json> --registry <semantic-registry.json>
 cargo run -p rune-cli -- check-evidence-packet --fixture <evidence-packet.json> --registry <semantic-registry.json>
 cargo run -p rune-cli -- check-agent-protocol --fixture <agent-protocol.json> --registry <semantic-registry.json>
+cargo run -p rune-cli -- check-compatibility --fixture <compatibility-report.json> --registry <semantic-registry.json>
 cargo run -p rune-cli -- generate --profile rune.neutral_descriptor_json --fixture <descriptor.json>
 cargo run -p rune-cli -- generate-collection --profile rune.neutral_descriptor_json --fixture <collection.json>
 cargo run -p rune-cli -- generate --profile rune.documentation_packet_json --fixture <descriptor.json>
@@ -122,6 +123,12 @@ retained diagnostic, validation, trace, health, and audit packet fixtures agains
 a semantic registry and retained descriptor collection source refs. It does not
 replace logging, metrics, observability backends, private payload capture, policy
 enforcement, or runtime host behavior.
+
+The first compatibility command is `check-compatibility`. It validates retained
+compatibility report fixtures against a semantic registry and approved retained
+refs. It reports explicit compatible, warning, incompatible, or blocked evidence;
+it does not perform automatic migration, best-effort conversion, runtime host
+negotiation, live inspection, mutation, or policy enforcement.
 
 The first agent protocol command is `check-agent-protocol`. It validates retained
 read-first protocol request fixtures against a semantic registry and retained

@@ -1,0 +1,28 @@
+{
+  "compatibility_report_id": "example.compat.collection_adapter",
+  "compatibility_report_version": "v0",
+  "source_ref": {
+    "artifact_kind": "collection",
+    "artifact_id": "example.known_contracts",
+    "artifact_version": "v0"
+  },
+  "target_ref": {
+    "artifact_kind": "adapter",
+    "artifact_id": "rune.review_packet_json",
+    "artifact_version": "v0"
+  },
+  "status": "incompatible",
+  "supported_concepts": [
+    "entity"
+  ],
+  "unsupported_concepts": [
+    "command"
+  ],
+  "degraded_concepts": [],
+  "diagnostics": [
+    {
+      "code": "RUNE-COMPAT-004",
+      "message": "review packet adapter does not emit command workflow metadata"
+    }
+  ]
+}

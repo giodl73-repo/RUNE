@@ -85,6 +85,8 @@ cargo run -p rune-cli -- status
 | Evidence packet CLI checks | `rune-cli` tests compare retained `check-evidence-packet` output and reject missing identity, unsupported kind, unknown descriptor refs, unsupported severity/status, missing audit capability decisions, mismatched registry refs, unknown retained evidence refs, and invalid usage. | covered |
 | Retained agent protocol implementation | `rune-core` tests validate registry describe, descriptor get, and compatibility check request fixtures against semantic registry collections and fail closed on unknown operations, missing capabilities, mutating operations, unknown refs, and restricted-data requests. | covered |
 | Agent protocol CLI checks | `rune-cli` tests compare retained `check-agent-protocol` output and reject unknown operations, missing capabilities, mutating operations, unknown refs, restricted-data requests, and invalid usage. | covered |
+| Retained compatibility implementation | `rune-core` tests validate collection/profile, collection/adapter, and registry/state graph compatibility report fixtures against semantic registry refs and fail closed on unknown source artifacts, unknown target artifacts, unsupported versions, unsupported compatible claims, unapproved degradation, and runtime-host negotiation. | covered |
+| Compatibility CLI checks | `rune-cli` tests compare retained `check-compatibility` output and reject unknown source artifacts, unknown target artifacts, unsupported versions, unsupported compatible claims, unapproved degradation, runtime-host negotiation, and invalid usage. | covered |
 
 ## Evidence rule
 

@@ -1,0 +1,24 @@
+{
+  "compatibility_report_id": "example.compat.runtime_host_blocked",
+  "compatibility_report_version": "v0",
+  "source_ref": {
+    "artifact_kind": "registry",
+    "artifact_id": "example.workspace_registry",
+    "artifact_version": "v0"
+  },
+  "target_ref": {
+    "artifact_kind": "runtime_host",
+    "artifact_id": "example.host",
+    "artifact_version": "v0"
+  },
+  "status": "blocked",
+  "supported_concepts": [],
+  "unsupported_concepts": [],
+  "degraded_concepts": [],
+  "diagnostics": [
+    {
+      "code": "RUNE-COMPAT-006",
+      "message": "runtime host negotiation remains blocked"
+    }
+  ]
+}

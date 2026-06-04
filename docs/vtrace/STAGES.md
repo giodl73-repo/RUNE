@@ -84,9 +84,9 @@ Current findings:
   (`RUNE-REQ-085` through `RUNE-REQ-089`), hardened retained state graph
   validation (`RUNE-REQ-090`), and retained evidence runtime packets
   (`RUNE-REQ-091`), and retained read-first agent protocol requests
-  (`RUNE-REQ-092`).
+  (`RUNE-REQ-092`), and retained compatibility reports (`RUNE-REQ-093`).
 - Later Mission 2.0 lanes still require new requirements/DCRs before declaring
-  compatibility, policy, or runtime host surfaces contract-stable.
+  policy or runtime host surfaces contract-stable.
 
 ### Stage 3: Concept and architecture
 
@@ -134,10 +134,11 @@ Current findings:
 - Mission 2.0 interface docs now exist for semantic registry, state graph,
   evidence runtime packets, agent protocol, compatibility negotiation,
   capability/sensitivity policy, and optional runtime host design.
-- DCR-RUNE-003, DCR-RUNE-004, DCR-RUNE-005, and DCR-RUNE-006 have moved
-  semantic registry, state graph, evidence runtime packets, and agent protocol
-  from interface planning into implemented retained-evidence slices; all later
-  lanes remain interface-only until their own implementation DCRs.
+- DCR-RUNE-003, DCR-RUNE-004, DCR-RUNE-005, DCR-RUNE-006, and DCR-RUNE-007 have
+  moved semantic registry, state graph, evidence runtime packets, agent protocol,
+  and compatibility negotiation from interface planning into implemented
+  retained-evidence slices; all later lanes remain interface-only until their own
+  implementation DCRs.
 
 ### Stage 5: Implementation slices
 
@@ -173,6 +174,9 @@ Current findings:
 - DCR-RUNE-006 implements retained read-first agent protocol validation with
   fail-closed operation, capability, input-ref, mutating-operation, and
   restricted-data diagnostics.
+- DCR-RUNE-007 implements retained compatibility report validation with
+  fail-closed source-ref, target-ref, version, unsupported-concept,
+  degraded-behavior, and runtime-host diagnostics.
 - Runtime host behavior, live state inspection, replay/mutation, Cargo traversal,
   source scraping, plugin discovery, automatic migration, and policy enforcement
   remain blocked.
@@ -206,6 +210,8 @@ Current findings:
   `RUNE-EVIDENCE-007` validation paths and CLI tests.
 - Agent protocol verification includes `RUNE-AGENT-001` through
   `RUNE-AGENT-005` validation paths and CLI tests.
+- Compatibility verification includes `RUNE-COMPAT-001` through
+  `RUNE-COMPAT-006` validation paths and CLI tests.
 
 ### Stage 7: Validation
 

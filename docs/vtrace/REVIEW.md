@@ -1810,3 +1810,31 @@ Artifacts reviewed:
 Conclusion: DCR-RUNE-006 is accepted as a retained read-first implementation
 slice. Compatibility negotiation is the next planned Mission 2.0 lane; runtime
 host behavior remains blocked.
+
+## Wave 46 retained compatibility negotiation review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates\rune-core\src\lib.rs`
+- `crates\rune-cli\src\main.rs`
+- `crates\rune-cli\tests\compatibility_cli.rs`
+- retained compatibility fixtures under `crates\rune-cli\tests\fixtures\`
+- `docs\architecture\compatibility-negotiation.md`
+- `docs\how-to\validate-compatibility.md`
+- `docs\runbooks\compatibility-validation.md`
+- `context\waves\2026-06-03-compatibility-negotiation\`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Retained report boundary | pass | `check-compatibility` reads retained report and registry fixtures only. |
+| Source/target integrity | pass | Collection, profile, adapter, and registry refs are validated against retained semantic registry evidence. |
+| Version integrity | pass | Mismatched retained source or target versions fail closed. |
+| Compatibility claim integrity | pass | Compatible reports cannot include unsupported concepts, while incompatible reports can retain explicit unsupported evidence. |
+| Degradation boundary | pass | Degraded behavior requires explicit approval, and automatic migration requests fail closed. |
+| Runtime safety | pass | Runtime-host compatibility remains blocked and no migration, live inspection, mutation, source scraping, Cargo traversal, plugin discovery, or policy enforcement was added. |
+
+Conclusion: DCR-RUNE-007 is accepted as a retained compatibility implementation
+slice. Capability and sensitivity policy is the next planned Mission 2.0 lane;
+runtime host behavior remains blocked.

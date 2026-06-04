@@ -11,3 +11,4 @@ surfaces before treating an adoption path as ready.
 | [State graph validation](state-graph-validation.md) | You want to validate retained state graph evidence against semantic registry and descriptor collection refs. |
 | [Evidence packet validation](evidence-packet-validation.md) | You want to validate retained evidence runtime packets against semantic registry and descriptor collection refs. |
 | [Agent protocol validation](agent-protocol-validation.md) | You want to validate retained read-first agent protocol requests against semantic registry and descriptor collection refs. |
+| [Compatibility validation](compatibility-validation.md) | You want to validate retained compatibility report evidence against semantic registry refs. |

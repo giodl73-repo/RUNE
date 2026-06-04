@@ -1,0 +1,19 @@
+{
+  "compatibility_report_id": "example.compat.unsupported_version",
+  "compatibility_report_version": "v0",
+  "source_ref": {
+    "artifact_kind": "collection",
+    "artifact_id": "example.known_contracts",
+    "artifact_version": "v9"
+  },
+  "target_ref": {
+    "artifact_kind": "profile",
+    "artifact_id": "rune.neutral_descriptor_json",
+    "artifact_version": "v0"
+  },
+  "status": "compatible",
+  "supported_concepts": [],
+  "unsupported_concepts": [],
+  "degraded_concepts": [],
+  "diagnostics": []
+}

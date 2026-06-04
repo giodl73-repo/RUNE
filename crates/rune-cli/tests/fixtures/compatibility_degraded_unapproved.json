@@ -1,0 +1,27 @@
+{
+  "compatibility_report_id": "example.compat.degraded_unapproved",
+  "compatibility_report_version": "v0",
+  "source_ref": {
+    "artifact_kind": "collection",
+    "artifact_id": "example.known_contracts",
+    "artifact_version": "v0"
+  },
+  "target_ref": {
+    "artifact_kind": "adapter",
+    "artifact_id": "rune.review_packet_json",
+    "artifact_version": "v0"
+  },
+  "status": "compatible_with_warnings",
+  "supported_concepts": [
+    "entity"
+  ],
+  "unsupported_concepts": [],
+  "degraded_concepts": [
+    {
+      "concept": "command_transition",
+      "approved": false,
+      "reason": "degraded command handling was not approved"
+    }
+  ],
+  "diagnostics": []
+}

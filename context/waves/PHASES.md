@@ -50,6 +50,7 @@ Work is organized into VTRACE-style waves and pulses.
 - `2026-06-03-state-graph`
 - `2026-06-03-evidence-runtime-packets`
 - `2026-06-03-agent-protocol`
+- `2026-06-03-compatibility-negotiation`
 
 ## Protocol
 
