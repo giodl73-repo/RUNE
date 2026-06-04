@@ -83,6 +83,8 @@ cargo run -p rune-cli -- status
 | State graph CLI checks | `rune-cli` tests compare retained `check-state-graph` output and reject unknown descriptors, unknown transition nodes, unsupported transition descriptors, live-state requests, missing or mismatched retained evidence refs, unknown ownership refs, duplicate graph ids, and invalid usage. | covered |
 | Retained evidence packet implementation | `rune-core` tests validate diagnostic, validation, trace, health, and audit packet fixtures against semantic registry collections and fail closed on missing identity, unsupported kind, unknown descriptor refs, unsupported severity/status, missing audit decisions, mismatched registry refs, and unknown retained evidence refs. | covered |
 | Evidence packet CLI checks | `rune-cli` tests compare retained `check-evidence-packet` output and reject missing identity, unsupported kind, unknown descriptor refs, unsupported severity/status, missing audit capability decisions, mismatched registry refs, unknown retained evidence refs, and invalid usage. | covered |
+| Retained agent protocol implementation | `rune-core` tests validate registry describe, descriptor get, and compatibility check request fixtures against semantic registry collections and fail closed on unknown operations, missing capabilities, mutating operations, unknown refs, and restricted-data requests. | covered |
+| Agent protocol CLI checks | `rune-cli` tests compare retained `check-agent-protocol` output and reject unknown operations, missing capabilities, mutating operations, unknown refs, restricted-data requests, and invalid usage. | covered |
 
 ## Evidence rule
 

@@ -132,9 +132,9 @@ semantic registries, state graphs, evidence packets, agent-safe protocols,
 compatibility negotiation, and capability policy without moving product
 vocabulary into `rune-core`.
 
-Mission 2.0 remains a direction, not an implementation claim. Runtime host and
-agent protocol implementation are blocked until their DCRs define boundaries,
-diagnostics, fixtures, and validation commands.
+Mission 2.0 remains a direction, not a runtime-host implementation claim.
+Compatibility, policy, and runtime host implementation are blocked until their
+DCRs define boundaries, diagnostics, fixtures, and validation commands.
 
 ## Mission 2.0 planning closeout
 
@@ -151,8 +151,8 @@ Validation posture:
 | Semantic registry | complete | implemented retained evidence slice |
 | State graph | complete | implemented retained evidence slice |
 | Evidence runtime packets | complete | implemented retained evidence slice |
-| Agent protocol | complete | next planned lane; blocked until read-first protocol DCR |
-| Compatibility negotiation | complete | blocked until report fixtures are implemented |
+| Agent protocol | complete | implemented retained evidence slice |
+| Compatibility negotiation | complete | next planned lane; blocked until report fixtures are implemented |
 | Capability and sensitivity policy | complete | blocked until enforcement boundary DCR |
 | Runtime host | complete as design blocker | blocked until prior lanes are implemented and reviewed |
 
@@ -253,6 +253,21 @@ and audit evidence over semantic registry and descriptor collection refs.
 | Audit decisions | pass | Audit packets require `capability_decision`; failures use `RUNE-EVIDENCE-005`. |
 | Retained evidence integrity | pass | Packet evidence refs must match semantic registry collection source refs; failures use `RUNE-EVIDENCE-007`. |
 | Runtime safety | pass | No logging backend, runtime host, live inspection, mutation, private payload capture, Cargo traversal, source scraping, plugin discovery, automatic migration, or policy enforcement was added. |
+
+## Wave 45 retained agent protocol validation
+
+Agent protocol requests validate retained, read-first request evidence over
+semantic registry and descriptor collection refs.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| Retained request shape | pass | `AgentProtocolRequestDocument` and retained request fixtures. |
+| Read operation vocabulary | pass | Approved read operations validate; unknown operations fail with `RUNE-AGENT-001`. |
+| Capability refs | pass | Missing or mismatched capabilities fail with `RUNE-AGENT-002`. |
+| Mutation blocking | pass | Mutating operation ids fail with `RUNE-AGENT-003`. |
+| Input refs | pass | Unknown registry, collection, descriptor, evidence, profile, or adapter refs fail with `RUNE-AGENT-004`. |
+| Restricted data | pass | Restricted-data requests fail with `RUNE-AGENT-005`. |
+| Runtime safety | pass | No live endpoint, runtime host, mutation/replay, prompt-only authority, private data exposure, Cargo traversal, source scraping, plugin discovery, automatic migration, or policy enforcement was added. |
 
 ## Wave 4 readiness decision
 

@@ -40,6 +40,9 @@ evolves.
 9. A new evidence packet command needs how-to, runbook, retained pass/failure
    fixtures, VTRACE, release/readiness updates, and explicit logging/runtime-host
    non-goals.
+10. A new agent protocol command needs how-to, runbook, retained pass/failure
+    fixtures, VTRACE, release/readiness updates, and explicit read-first,
+    no-live-endpoint, no-mutation boundary language.
 
 ## Documentation validation
 

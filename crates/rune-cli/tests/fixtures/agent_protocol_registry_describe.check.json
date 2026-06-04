@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "protocol_id": "example.agent.registry_describe",
+  "protocol_version": "v0",
+  "operation": "registry.describe",
+  "capability_ref": "read",
+  "registry_id": "example.workspace_registry",
+  "registry_version": "v0",
+  "collection_ref_count": 0,
+  "descriptor_ref_count": 0,
+  "evidence_ref_count": 0,
+  "profile_ref_count": 0,
+  "adapter_ref_count": 0,
+  "diagnostic_count": 0,
+  "result_status": "observed"
+}

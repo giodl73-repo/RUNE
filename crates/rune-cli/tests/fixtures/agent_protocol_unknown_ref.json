@@ -1,0 +1,15 @@
+{
+  "protocol_id": "example.agent.unknown_ref",
+  "protocol_version": "v0",
+  "operation": "descriptor.get",
+  "capability_ref": "read",
+  "input_refs": {
+    "descriptor_refs": [
+      {
+        "descriptor_id": "example.missing_descriptor",
+        "descriptor_version": "v0"
+      }
+    ]
+  },
+  "diagnostics": []
+}

@@ -83,10 +83,10 @@ Current findings:
 - Mission 2.0 DCRs now add requirements for retained semantic registry evidence
   (`RUNE-REQ-085` through `RUNE-REQ-089`), hardened retained state graph
   validation (`RUNE-REQ-090`), and retained evidence runtime packets
-  (`RUNE-REQ-091`).
+  (`RUNE-REQ-091`), and retained read-first agent protocol requests
+  (`RUNE-REQ-092`).
 - Later Mission 2.0 lanes still require new requirements/DCRs before declaring
-  evidence runtime, agent protocol, compatibility, policy, or runtime host
-  surfaces contract-stable.
+  compatibility, policy, or runtime host surfaces contract-stable.
 
 ### Stage 3: Concept and architecture
 
@@ -134,10 +134,10 @@ Current findings:
 - Mission 2.0 interface docs now exist for semantic registry, state graph,
   evidence runtime packets, agent protocol, compatibility negotiation,
   capability/sensitivity policy, and optional runtime host design.
-- DCR-RUNE-003, DCR-RUNE-004, and DCR-RUNE-005 have moved semantic registry,
-  state graph, and evidence runtime packets from interface planning into
-  implemented retained-evidence slices; all later lanes remain interface-only
-  until their own implementation DCRs.
+- DCR-RUNE-003, DCR-RUNE-004, DCR-RUNE-005, and DCR-RUNE-006 have moved
+  semantic registry, state graph, evidence runtime packets, and agent protocol
+  from interface planning into implemented retained-evidence slices; all later
+  lanes remain interface-only until their own implementation DCRs.
 
 ### Stage 5: Implementation slices
 
@@ -170,6 +170,9 @@ Current findings:
 - DCR-RUNE-005 implements retained evidence runtime packet validation with
   fail-closed packet identity, family, descriptor ref, severity/status, audit
   decision, registry ref, and evidence ref diagnostics.
+- DCR-RUNE-006 implements retained read-first agent protocol validation with
+  fail-closed operation, capability, input-ref, mutating-operation, and
+  restricted-data diagnostics.
 - Runtime host behavior, live state inspection, replay/mutation, Cargo traversal,
   source scraping, plugin discovery, automatic migration, and policy enforcement
   remain blocked.
@@ -196,11 +199,13 @@ Current findings:
   derive slice.
 - Verification now covers descriptor/collection/profile/adapter/discovery
   evidence, semantic registry checks/inspection, hardened state graph checks, and
-  retained evidence packet checks.
+  retained evidence packet checks, and retained agent protocol checks.
 - State graph verification includes `RUNE-STATE-001` through `RUNE-STATE-009`
   fixtures and CLI tests.
 - Evidence packet verification includes `RUNE-EVIDENCE-001` through
   `RUNE-EVIDENCE-007` validation paths and CLI tests.
+- Agent protocol verification includes `RUNE-AGENT-001` through
+  `RUNE-AGENT-005` validation paths and CLI tests.
 
 ### Stage 7: Validation
 
@@ -250,9 +255,9 @@ Current findings:
 - Mission 2.0 role/panel review identified Wave 43 hardening needs; those are
   now resolved in DCR-RUNE-004 through retained evidence ref, ownership ref, and
   duplicate graph-id validation.
-- Broad runtime adoption remains blocked until evidence runtime, agent protocol,
-  compatibility, policy, and optional runtime host lanes have their own approved
-  DCRs and validation packages.
+- Broad runtime adoption remains blocked until compatibility, policy, and
+  optional runtime host lanes have their own approved DCRs and validation
+  packages.
 
 ## Trace links expected
 

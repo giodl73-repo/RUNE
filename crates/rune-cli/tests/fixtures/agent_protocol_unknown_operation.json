@@ -1,0 +1,13 @@
+{
+  "protocol_id": "example.agent.unknown_operation",
+  "protocol_version": "v0",
+  "operation": "registry.teleport",
+  "capability_ref": "read",
+  "input_refs": {
+    "registry_ref": {
+      "registry_id": "example.workspace_registry",
+      "registry_version": "v0"
+    }
+  },
+  "diagnostics": []
+}

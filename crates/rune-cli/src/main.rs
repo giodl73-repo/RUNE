@@ -2,8 +2,9 @@ use rune_adapters::{
     AdapterCatalog, AdapterCompatibilityCodes, ReviewPacketDocument, review_packet_adapter,
 };
 use rune_core::{
-    CheckCollectionReportDocument, CheckReportDocument, CollectionEvidenceBundleDocument,
-    DataContractDocument, DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
+    AgentProtocolRequestDraft, AgentProtocolValidationCodes, CheckCollectionReportDocument,
+    CheckReportDocument, CollectionEvidenceBundleDocument, DataContractDocument,
+    DescriptorCollectionDocument, DescriptorCollectionDraft, DescriptorDraft,
     DescriptorKindInventoryDocument, DiscoveryManifestDraft, DocumentationPacketDocument,
     EvidenceRuntimePacketDraft, EvidenceRuntimePacketValidationCodes, GeneratedArtifactDocument,
     GeneratedCollectionArtifactDocument, ProfileCatalog, ProfileCompatibilityCodes,
@@ -23,7 +24,7 @@ fn main() {
             println!("approved stage: v1 implementation waves");
             println!("contract kinds: entity,event,command,state,artifact,source,evidence,other");
             println!(
-                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,check-evidence-packet --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
+                "approved commands: status,inspect --fixture <path>,inspect-collection --fixture <path>,inventory-collection --fixture <path>,discover --manifest <path>,evidence-collection --profile rune.neutral_descriptor_json (--fixture <path> | --manifest <path>),adapt-collection --adapter rune.review_packet_json --fixture <path>,adapter list,check --profile <profile-id> --fixture <path>,check-collection --profile <profile-id> --fixture <path>,check-registry --fixture <path>,inspect-registry --fixture <path>,check-state-graph --fixture <path> --registry <path>,check-evidence-packet --fixture <path> --registry <path>,check-agent-protocol --fixture <path> --registry <path>,generate --profile <profile-id> --fixture <path>,generate-collection --profile <profile-id> --fixture <path>,profile list"
             );
             println!(
                 "approved profiles: rune.neutral_descriptor_json,rune.documentation_packet_json,rune.data_contract_json"
@@ -45,6 +46,7 @@ fn main() {
         "inspect-registry" => inspect_registry(args.collect()),
         "check-state-graph" => check_state_graph(args.collect()),
         "check-evidence-packet" => check_evidence_packet(args.collect()),
+        "check-agent-protocol" => check_agent_protocol(args.collect()),
         "generate" => generate(args.collect()),
         "generate-collection" => generate_collection(args.collect()),
         "profile" => profile(args.collect()),
@@ -113,6 +115,24 @@ struct EvidencePacketCheckReportDocument {
     evidence_ref_count: usize,
     diagnostic_count: usize,
     has_capability_decision: bool,
+}
+
+#[derive(Serialize)]
+struct AgentProtocolCheckReportDocument {
+    status: String,
+    protocol_id: String,
+    protocol_version: String,
+    operation: String,
+    capability_ref: String,
+    registry_id: String,
+    registry_version: String,
+    collection_ref_count: usize,
+    descriptor_ref_count: usize,
+    evidence_ref_count: usize,
+    profile_ref_count: usize,
+    adapter_ref_count: usize,
+    diagnostic_count: usize,
+    result_status: String,
 }
 
 fn inspect_collection(args: Vec<String>) -> Result<(), String> {
@@ -488,6 +508,60 @@ fn check_evidence_packet(args: Vec<String>) -> Result<(), String> {
     Ok(())
 }
 
+fn check_agent_protocol(args: Vec<String>) -> Result<(), String> {
+    let options = parse_agent_protocol_args(&args)?;
+    let registry = read_semantic_registry_fixture(&options.registry, "RUNE-AGENT-900")?;
+    let registry = registry.validate_with_codes(
+        "RUNE-REGISTRY-001",
+        "RUNE-REGISTRY-002",
+        "RUNE-REGISTRY-003",
+        "RUNE-REGISTRY-004",
+        "RUNE-REGISTRY-007",
+    )?;
+    check_registry_catalog_refs(&registry)?;
+    let collections = load_registry_collection_refs(&registry, &options.registry)?;
+    let request = read_agent_protocol_fixture(&options.fixture, "RUNE-AGENT-900")?;
+    let request = request.validate_with_codes(&registry, &collections, agent_protocol_codes())?;
+    let (registry_id, registry_version) = request
+        .input_refs
+        .registry_ref
+        .as_ref()
+        .map(|reference| {
+            (
+                reference.registry_id.clone(),
+                reference.registry_version.clone(),
+            )
+        })
+        .unwrap_or_default();
+    let result_status = request
+        .result
+        .as_ref()
+        .map(|result| result.status.clone())
+        .unwrap_or_default();
+
+    let output = serde_json::to_string_pretty(&AgentProtocolCheckReportDocument {
+        status: "ok".to_owned(),
+        protocol_id: request.protocol_id,
+        protocol_version: request.protocol_version,
+        operation: request.operation,
+        capability_ref: request.capability_ref,
+        registry_id,
+        registry_version,
+        collection_ref_count: request.input_refs.collection_refs.len(),
+        descriptor_ref_count: request.input_refs.descriptor_refs.len(),
+        evidence_ref_count: request.input_refs.evidence_refs.len(),
+        profile_ref_count: request.input_refs.profile_refs.len(),
+        adapter_ref_count: request.input_refs.adapter_refs.len(),
+        diagnostic_count: request.diagnostics.len(),
+        result_status,
+    })
+    .map_err(|error| {
+        format!("RUNE-AGENT-900 error serializing agent protocol check report: {error}")
+    })?;
+    println!("{output}");
+    Ok(())
+}
+
 fn state_graph_codes() -> StateGraphValidationCodes {
     StateGraphValidationCodes {
         missing_identity: "RUNE-STATE-001",
@@ -499,6 +573,16 @@ fn state_graph_codes() -> StateGraphValidationCodes {
         invalid_evidence_ref: "RUNE-STATE-007",
         invalid_ownership_ref: "RUNE-STATE-008",
         duplicate_graph_id: "RUNE-STATE-009",
+    }
+}
+
+fn agent_protocol_codes() -> AgentProtocolValidationCodes {
+    AgentProtocolValidationCodes {
+        unknown_operation: "RUNE-AGENT-001",
+        missing_capability: "RUNE-AGENT-002",
+        mutating_operation: "RUNE-AGENT-003",
+        unknown_ref: "RUNE-AGENT-004",
+        restricted_data: "RUNE-AGENT-005",
     }
 }
 
@@ -816,6 +900,11 @@ struct EvidencePacketOptions {
     registry: String,
 }
 
+struct AgentProtocolOptions {
+    fixture: String,
+    registry: String,
+}
+
 fn parse_state_graph_args(args: &[String]) -> Result<StateGraphOptions, String> {
     match args {
         [fixture_flag, fixture, registry_flag, registry]
@@ -841,6 +930,20 @@ fn parse_evidence_packet_args(args: &[String]) -> Result<EvidencePacketOptions, 
             })
         }
         _ => Err("usage: rune check-evidence-packet --fixture <path> --registry <path>".to_owned()),
+    }
+}
+
+fn parse_agent_protocol_args(args: &[String]) -> Result<AgentProtocolOptions, String> {
+    match args {
+        [fixture_flag, fixture, registry_flag, registry]
+            if fixture_flag == "--fixture" && registry_flag == "--registry" =>
+        {
+            Ok(AgentProtocolOptions {
+                fixture: fixture.clone(),
+                registry: registry.clone(),
+            })
+        }
+        _ => Err("usage: rune check-agent-protocol --fixture <path> --registry <path>".to_owned()),
     }
 }
 
@@ -937,4 +1040,14 @@ fn read_evidence_packet_fixture(
         .map_err(|error| format!("{io_code} error reading evidence packet fixture: {error}"))?;
     serde_json::from_str(&content)
         .map_err(|error| format!("{io_code} error parsing evidence packet fixture JSON: {error}"))
+}
+
+fn read_agent_protocol_fixture(
+    path: &str,
+    io_code: &'static str,
+) -> Result<AgentProtocolRequestDraft, String> {
+    let content = std::fs::read_to_string(Path::new(path))
+        .map_err(|error| format!("{io_code} error reading agent protocol fixture: {error}"))?;
+    serde_json::from_str(&content)
+        .map_err(|error| format!("{io_code} error parsing agent protocol fixture JSON: {error}"))
 }

@@ -4,17 +4,17 @@
 
 RUNE v1 is ready as publishable contract infrastructure with reviewed discovery,
 external profile, adapter, adopter example, and bakeoff evidence. Mission 2.0
-now has retained semantic registry evidence, retained state graph evidence, and
-retained evidence runtime packets without live state inspection or runtime host
-behavior.
+now has retained semantic registry evidence, retained state graph evidence,
+retained evidence runtime packets, and retained read-first agent protocol
+requests without live state inspection or runtime host behavior.
 
 ## Crate surfaces
 
 | Crate | V1 role |
 |---|---|
-| `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, inventory, semantic registry, retained state graph, and evidence runtime packet models. |
+| `rune-core` | Neutral descriptor, collection, discovery, profile, evidence, inventory, semantic registry, retained state graph, evidence runtime packet, and agent protocol models. |
 | `rune-derive` | Compile-time derive macro for annotated Rust contract descriptors. |
-| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, semantic registry, state graph, and evidence packet commands. |
+| `rune-cli` | Fixture-backed inspection, check, generation, discovery, evidence, adapter, semantic registry, state graph, evidence packet, and agent protocol commands. |
 | `rune-adapters` | Downstream adapter models outside the neutral core. |
 | `examples\rune-adopter` | Non-published adopter workflow example. |
 
@@ -28,6 +28,7 @@ cargo run -p rune-cli -- check-registry --fixture crates\rune-cli\tests\fixtures
 cargo run -p rune-cli -- inspect-registry --fixture crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 cargo run -p rune-cli -- check-state-graph --fixture crates\rune-cli\tests\fixtures\state_graph_workspace.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 cargo run -p rune-cli -- check-evidence-packet --fixture crates\rune-cli\tests\fixtures\evidence_packet_diagnostic.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
+cargo run -p rune-cli -- check-agent-protocol --fixture crates\rune-cli\tests\fixtures\agent_protocol_registry_describe.json --registry crates\rune-cli\tests\fixtures\semantic_registry_workspace.json
 git diff --check
 ```
 
@@ -55,14 +56,18 @@ git diff --check
 - Evidence runtime packets are retained and versioned; packet families, severity,
   status, descriptor refs, registry refs, evidence refs, and audit capability
   decisions fail closed before packets are treated as usable evidence.
+- Agent protocol requests are retained and versioned; read operations,
+  capabilities, registry/collection/descriptor/evidence/profile/adapter refs,
+  mutating operations, and restricted-data requests fail closed before requests
+  are treated as usable evidence.
 
 ## Release evidence
 
 - VTRACE requirements and trace are complete through v1 release readiness.
 - Retained fixtures cover descriptor, collection, discovery, evidence bundle,
   external profile, adapter, adopter workflow, semantic registry, and QUIVER
-  bakeoff scenarios plus retained state graph and evidence packet pass/failure
-  scenarios.
+  bakeoff scenarios plus retained state graph, evidence packet, and agent
+  protocol pass/failure scenarios.
 - Full workspace validation passes with the CI-ready commands above.
 
 ## Non-goals for v1

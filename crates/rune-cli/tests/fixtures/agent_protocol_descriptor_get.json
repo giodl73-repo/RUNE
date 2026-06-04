@@ -1,0 +1,29 @@
+{
+  "protocol_id": "example.agent.descriptor_get",
+  "protocol_version": "v0",
+  "operation": "descriptor.get",
+  "capability_ref": "read",
+  "input_refs": {
+    "registry_ref": {
+      "registry_id": "example.workspace_registry",
+      "registry_version": "v0"
+    },
+    "descriptor_refs": [
+      {
+        "descriptor_id": "example.customer",
+        "descriptor_version": "v0"
+      }
+    ],
+    "evidence_refs": [
+      {
+        "evidence_kind": "descriptor_collection_fixture",
+        "source_ref": "known_contract_descriptor_collection.json"
+      }
+    ]
+  },
+  "result": {
+    "result_kind": "descriptor",
+    "status": "observed"
+  },
+  "diagnostics": []
+}

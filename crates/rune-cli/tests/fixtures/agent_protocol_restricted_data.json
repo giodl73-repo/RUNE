@@ -1,0 +1,16 @@
+{
+  "protocol_id": "example.agent.restricted_data",
+  "protocol_version": "v0",
+  "operation": "evidence.list",
+  "capability_ref": "read",
+  "input_refs": {
+    "evidence_refs": [
+      {
+        "evidence_kind": "descriptor_collection_fixture",
+        "source_ref": "known_contract_descriptor_collection.json"
+      }
+    ]
+  },
+  "restricted_data_requested": true,
+  "diagnostics": []
+}

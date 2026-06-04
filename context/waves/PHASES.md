@@ -44,6 +44,12 @@ Work is organized into VTRACE-style waves and pulses.
 - `2026-06-02-adoption-validation-runbook`
 - `2026-06-02-shape-data-contracts`
 - `2026-06-02-field-metadata`
+- `2026-06-03-mission-2-managed-native-runtime`
+- `2026-06-03-semantic-registry`
+- `2026-06-03-final-comms-readiness`
+- `2026-06-03-state-graph`
+- `2026-06-03-evidence-runtime-packets`
+- `2026-06-03-agent-protocol`
 
 ## Protocol
 

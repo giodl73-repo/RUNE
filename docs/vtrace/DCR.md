@@ -209,17 +209,17 @@ adapters, and field metadata.
 
 ### Implementation readiness
 
-Mission 2.0 implementation remains lane-gated. DCR-RUNE-003 and DCR-RUNE-004
-completed the first two retained-evidence slices; broad runtime implementation
-is still blocked:
+Mission 2.0 implementation remains lane-gated. DCR-RUNE-003 through
+DCR-RUNE-006 completed the first four retained-evidence slices; broad runtime
+implementation is still blocked:
 
 | Lane | Readiness |
 |---|---|
 | Semantic registry | implemented by DCR-RUNE-003 as retained registry documents, read-only CLI checks, inspection reports, catalog checks, and retained collection source-ref validation |
 | State graph | implemented and role-review hardened by DCR-RUNE-004 as retained graph validation over registry refs, descriptor-backed nodes/transitions, retained evidence refs, ownership refs, duplicate graph-id diagnostics, and live-state blocking |
 | Evidence runtime packets | implemented by DCR-RUNE-005 as retained packet documents, read-only CLI checks, packet family fixtures, descriptor/evidence ref validation, and audit capability decision checks |
-| Agent protocol | interface planning complete in `docs/architecture/agent-protocol-interface.md`; next implementation DCR must stay read-first and remain gated by policy boundaries |
-| Compatibility negotiation | interface planning complete in `docs/architecture/compatibility-negotiation.md`; implementation gated until report fixtures are added |
+| Agent protocol | implemented by DCR-RUNE-006 as retained read-first protocol request documents, read-only CLI checks, capability/ref validation, mutating-operation blocking, and restricted-data blocking |
+| Compatibility negotiation | interface planning complete in `docs/architecture/compatibility-negotiation.md`; next implementation DCR must stay retained-evidence-first and must not approve automatic migration |
 | Capability and sensitivity policy | interface planning complete in `docs/architecture/capability-sensitivity-policy.md`; implementation gated until enforcement boundaries are approved |
 | Runtime host | design planning complete in `docs/architecture/runtime-host-design.md`; implementation blocked until all prior lanes have approved implementations |
 
@@ -228,10 +228,11 @@ is still blocked:
 Mission 2.0 planning is complete as a docs/spec package. The planning index is
 `docs/architecture/mission-2-planning-index.md`.
 
-Next allowed implementation-oriented work is a narrow DCR for **Wave 45: Agent
-protocol interface implementation**. It must stay read-first and must not add
-runtime host behavior, live process inspection, mutation/replay, Cargo traversal,
-source scraping, plugin discovery, automatic migration, or policy enforcement.
+Next allowed implementation-oriented work is a narrow DCR for **Wave 46:
+Compatibility negotiation implementation**. It must stay retained-evidence-first
+and must not add runtime host behavior, live process inspection, mutation/replay,
+Cargo traversal, source scraping, plugin discovery, automatic migration, or
+policy enforcement.
 
 ### Validation expectations
 
@@ -425,6 +426,63 @@ source refs.
 - No live state inspection.
 - No private payload capture.
 - No mutation authorization or replay.
+- No Cargo graph scanning.
+- No Rust source scraping.
+- No plugin discovery, automatic migration, or policy enforcement.
+
+## DCR-RUNE-006: Retained read-first agent protocol implementation
+
+| Field | Value |
+|---|---|
+| Status | implemented retained evidence slice |
+| Date | 2026-06-03 |
+| Source requirement | RUNE-REQ-092 |
+| Trigger | DCR-RUNE-002 and `docs\architecture\agent-protocol-interface.md` named a read-first agent protocol as the next Mission 2.0 lane after retained registry, state graph, and evidence packet surfaces existed. |
+| Primary repo | RUNE |
+| Coordinating repo | TRACKER |
+
+### Decision
+
+RUNE should implement the first agent protocol slice as retained request evidence
+over explicit semantic registry and descriptor collection refs. The slice is
+read-first and validates authored protocol request documents without adding live
+endpoints, autonomous mutation, prompt-only authority, hidden source scraping,
+private data exposure, runtime host behavior, Cargo traversal, plugin discovery,
+automatic migration, or policy enforcement.
+
+### Implemented surface
+
+| Surface | Status |
+|---|---|
+| `AgentProtocolRequestDraft` | implemented |
+| `AgentProtocolRequestDocument` | implemented |
+| `AgentProtocolInputRefs` | implemented |
+| `AgentProtocolCollectionRef` | implemented |
+| `AgentProtocolResult` | implemented |
+| Retained `registry.describe`, `descriptor.get`, and `compatibility.check` fixtures | implemented |
+| Retained unknown operation, mutating operation, missing capability, unknown ref, and restricted-data fixtures | implemented |
+| `rune check-agent-protocol --fixture <path> --registry <path>` | implemented read-only |
+
+### Validation behavior
+
+| Diagnostic | Status |
+|---|---|
+| `RUNE-AGENT-001` unknown operation | implemented |
+| `RUNE-AGENT-002` missing or mismatched required capability | implemented |
+| `RUNE-AGENT-003` mutating operation blocked | implemented |
+| `RUNE-AGENT-004` unknown registry, collection, descriptor, evidence, profile, or adapter ref | implemented |
+| `RUNE-AGENT-005` restricted data exposure blocked | implemented |
+
+Agent protocol validation is intentionally bounded to retained request fixtures,
+semantic registry fixtures, the registry's retained descriptor collection source
+refs, and registry-declared profile/adapter refs.
+
+### Non-goals
+
+- No live endpoint, server, SDK, or runtime host.
+- No autonomous mutation or replay.
+- No prompt-only authority model.
+- No private data exposure.
 - No Cargo graph scanning.
 - No Rust source scraping.
 - No plugin discovery, automatic migration, or policy enforcement.

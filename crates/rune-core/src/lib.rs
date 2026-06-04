@@ -445,6 +445,71 @@ pub struct EvidenceRuntimePacketValidationCodes {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
+pub struct AgentProtocolRequestDraft {
+    pub protocol_id: Option<String>,
+    pub protocol_version: Option<String>,
+    pub operation: Option<String>,
+    pub capability_ref: Option<String>,
+    #[serde(default)]
+    pub input_refs: AgentProtocolInputRefs,
+    #[serde(default)]
+    pub result: Option<AgentProtocolResult>,
+    #[serde(default)]
+    pub diagnostics: Vec<EvidencePacketDiagnostic>,
+    #[serde(default)]
+    pub restricted_data_requested: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct AgentProtocolRequestDocument {
+    pub protocol_id: String,
+    pub protocol_version: String,
+    pub operation: String,
+    pub capability_ref: String,
+    pub input_refs: AgentProtocolInputRefs,
+    pub result: Option<AgentProtocolResult>,
+    pub diagnostics: Vec<EvidencePacketDiagnostic>,
+    pub restricted_data_requested: bool,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct AgentProtocolInputRefs {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub registry_ref: Option<EvidencePacketRegistryRef>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub collection_refs: Vec<AgentProtocolCollectionRef>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub descriptor_refs: Vec<EvidenceDescriptorRef>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub evidence_refs: Vec<StateGraphEvidenceRef>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub profile_refs: Vec<SemanticRegistryProfileRef>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub adapter_refs: Vec<SemanticRegistryAdapterRef>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct AgentProtocolCollectionRef {
+    pub collection_id: String,
+    pub collection_version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct AgentProtocolResult {
+    pub result_kind: String,
+    pub status: String,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct AgentProtocolValidationCodes {
+    pub unknown_operation: &'static str,
+    pub missing_capability: &'static str,
+    pub mutating_operation: &'static str,
+    pub unknown_ref: &'static str,
+    pub restricted_data: &'static str,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 pub struct DescriptorCollectionDraft {
     pub collection_id: Option<String>,
     pub collection_version: Option<String>,
@@ -1043,6 +1108,186 @@ impl EvidenceRuntimePacketDraft {
     }
 }
 
+impl AgentProtocolRequestDraft {
+    pub fn validate_with_codes(
+        self,
+        registry: &SemanticRegistryDocument,
+        collections: &[DescriptorCollectionDocument],
+        codes: AgentProtocolValidationCodes,
+    ) -> Result<AgentProtocolRequestDocument, String> {
+        let protocol_id = required_non_empty(
+            self.protocol_id,
+            codes.unknown_operation,
+            "agent protocol identity is missing",
+        )?;
+        let protocol_version = required_non_empty(
+            self.protocol_version,
+            codes.unknown_operation,
+            "agent protocol version is missing",
+        )?;
+        let operation = required_non_empty(
+            self.operation,
+            codes.unknown_operation,
+            "agent protocol operation is missing",
+        )?;
+        if is_mutating_agent_protocol_operation(&operation) {
+            return Err(format!(
+                "{} mutating agent protocol operation is not approved: {}",
+                codes.mutating_operation, operation
+            ));
+        }
+        if !is_supported_agent_protocol_operation(&operation) {
+            return Err(format!(
+                "{} unknown agent protocol operation: {}",
+                codes.unknown_operation, operation
+            ));
+        }
+        if self.restricted_data_requested {
+            return Err(format!(
+                "{} agent protocol request would expose restricted data",
+                codes.restricted_data
+            ));
+        }
+
+        let required_capability = required_agent_protocol_capability(&operation);
+        let capability_ref = required_non_empty(
+            self.capability_ref,
+            codes.missing_capability,
+            "agent protocol capability reference is missing",
+        )?;
+        if capability_ref != required_capability {
+            return Err(format!(
+                "{} agent protocol operation {} requires capability {} but requested {}",
+                codes.missing_capability, operation, required_capability, capability_ref
+            ));
+        }
+        if !semantic_registry_capability_enabled(&registry.capabilities, required_capability) {
+            return Err(format!(
+                "{} semantic registry does not declare required capability: {}",
+                codes.missing_capability, required_capability
+            ));
+        }
+
+        if let Some(registry_ref) = &self.input_refs.registry_ref {
+            if registry_ref.registry_id != registry.registry_id
+                || registry_ref.registry_version != registry.registry_version
+            {
+                return Err(format!(
+                    "{} agent protocol registry reference does not match semantic registry: {}@{}",
+                    codes.unknown_ref, registry_ref.registry_id, registry_ref.registry_version
+                ));
+            }
+        }
+
+        let collection_versions: BTreeMap<&str, &str> = registry
+            .collections
+            .iter()
+            .map(|collection| {
+                (
+                    collection.collection_id.as_str(),
+                    collection.collection_version.as_str(),
+                )
+            })
+            .collect();
+        for collection_ref in &self.input_refs.collection_refs {
+            match collection_versions.get(collection_ref.collection_id.as_str()) {
+                Some(version) if *version == collection_ref.collection_version.as_str() => {}
+                Some(version) => {
+                    return Err(format!(
+                        "{} agent protocol collection ref version mismatch: {}@{} declared, registry has {}",
+                        codes.unknown_ref,
+                        collection_ref.collection_id,
+                        collection_ref.collection_version,
+                        version
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{} agent protocol references unknown collection id: {}",
+                        codes.unknown_ref, collection_ref.collection_id
+                    ));
+                }
+            }
+        }
+
+        let descriptor_versions = descriptor_versions_by_id(collections);
+        for descriptor_ref in &self.input_refs.descriptor_refs {
+            match descriptor_versions.get(&descriptor_ref.descriptor_id) {
+                Some(version) if version == &descriptor_ref.descriptor_version => {}
+                Some(version) => {
+                    return Err(format!(
+                        "{} agent protocol descriptor ref version mismatch: {}@{} declared, registry has {}",
+                        codes.unknown_ref,
+                        descriptor_ref.descriptor_id,
+                        descriptor_ref.descriptor_version,
+                        version
+                    ));
+                }
+                None => {
+                    return Err(format!(
+                        "{} agent protocol references unknown descriptor id: {}",
+                        codes.unknown_ref, descriptor_ref.descriptor_id
+                    ));
+                }
+            }
+        }
+
+        let registry_source_refs: BTreeSet<&str> = registry
+            .collections
+            .iter()
+            .map(|collection| collection.source_ref.as_str())
+            .collect();
+        for evidence_ref in &self.input_refs.evidence_refs {
+            if evidence_ref.evidence_kind != "descriptor_collection_fixture" {
+                return Err(format!(
+                    "{} unsupported agent protocol evidence kind: {}",
+                    codes.unknown_ref, evidence_ref.evidence_kind
+                ));
+            }
+            if !registry_source_refs.contains(evidence_ref.source_ref.as_str()) {
+                return Err(format!(
+                    "{} agent protocol evidence ref is not declared by semantic registry: {}",
+                    codes.unknown_ref, evidence_ref.source_ref
+                ));
+            }
+        }
+
+        for profile_ref in &self.input_refs.profile_refs {
+            if !registry.profiles.iter().any(|candidate| {
+                candidate.profile_id == profile_ref.profile_id
+                    && candidate.profile_version == profile_ref.profile_version
+            }) {
+                return Err(format!(
+                    "{} agent protocol references unknown profile: {}@{}",
+                    codes.unknown_ref, profile_ref.profile_id, profile_ref.profile_version
+                ));
+            }
+        }
+        for adapter_ref in &self.input_refs.adapter_refs {
+            if !registry.adapters.iter().any(|candidate| {
+                candidate.adapter_id == adapter_ref.adapter_id
+                    && candidate.adapter_version == adapter_ref.adapter_version
+            }) {
+                return Err(format!(
+                    "{} agent protocol references unknown adapter: {}@{}",
+                    codes.unknown_ref, adapter_ref.adapter_id, adapter_ref.adapter_version
+                ));
+            }
+        }
+
+        Ok(AgentProtocolRequestDocument {
+            protocol_id,
+            protocol_version,
+            operation,
+            capability_ref,
+            input_refs: self.input_refs,
+            result: self.result,
+            diagnostics: self.diagnostics,
+            restricted_data_requested: self.restricted_data_requested,
+        })
+    }
+}
+
 fn descriptor_kinds_by_id(
     collections: &[DescriptorCollectionDocument],
 ) -> BTreeMap<String, String> {
@@ -1118,6 +1363,48 @@ pub fn is_supported_evidence_packet_status(status: &str) -> bool {
         status,
         "pass" | "fail" | "blocked" | "degraded" | "observed"
     )
+}
+
+pub fn is_supported_agent_protocol_operation(operation: &str) -> bool {
+    matches!(
+        operation,
+        "registry.describe"
+            | "collection.list"
+            | "descriptor.get"
+            | "evidence.list"
+            | "compatibility.check"
+            | "profile.generate.preview"
+            | "adapter.generate.preview"
+    )
+}
+
+pub fn is_mutating_agent_protocol_operation(operation: &str) -> bool {
+    operation.contains(".create")
+        || operation.contains(".update")
+        || operation.contains(".delete")
+        || operation.contains(".mutate")
+        || operation.contains(".apply")
+        || operation.starts_with("mutation.")
+}
+
+pub fn required_agent_protocol_capability(operation: &str) -> &'static str {
+    match operation {
+        "compatibility.check" => "query",
+        "profile.generate.preview" | "adapter.generate.preview" => "generate",
+        _ => "read",
+    }
+}
+
+fn semantic_registry_capability_enabled(
+    capabilities: &SemanticRegistryCapabilities,
+    capability: &str,
+) -> bool {
+    match capability {
+        "read" => capabilities.read,
+        "query" => capabilities.query,
+        "generate" => capabilities.generate,
+        _ => false,
+    }
 }
 
 fn required_non_empty(
@@ -2290,6 +2577,113 @@ mod tests {
         assert!(error.contains("RUNE-EVIDENCE-007"));
     }
 
+    #[test]
+    fn retained_agent_protocol_success_fixtures_validate_against_registry_collections() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixtures = [
+            (
+                "registry.describe",
+                include_str!("../../rune-cli/tests/fixtures/agent_protocol_registry_describe.json"),
+            ),
+            (
+                "descriptor.get",
+                include_str!("../../rune-cli/tests/fixtures/agent_protocol_descriptor_get.json"),
+            ),
+            (
+                "compatibility.check",
+                include_str!(
+                    "../../rune-cli/tests/fixtures/agent_protocol_compatibility_check.json"
+                ),
+            ),
+        ];
+
+        for (expected_operation, fixture) in fixtures {
+            let draft: AgentProtocolRequestDraft =
+                serde_json::from_str(fixture).expect("agent protocol fixture parses");
+            let request = draft
+                .validate_with_codes(&registry, &collections, agent_protocol_codes())
+                .expect("agent protocol fixture validates");
+
+            assert_eq!(request.operation, expected_operation);
+            assert!(!request.capability_ref.is_empty());
+        }
+    }
+
+    #[test]
+    fn retained_agent_protocol_unknown_operation_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/agent_protocol_unknown_operation.json");
+        let draft: AgentProtocolRequestDraft =
+            serde_json::from_str(fixture).expect("agent protocol fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, agent_protocol_codes())
+            .expect_err("unknown operation should fail");
+
+        assert!(error.contains("RUNE-AGENT-001"));
+    }
+
+    #[test]
+    fn retained_agent_protocol_mutating_operation_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/agent_protocol_mutating_operation.json");
+        let draft: AgentProtocolRequestDraft =
+            serde_json::from_str(fixture).expect("agent protocol fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, agent_protocol_codes())
+            .expect_err("mutating operation should fail");
+
+        assert!(error.contains("RUNE-AGENT-003"));
+    }
+
+    #[test]
+    fn retained_agent_protocol_missing_capability_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/agent_protocol_missing_capability.json");
+        let draft: AgentProtocolRequestDraft =
+            serde_json::from_str(fixture).expect("agent protocol fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, agent_protocol_codes())
+            .expect_err("missing capability should fail");
+
+        assert!(error.contains("RUNE-AGENT-002"));
+    }
+
+    #[test]
+    fn retained_agent_protocol_unknown_ref_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture = include_str!("../../rune-cli/tests/fixtures/agent_protocol_unknown_ref.json");
+        let draft: AgentProtocolRequestDraft =
+            serde_json::from_str(fixture).expect("agent protocol fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, agent_protocol_codes())
+            .expect_err("unknown ref should fail");
+
+        assert!(error.contains("RUNE-AGENT-004"));
+    }
+
+    #[test]
+    fn retained_agent_protocol_restricted_data_fixture_fails_closed() {
+        let registry = workspace_registry_fixture();
+        let collections = workspace_registry_collections();
+        let fixture =
+            include_str!("../../rune-cli/tests/fixtures/agent_protocol_restricted_data.json");
+        let draft: AgentProtocolRequestDraft =
+            serde_json::from_str(fixture).expect("agent protocol fixture parses");
+        let error = draft
+            .validate_with_codes(&registry, &collections, agent_protocol_codes())
+            .expect_err("restricted data should fail");
+
+        assert!(error.contains("RUNE-AGENT-005"));
+    }
+
     fn state_graph_codes() -> StateGraphValidationCodes {
         StateGraphValidationCodes {
             missing_identity: "RUNE-STATE-001",
@@ -2313,6 +2707,16 @@ mod tests {
             missing_audit_decision: "RUNE-EVIDENCE-005",
             invalid_registry_ref: "RUNE-EVIDENCE-006",
             invalid_evidence_ref: "RUNE-EVIDENCE-007",
+        }
+    }
+
+    fn agent_protocol_codes() -> AgentProtocolValidationCodes {
+        AgentProtocolValidationCodes {
+            unknown_operation: "RUNE-AGENT-001",
+            missing_capability: "RUNE-AGENT-002",
+            mutating_operation: "RUNE-AGENT-003",
+            unknown_ref: "RUNE-AGENT-004",
+            restricted_data: "RUNE-AGENT-005",
         }
     }
 

@@ -1,0 +1,35 @@
+{
+  "protocol_id": "example.agent.compatibility_check",
+  "protocol_version": "v0",
+  "operation": "compatibility.check",
+  "capability_ref": "query",
+  "input_refs": {
+    "registry_ref": {
+      "registry_id": "example.workspace_registry",
+      "registry_version": "v0"
+    },
+    "descriptor_refs": [
+      {
+        "descriptor_id": "example.customer",
+        "descriptor_version": "v0"
+      }
+    ],
+    "profile_refs": [
+      {
+        "profile_id": "rune.neutral_descriptor_json",
+        "profile_version": "v0"
+      }
+    ],
+    "adapter_refs": [
+      {
+        "adapter_id": "rune.review_packet_json",
+        "adapter_version": "v0"
+      }
+    ]
+  },
+  "result": {
+    "result_kind": "compatibility_report",
+    "status": "pass"
+  },
+  "diagnostics": []
+}

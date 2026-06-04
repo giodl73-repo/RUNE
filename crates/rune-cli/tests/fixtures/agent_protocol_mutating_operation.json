@@ -1,0 +1,15 @@
+{
+  "protocol_id": "example.agent.mutating_operation",
+  "protocol_version": "v0",
+  "operation": "descriptor.update",
+  "capability_ref": "generate",
+  "input_refs": {
+    "descriptor_refs": [
+      {
+        "descriptor_id": "example.customer",
+        "descriptor_version": "v0"
+      }
+    ]
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,12 @@
+{
+  "protocol_id": "example.agent.missing_capability",
+  "protocol_version": "v0",
+  "operation": "registry.describe",
+  "input_refs": {
+    "registry_ref": {
+      "registry_id": "example.workspace_registry",
+      "registry_version": "v0"
+    }
+  },
+  "diagnostics": []
+}

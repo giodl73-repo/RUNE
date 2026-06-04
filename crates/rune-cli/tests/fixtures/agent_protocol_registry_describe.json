@@ -1,0 +1,17 @@
+{
+  "protocol_id": "example.agent.registry_describe",
+  "protocol_version": "v0",
+  "operation": "registry.describe",
+  "capability_ref": "read",
+  "input_refs": {
+    "registry_ref": {
+      "registry_id": "example.workspace_registry",
+      "registry_version": "v0"
+    }
+  },
+  "result": {
+    "result_kind": "semantic_registry",
+    "status": "observed"
+  },
+  "diagnostics": []
+}

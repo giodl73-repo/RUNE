@@ -1782,3 +1782,31 @@ Artifacts reviewed:
 
 Conclusion: DCR-RUNE-005 is accepted as a retained-evidence implementation
 slice. Agent protocol work remains blocked until its own read-first DCR.
+
+## Wave 45 retained agent protocol review
+
+Date: 2026-06-03
+
+Artifacts reviewed:
+
+- `crates\rune-core\src\lib.rs`
+- `crates\rune-cli\src\main.rs`
+- `crates\rune-cli\tests\agent_protocol_cli.rs`
+- retained agent protocol fixtures under `crates\rune-cli\tests\fixtures\`
+- `docs\architecture\agent-protocol-interface.md`
+- `docs\how-to\validate-agent-protocol.md`
+- `docs\runbooks\agent-protocol-validation.md`
+- `context\waves\2026-06-03-agent-protocol\`
+
+| Review area | Result | Finding |
+|---|---|---|
+| Retained request boundary | pass | `check-agent-protocol` reads retained request and registry fixtures only. |
+| Read-first operation vocabulary | pass | Approved operations are explicit and unknown operations fail closed. |
+| Capability integrity | pass | Requests must declare the capability required by the operation. |
+| Input-ref integrity | pass | Registry, collection, descriptor, evidence, profile, and adapter refs are checked against retained registry evidence and approved catalogs. |
+| Mutation and restricted data blocking | pass | Mutating operations and restricted-data requests fail closed with dedicated diagnostics. |
+| Runtime safety | pass | No server, SDK, live endpoint, runtime host, tool executor, prompt-only authority, private data exposure, Cargo traversal, source scraping, plugin discovery, automatic migration, or policy enforcement was added. |
+
+Conclusion: DCR-RUNE-006 is accepted as a retained read-first implementation
+slice. Compatibility negotiation is the next planned Mission 2.0 lane; runtime
+host behavior remains blocked.

@@ -13,6 +13,7 @@ basic RUNE model and want to complete one workflow.
 | [Validate a semantic registry](validate-semantic-registry.md) | Check and inspect retained semantic registry evidence. |
 | [Validate a state graph](validate-state-graph.md) | Check retained state graph evidence against a semantic registry. |
 | [Validate an evidence packet](validate-evidence-packet.md) | Check retained diagnostic, validation, trace, health, and audit packet evidence. |
+| [Validate an agent protocol request](validate-agent-protocol.md) | Check retained read-first agent protocol request evidence. |
 
 For ordered end-to-end validation, use the
 [adopter evidence validation runbook](../runbooks/adopter-evidence-validation.md).
