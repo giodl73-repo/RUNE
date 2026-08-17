@@ -249,6 +249,28 @@ RUNE v1 is complete when it provides:
 Release readiness and compatibility policy are recorded in
 `docs\release-readiness.md`.
 
+## Foundation compatibility proof
+
+RUNE protects downstream adopters with three retained surfaces:
+
+- `docs\release-readiness.md` requires explicit descriptor and collection
+  versions, new versions for breaking neutral changes, retained fixture updates,
+  and fail-closed diagnostics for profiles and adapters.
+- `cargo test -p rune-adopter` compares the example downstream registry,
+  documentation packet, and review packet against retained evidence. Contract
+  drift therefore breaks the adopter test instead of silently changing output.
+- `cargo test -p rune-cli --test compatibility_cli` rehearses incompatible
+  source/target refs, unsupported versions and concepts, unapproved degradation,
+  and blocked runtime-host negotiation. Unsupported-version drift fails with
+  `RUNE-COMPAT-003`.
+
+Run both focused lanes before changing a foundation contract:
+
+```powershell
+cargo test -p rune-adopter
+cargo test -p rune-cli --test compatibility_cli
+```
+
 ## VTRACE operating model
 
 RUNE uses VTRACE-style engineering from the beginning. Every non-trivial
