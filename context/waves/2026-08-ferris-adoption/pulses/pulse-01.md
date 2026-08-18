@@ -1,6 +1,6 @@
 # Pulse 01: Exact Procedural-Macro Compatibility Proof
 
-Status: Complete pending consumer CI
+Status: Complete
 Implementation authority: Bounded to this pulse
 Successor authority: None
 
@@ -53,5 +53,6 @@ remain the required validation contract.
 
 ## Decision
 
-Complete the implementation pulse without a successor. Merge only after the
-consumer workflow proves the immutable pull-request event revision on Ubuntu.
+Complete the implementation pulse without a successor. The consumer workflow
+proved the immutable pull-request event revision on Ubuntu in run
+[`32182071143`](https://github.com/giodl73-repo/RUNE/actions/runs/32182071143).

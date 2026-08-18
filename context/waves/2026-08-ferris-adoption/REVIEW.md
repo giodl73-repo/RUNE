@@ -1,6 +1,6 @@
 # FERRIS Procedural-Macro Consumer Contract Role Review
 
-Status: Accepted pending consumer CI
+Status: Accepted and complete
 Scope: RUNE-owned exact FERRIS `validation-plan` compatibility proof
 
 ## Product Value Governor
@@ -51,9 +51,9 @@ be removed without affecting normal Cargo behavior.
 
 ## Native Platform Adopter
 
-Pass pending consumer CI. The exact-pin proof, full RUNE tests, and status
-command passed on Windows. Ubuntu proof at the immutable pull-request event
-revision remains the merge gate.
+Pass. The exact-pin proof, full RUNE tests, and status command passed on
+Windows. The consumer workflow also passed on Ubuntu at the immutable
+pull-request event revision.
 
 ## Scope Keeper
 
@@ -63,7 +63,7 @@ automatic upgrades or a successor.
 
 ## Validation Checker
 
-Pass pending consumer CI. Local exact-checkout and fetched-pin modes passed,
+Pass. Local exact-checkout and fetched-pin modes passed,
 including an injected Cargo alias. Python compilation, formatting, full
 workspace tests, the RUNE status command, and diff hygiene passed. The checker
 also binds both portable changed paths.
@@ -92,9 +92,12 @@ pin change. No successor authority is granted.
 
 ## Decision
 
-All eleven roles accept the bounded contract subject to the Ubuntu consumer CI
-merge gate. No role grants execution, validation narrowing, support, general
-stability, source modification, or successor authority.
+All eleven roles accept the bounded contract. The Ubuntu consumer CI merge gate
+passed in RUNE PR
+[#1](https://github.com/giodl73-repo/RUNE/pull/1), workflow run
+[`32182071143`](https://github.com/giodl73-repo/RUNE/actions/runs/32182071143).
+No role grants execution, validation narrowing, support, general stability,
+source modification, or successor authority.
 
 Codex review was attempted three times with `codex review --uncommitted` and
 was unavailable because of account capacity. Its required closeout function

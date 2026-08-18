@@ -1,6 +1,6 @@
 # Wave: FERRIS Procedural-Macro Consumer Contract
 
-Status: Complete pending consumer CI
+Status: Complete
 
 ## Product outcome
 
@@ -80,14 +80,16 @@ procedural-macro and compile-test limitations explicitly.
 
 | Pulse | Title | Status | Outcome |
 |---:|---|---|---|
-| 01 | Exact procedural-macro compatibility proof | Complete pending CI | Local, fetched, lifecycle, and role gates passed |
+| 01 | Exact procedural-macro compatibility proof | Complete | Local, fetched, lifecycle, role, and Ubuntu CI gates passed |
 
 ## Closeout
 
 The implementation evidence is recorded in
 [`pulses/pulse-01.md`](pulses/pulse-01.md), and the all-eleven-role decision is
-recorded in [`REVIEW.md`](REVIEW.md). The consumer Ubuntu workflow remains the
-merge gate.
+recorded in [`REVIEW.md`](REVIEW.md). RUNE PR
+[#1](https://github.com/giodl73-repo/RUNE/pull/1) satisfied the consumer Ubuntu
+workflow merge gate in run
+[`32182071143`](https://github.com/giodl73-repo/RUNE/actions/runs/32182071143).
 
 ## Migration, rollback, and removal
 
