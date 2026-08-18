@@ -289,3 +289,16 @@ cargo test --workspace
 cargo run -p rune-cli -- status
 git diff --check
 ```
+
+RUNE also owns an experimental exact-pin compatibility proof for FERRIS's
+read-only `validation-plan` projection:
+
+```powershell
+python tools/ferris-contract/check.py
+```
+
+This proof checks only the `rune-derive` Cargo reverse cone and the
+full-workspace fallback. It does not execute selected work or replace the four
+RUNE validation commands above. Procedural-macro expansion, `trybuild`
+semantics, features, targets, doctests, runtime behavior, and repository policy
+remain RUNE-owned.

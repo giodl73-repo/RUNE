@@ -1,0 +1,55 @@
+{
+  "schema": "rune.ferris-consumer-contract/v1",
+  "ferris": {
+    "repository": "https://github.com/giodl73-repo/FERRIS.git",
+    "commit": "35f3518b6597acde34641a4f55e5111405334e70",
+    "command_version": "0.1.0",
+    "result_schema": "ferris.command-result/v2",
+    "plan_schema": "ferris.validation-plan/v0"
+  },
+  "workspace_id": "org.giodl73/rune",
+  "procedural_macro": {
+    "changed_path": "crates/rune-derive/src/lib.rs",
+    "input_disposition": "owned_rust_path",
+    "selected_packages": [
+      {
+        "identity": "cargo-workspace-package:rune-adopter@0.1.0:examples/rune-adopter/Cargo.toml",
+        "disposition": "reverse_dependency"
+      },
+      {
+        "identity": "cargo-workspace-package:rune-derive@0.1.0:crates/rune-derive/Cargo.toml",
+        "disposition": "anchor"
+      },
+      {
+        "identity": "cargo-workspace-package:rune-shape-calculator@0.1.0:examples/rune-shape-calculator/Cargo.toml",
+        "disposition": "reverse_dependency"
+      }
+    ],
+    "activity_families": [
+      "check",
+      "test"
+    ]
+  },
+  "repository_fallback": {
+    "changed_path": "README.md",
+    "input_disposition": "full_workspace_fallback",
+    "package_identities": [
+      "cargo-workspace-package:rune-adapters@0.1.0:crates/rune-adapters/Cargo.toml",
+      "cargo-workspace-package:rune-adopter@0.1.0:examples/rune-adopter/Cargo.toml",
+      "cargo-workspace-package:rune-cli@0.1.0:crates/rune-cli/Cargo.toml",
+      "cargo-workspace-package:rune-core@0.1.0:crates/rune-core/Cargo.toml",
+      "cargo-workspace-package:rune-derive@0.1.0:crates/rune-derive/Cargo.toml",
+      "cargo-workspace-package:rune-shape-calculator@0.1.0:examples/rune-shape-calculator/Cargo.toml"
+    ],
+    "activity_families": [
+      "check",
+      "test"
+    ]
+  },
+  "owner_validation": [
+    "cargo fmt --check",
+    "cargo test --workspace",
+    "cargo run -p rune-cli -- status",
+    "git diff --check"
+  ]
+}
