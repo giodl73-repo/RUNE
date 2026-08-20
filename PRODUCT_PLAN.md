@@ -423,7 +423,7 @@ separate DCR.
 
 ## Non-goals
 
-- Do not encode BAKER, LATTICE, FLETCHER, ARCADE, or any other product names in
+- Do not encode BAKER, LATTICE, WITNESS, ARCADE, or any other product names in
   base RUNE specs.
 - Do not make RUNE depend on enterprise consumer repos.
 - Do not promise full Rust semantic analysis in the foundation wave.
