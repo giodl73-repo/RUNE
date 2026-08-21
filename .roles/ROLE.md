@@ -28,3 +28,17 @@ downstream systems.
 | `stakeholders/rust-maintainer.md` | Rust Maintainer | Can add RUNE incrementally without distorting idiomatic Rust |
 | `stakeholders/platform-adapter-author.md` | Platform Adapter Author | Can map neutral descriptors into product-specific contracts |
 | `stakeholders/future-agent.md` | Future Agent | Can inspect, validate, and safely use generated contracts |
+
+## Productive tensions
+
+| Pulls | Against | Because |
+|---|---|---|
+| Contract Model Steward | Rust Maintainer | Durable neutral descriptors can conflict with idiomatic, incremental Rust adoption. |
+| Macro Safety Steward | AI Contract Consumer | Convenient generated contracts can hide behavior that agents need to inspect. |
+| Generator Interop Steward | Platform Adapter Author | Portable output contracts can conflict with a platform's native vocabulary and capabilities. |
+| VTRACE Traceability Auditor | Ecosystem Strategist | Complete mission-to-evidence traces can outweigh the value of a proposed ecosystem wedge. |
+
+Contract correctness and hidden generated behavior block first. Resolve portability and adoption
+disputes with one neutral descriptor fixture and one concrete adapter. If both cannot be supported
+without product-specific leakage, preserve the neutral contract and record the rejected adapter
+requirement rather than silently widening the model.
