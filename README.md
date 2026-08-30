@@ -281,6 +281,14 @@ The source-of-truth proof package starts under `docs/vtrace/`.
 Mission 2.0 is recorded in `docs\vtrace\MISSION_2_0.md` and
 `docs\vtrace\DCR.md`.
 
+## PITFALL doctrine
+
+RUNE's reusable contract-infrastructure failure memory is indexed at
+[`.pitfall/PITFALL.md`](.pitfall/PITFALL.md). It keeps downstream-vocabulary
+leakage, macro opacity, source-scraping drift, silent compatibility degradation,
+and read-first/runtime-authority confusion visible before descriptor, profile,
+adapter, registry, protocol, or runtime-host claims expand.
+
 ## Validation
 
 ```powershell
