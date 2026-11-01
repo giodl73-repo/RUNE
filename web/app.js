@@ -17,7 +17,7 @@ function render(){
  $('summary').textContent='Metadata compatible with '+result.profile+'. '+result.boundary;
  $('ignored').textContent=result.ignored_fields.length?'Ignored fields (not validated): '+result.ignored_fields.join(', '):'No unknown fields were ignored.';
  for(const [id,key] of [['check','check_json'],['artifact','artifact_json'],['normalized','normalized_json'],['inventory','inventory_json']])$(id).textContent=result[key]??'Not applicable to a descriptor.';
- $('review').textContent=JSON.stringify(result.review,null,2);$('results').hidden=false;
+ $('review').textContent=result.review.artifact_json??JSON.stringify(result.review,null,2);$('results').hidden=false;
 }
 function start(){
  epoch++;const generation=epoch;worker?.terminate();clearTimeout(startupTimer);clearTimeout(computeTimer);ready=busy=false;active=null;clear();$('retry').hidden=true;$('status').textContent='Loading Rust engine…';startupTimer=setTimeout(()=>{if(generation===epoch&&!ready)engineError('Rust did not start within twelve seconds. Retry to load it again.');},12000);
@@ -30,7 +30,7 @@ function start(){
  };
 }
 function download(name,text,type='application/json'){const url=URL.createObjectURL(new Blob([text],{type:type+';charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-function example(name){cancelFile();original=null;const req=JSON.parse(examples[name]);$('request').value=req.input_json;$('kind').value=req.kind;$('profile').value=req.profile;$('request-file').value='';invalidate();$('request').focus();}
+function example(name){cancelFile();original=null;const req=JSON.parse(examples[name]);$('request').value=req.input_json;$('kind').value=req.kind;$('profile').value=req.profile;$('request-file').value='';invalidate();$('request').focus();$('request').setSelectionRange(0,0);$('request').scrollTop=0;}
 $('request').addEventListener('input',edited);for(const id of ['kind','profile'])$(id).addEventListener('change',()=>{cancelFile();invalidate();});$('workbench').addEventListener('submit',e=>{e.preventDefault();replay();});$('reset').addEventListener('click',()=>example('descriptor'));$('retry').addEventListener('click',start);for(const button of document.querySelectorAll('[data-example]'))button.addEventListener('click',()=>example(button.dataset.example));
 $('original-download').addEventListener('click',()=>download('rune-input.json',original??$('request').value));
 for(const [id,name,key] of [['report-download','report',null],['submitted-download','submitted','input_json'],['artifact-download','artifact','artifact_json'],['check-download','compatibility','check_json'],['inventory-download','inventory','inventory_json'],['review-download','review-packet','review']])$(id).addEventListener('click',()=>{if(result?.ok){const text=key===null?canonical:key==='review'?result.review.artifact_json:result[key];if(text)download('rune-'+name+'.json',text);}});
