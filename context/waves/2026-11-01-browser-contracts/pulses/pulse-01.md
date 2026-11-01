@@ -33,3 +33,9 @@ Workspace Clippy under Rust 1.95 requires scoped allowances for two existing
 `collapsible_if` findings in core and repeated `namespace` macro metadata in the
 shape example (`duplicated_attributes`). Consumer host/wasm linting remains
 `-D warnings` without allowances. No core/example source changed for these lints.
+
+Hosted Linux qualification exposed Windows-only discovery fixture paths in
+`adopter_discovery_manifest.json` and `duplicate_descriptor_discovery_manifest.json`.
+Their three source path strings now use portable forward slashes. This fixture-only
+repair changes no CLI/core behavior or expected generated artifacts. Existing
+discovery/evidence tests exercise the same paths on both Windows and Linux.
