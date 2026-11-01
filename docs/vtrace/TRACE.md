@@ -90,3 +90,15 @@
 | SPEC-RUNE-007 | RUNE-REQ-040 / RUNE-REQ-041 / RUNE-REQ-042 / RUNE-REQ-045 / RUNE-REQ-070 / RUNE-REQ-071 / RUNE-REQ-072 / RUNE-REQ-073 / RUNE-REQ-074 | Validation, release, adoption docs, runbooks, and games adoption guidance | Workspace validation, QUIVER bakeoff, release readiness, docs package, adopter validation runbook, shape scenario, and games survey |
 | SPEC-RUNE-008 | RUNE-REQ-075 / RUNE-REQ-076 | Design change control and field metadata | DCR-RUNE-001 records planned field-level metadata scope before implementation; Wave 36 implements the approved first slice with retained evidence. |
 | SPEC-RUNE-009 | RUNE-REQ-077 / RUNE-REQ-078 / RUNE-REQ-079 / RUNE-REQ-080 / RUNE-REQ-081 / RUNE-REQ-082 / RUNE-REQ-083 / RUNE-REQ-084 / RUNE-REQ-085 / RUNE-REQ-086 / RUNE-REQ-087 / RUNE-REQ-088 / RUNE-REQ-089 / RUNE-REQ-090 / RUNE-REQ-091 / RUNE-REQ-092 / RUNE-REQ-093 | Mission 2.0 managed native semantic runtime | DCR-RUNE-002 upgrades the mission and `docs/architecture/mission-2-planning-index.md` closes planning for semantic registry, state graph, evidence runtime, agent protocol, compatibility negotiation, capability policy, and optional runtime host lanes; DCR-RUNE-003 implements retained semantic registry document, read-only CLI validation, catalog checks, retained collection source-ref checks, and inspection reports; Wave 49 closes communications and readiness docs for v1 plus Wave 42; DCR-RUNE-004 implements retained state graph documents and read-only state graph validation with live state blocked; DCR-RUNE-005 implements retained evidence runtime packet documents and read-only packet validation while logging/runtime behavior remains blocked; DCR-RUNE-006 implements retained read-first agent protocol request documents and read-only protocol validation while live endpoints and mutation remain blocked; DCR-RUNE-007 implements retained compatibility report documents and read-only compatibility validation while automatic migration, runtime host behavior, and policy enforcement remain blocked. |
+
+## Browser consumer trace
+
+| Need | Requirement | Design / implementation | Verification / evidence |
+|---|---|---|---|
+| Rust maintainer inspection | RUNE-WEB-01, RUNE-WEB-03 | Existing core/profile/adapter APIs through `web/adapter/src/lib.rs` | Native unit tests; `.cache/native-references.json`; browser own-input and refusal tasks |
+| Portable handoff | RUNE-WEB-02, RUNE-WEB-04 | Original raw string, typed serde parsing with ignored-field paths; separate artifact strings | CRLF/export/unknown/markup browser cases and native references |
+| Accessible resilient consumer | RUNE-WEB-05 | `web/app.js`, worker, responsive labels and focus states | `tests/browser/workbench.spec.js`; hosted `browser-evidence` artifact |
+| Reproducible public evidence | RUNE-WEB-06 | `tools/build-pages.py`, `BUILD.md`, Pages workflow | Source ZIP and file inventory; exact-main deployment evidence in TRACKER release record |
+
+Stage 7 downstream adoption remains deferred. The browser does not exercise Rust
+derive macros, live semantic registries, authorization, mutation or runtime hosts.

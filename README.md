@@ -1,5 +1,13 @@
 # RUNE
 
+[Open the Rust/WebAssembly contract workbench](https://giodl73-repo.github.io/RUNE/)
+to inspect your descriptor or collection JSON, check approved profiles and export
+generated artifacts. The existing review adapter and collection inventory are
+available for collection inputs. Metadata checks do not execute field constraints,
+invariants or a live runtime. See [build and boundary details](BUILD.md) and the
+[browser wave](context/waves/2026-11-01-browser-contracts/WAVE.md).
+
+
 **Rust Universal Notation Engine.**
 
 RUNE is an enterprise Rust infrastructure project for deriving AI-readable

@@ -98,3 +98,16 @@
 | RUNE-REQ-091 | RUNE shall implement retained evidence runtime packet documents for diagnostic, validation, trace, health, and audit evidence with fail-closed registry refs, descriptor refs, severity/status, evidence refs, and audit capability decisions while keeping logging/runtime behavior blocked. | `EvidenceRuntimePacketDraft`, `EvidenceRuntimePacketDocument`, evidence packet fixtures, `rune check-evidence-packet --fixture <path> --registry <path>`, and Wave 44 records. |
 | RUNE-REQ-092 | RUNE shall implement retained read-first agent protocol request documents with fail-closed operation, capability, input-ref, mutating-operation, and restricted-data diagnostics while keeping live endpoints, mutation, source scraping, and runtime host behavior blocked. | `AgentProtocolRequestDraft`, `AgentProtocolRequestDocument`, agent protocol fixtures, `rune check-agent-protocol --fixture <path> --registry <path>`, and Wave 45 records. |
 | RUNE-REQ-093 | RUNE shall implement retained compatibility report documents with fail-closed source refs, target refs, version checks, unsupported-concept checks, degraded-behavior checks, and runtime-host blocking while keeping automatic migration, live inspection, mutation, and policy enforcement blocked. | `CompatibilityReportDraft`, `CompatibilityReportDocument`, compatibility fixtures, `rune check-compatibility --fixture <path> --registry <path>`, and Wave 46 records. |
+
+## Browser consumer acceptance (2026-11-01)
+
+These requirements apply to the standalone consumer and do not widen core APIs.
+
+| Requirement | Acceptance | Verification |
+|---|---|---|
+| RUNE-WEB-01 | Users can check their own descriptor/collection through native draft and approved profile APIs and generate existing profile artifacts. | Native tests and browser own-input tasks |
+| RUNE-WEB-02 | Original UTF-8 input and native generated/check/inventory/review outputs can be exported separately. | CRLF, integer lexeme and exact download comparisons |
+| RUNE-WEB-03 | Invalid identity/kind/version, duplicate IDs and unsupported review concepts fail at their respective boundaries. | Negative native/WASM references; adapter refusal browser task |
+| RUNE-WEB-04 | Unknown fields are disclosed; input and collections are bounded; supplied strings render as text. | Unknown-field, resource-limit, control and markup cases |
+| RUNE-WEB-05 | Keyboard/mobile operation, stale fences and startup/compute/file failure recovery preserve the draft. | Real Chromium suite and screenshots |
+| RUNE-WEB-06 | Public release provides exact source, WASM, dependency notices and clean build provenance. | Builder custody checks, hosted artifact and live-file comparison |

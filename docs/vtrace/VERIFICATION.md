@@ -92,3 +92,21 @@ cargo run -p rune-cli -- status
 
 Each pulse records the validation commands it expects. Future generated contract
 artifacts should be retained as evidence or regenerated deterministically.
+
+## Browser consumer verification — November 1, 2026
+
+The isolated consumer uses unchanged core and adapter APIs. Seven consumer unit
+tests pass. The real Chromium suite passes 21 cases with zero retries, skips or
+flakes, including exact native/WASM response parity over 56 requests (32 generated
+metadata variants), own-input tasks, exact exports, unknown fields, adapter refusal,
+CRLF preservation, malformed replacement files, stale result fences, independent
+deadlines, WASM failure/retry, keyboard, no-JavaScript links and desktop/mobile.
+Workspace tests/build/docs/fmt and consumer host/wasm Clippy pass locally.
+
+These are consumer verification claims. Exact-main hosted/live custody is recorded
+after release in TRACKER; local dirty previews do not certify deployed artifacts.
+
+Workspace Clippy under Rust 1.95 requires scoped allowances for two existing
+`collapsible_if` findings in core and repeated `namespace` macro metadata in the
+shape example (`duplicated_attributes`). Consumer host/wasm linting remains
+`-D warnings` without allowances. No core/example source changed for these lints.

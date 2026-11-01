@@ -1,0 +1,21 @@
+[package]
+name = "rune-web"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+[workspace]
+[lib]
+crate-type = ["cdylib", "rlib"]
+[[bin]]
+name = "rune-replay"
+path = "src/main.rs"
+[features]
+wasm = ["dep:wasm-bindgen"]
+[dependencies]
+rune-core = { path = "../../crates/rune-core" }
+rune-adapters = { path = "../../crates/rune-adapters" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["arbitrary_precision"] }
+serde_ignored = "0.1"
+wasm-bindgen = { version = "=0.2.127", optional = true }
