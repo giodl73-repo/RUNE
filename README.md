@@ -1,5 +1,13 @@
 # RUNE
 
+[Open the Rust/WebAssembly contract workbench](https://giodl73-repo.github.io/RUNE/)
+to inspect your descriptor or collection JSON, check approved profiles and export
+generated artifacts. The existing review adapter and collection inventory are
+available for collection inputs. Metadata checks do not execute field constraints,
+invariants or a live runtime. See [build and boundary details](BUILD.md) and the
+[browser wave](context/waves/2026-11-01-browser-contracts/WAVE.md).
+
+
 **Rust Universal Notation Engine.**
 
 RUNE is an enterprise Rust infrastructure project for deriving AI-readable
@@ -280,6 +288,14 @@ implementation, verification, validation, and objective evidence.
 The source-of-truth proof package starts under `docs/vtrace/`.
 Mission 2.0 is recorded in `docs\vtrace\MISSION_2_0.md` and
 `docs\vtrace\DCR.md`.
+
+## PITFALL doctrine
+
+RUNE's reusable contract-infrastructure failure memory is indexed at
+[`.pitfall/PITFALL.md`](.pitfall/PITFALL.md). It keeps downstream-vocabulary
+leakage, macro opacity, source-scraping drift, silent compatibility degradation,
+and read-first/runtime-authority confusion visible before descriptor, profile,
+adapter, registry, protocol, or runtime-host claims expand.
 
 ## Validation
 

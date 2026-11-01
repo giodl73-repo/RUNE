@@ -4,7 +4,7 @@ Work is organized into VTRACE-style waves and pulses.
 
 ## Active wave
 
-- none
+- `2026-11-01-browser-contracts`
 
 ## Completed waves
 
